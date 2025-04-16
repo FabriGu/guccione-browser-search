@@ -1,0 +1,24 @@
+@font-face {
+    font-family: googleFont-medium;
+    src: url(../fonts/qlrg.ttf);
+}
+
+@font-face {
+    font-family: googleFont-bold;
+    src: url(../fonts/qlm.ttf);
+}
+
+@font-face {
+    font-family: googleFont-italic;
+    src: url(../fonts/qli.ttf);
+}
+
+@font-face {
+    font-family: gotham-medium;
+    src: url(../fonts/Gotham-Medium.otf);
+}
+
+@font-face {
+    font-family: gotham-light;
+    src: url(../fonts/Gotham-Light.otf);
+}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/p5@2.0.0-beta.4/lib/p5.js"></script>
+    <meta charset="utf-8" />
+    <title>Guccione</title>
+    <link rel="stylesheet" type="text/css" href="./css/desktop.css" />
+
+   
+    <script>
+      var queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const qValue = urlParams.get('q');
+     
+    
+    </script>
+  </head>
+  <body>
+    <main></main>
+    
+    
+    <div id="homeScreen" class="wrapper">
+      <div id="homeScreenNav">
+        <!-- <nobr><b class=gb1>Web</b>  -->
+          <a href="#" id="navImages" class="navOption selectedNavOption">Images</a> 
+          <a href="#" id="navTexts" class="navOption">Texts</a> 
+          <a href="#" id="navMaps" class="navOption">Maps</a> 
+          <!-- <a href="#" onclick=gbar.qs(this) class=gb1>News</a>  -->
+          <!-- <a href="#" onclick=gbar.qs(this) class=gb1>Shopping</a>  -->
+          <a href="#" id="navMaps" class="navOption">Gmail</a> 
+          <!-- <a href="#" onclick="this.blur();gbar.tg(event);return !1" aria-haspopup=true class=gb3><u>more</u> <small>&#9660;</small></a> -->
+        </nobr>
+      </div>
+      <div id="title">
+        <img src="./assets/guccioneComV1.png">
+      </div>
+      <div id="homeScreenSearchContainer">
+        <input id="searchInput">
+        <div id="btnContainer"> 
+          <button id="searchBtn">Guccione Search</button>
+          <button id="luckyBtn">I'm Feeling Lucky</button>
+        </div>
+      </div>
+      <div id="homeScreenInfo">
+        <a href="#">Work</a> - 
+        <!-- <a href="#">Business Solutions</a> -  -->
+        <a href="#">About Guccione</a>
+        <p>
+          <font size=-2>&copy;2025 - <a href="#">Privacy</a></font>
+        </p>
+      </div>
+    </div>
+
+
+    <div id="imageSearchScreen" class="wrapper">
+      
+    </div>
+
+    <div id="imageSearchScreen" class="wrapper">
+      <!-- Content for image search goes here -->
+    </div>
+    
+    
+   
+    
+    <script src="tf-helper.js"></script>
+    <script src="sketch.js"></script>
+    
+   
+  </body>
+</html>
