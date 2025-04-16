@@ -70,6 +70,7 @@ canvas {
   display: flex;
   flex-direction: column;
   width: 50%;
+  z-index: 10;
 }
 
 #btnContainer {
@@ -127,3 +128,4 @@ canvas {
   border-radius: 4px;
   text-align: left;
 }
+
