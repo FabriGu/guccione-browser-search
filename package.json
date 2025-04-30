@@ -5,11 +5,12 @@
     "main": "server/server.js",
     "type": "module",
     "scripts": {
-      "start": "node server/server.js",
-      "dev": "nodemon server/server.js",
-      "postinstall": "node scripts/download-models.js",
-      "build": "mkdir -p dist && cp -r public dist/ && cp -r models dist/"
-    },
+        "start": "node server/server.js",
+        "dev": "nodemon server/server.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "mkdir -p dist && cp -r public dist/ && cp -r models dist/",
+        "download-models": "node scripts/download-models.js"
+      },
     "dependencies": {
       "cors": "^2.8.5",
       "express": "^4.21.2",

@@ -1,16 +1,4 @@
-// server/image-search.js
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { configureModelPath, MODELS_DIR } from './model-config.js';
 
-
-// Get current directory if needed
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-configureModelPath();
-
-// Initialize transformers (keep this part of your original code)
-let transformers;
 
 // async function initialize() {
 //   // Import the transformers library
@@ -41,35 +29,72 @@ let transformers;
   
 //   console.log("Models loaded successfully");
 // }
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Get current directory if needed
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const MODELS_DIR = path.join(__dirname, '../models/huggingface');
+
+// Initialize transformers
+let transformers;
+
+// Configure the environment
+process.env.TRANSFORMERS_CACHE = MODELS_DIR;
+console.log("Using models directory:", MODELS_DIR);
 
 async function initialize() {
-  // Import the transformers library
-  transformers = await import('@huggingface/transformers');
-  
-  // Set any custom pipeline options
-  const pipelineOptions = {
-    local_files_only: true,
-    cache_dir: MODELS_DIR,
-  };
-  
   try {
-    // Initialize tokenizer and text model
+    // Import the transformers library
+    transformers = await import('@huggingface/transformers');
+    
+    // Initialize tokenizer and text model with local path
+    console.log("Loading tokenizer...");
     global.tokenizer = await transformers.AutoTokenizer.from_pretrained(
       "Xenova/clip-vit-base-patch16",
-      pipelineOptions
+      { 
+        local_files_only: true, 
+        cache_dir: MODELS_DIR 
+      }
     );
     
+    console.log("Loading text model...");
     global.textModel = await transformers.CLIPTextModelWithProjection.from_pretrained(
       "Xenova/clip-vit-base-patch16",
-      pipelineOptions
+      { 
+        local_files_only: true, 
+        cache_dir: MODELS_DIR 
+      }
     );
     
-    console.log("Models loaded successfully from:", MODELS_DIR);
+    console.log("Models loaded successfully from pre-downloaded files");
+    return true;
   } catch (error) {
     console.error("Failed to load models:", error);
-    throw error;
+    
+    // Fallback to download if necessary
+    console.log("Attempting to download models as fallback...");
+    try {
+      global.tokenizer = await transformers.AutoTokenizer.from_pretrained(
+        "Xenova/clip-vit-base-patch16",
+        { local_files_only: false }
+      );
+      
+      global.textModel = await transformers.CLIPTextModelWithProjection.from_pretrained(
+        "Xenova/clip-vit-base-patch16",
+        { local_files_only: false }
+      );
+      
+      console.log("Models downloaded successfully");
+      return true;
+    } catch (fallbackError) {
+      console.error("Fallback download also failed:", fallbackError);
+      throw error;
+    }
   }
 }
+
+// Rest of your code remains the same
 
 async function computeTextEmbedding(query) {
   // Compute text embedding
