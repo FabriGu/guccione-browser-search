@@ -1,0 +1,18 @@
+# node_modules
+node_modules/
+
+# Environment variables
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Don't ignore models directory for LFS
+!models/
+!models/**/*.onnx

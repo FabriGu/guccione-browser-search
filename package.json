@@ -1,0 +1,24 @@
+{
+    "name": "guccione-browser-search",
+    "version": "1.0.0",
+    "description": "CLIP-based image search app",
+    "main": "server/server.js",
+    "type": "module",
+    "scripts": {
+      "start": "node server/server.js",
+      "dev": "nodemon server/server.js",
+      "postinstall": "node scripts/download-models.js",
+      "build": "mkdir -p dist && cp -r public dist/ && cp -r models dist/"
+    },
+    "dependencies": {
+      "cors": "^2.8.5",
+      "express": "^4.21.2",
+      "node-fetch": "^3.3.2"
+    },
+    "devDependencies": {
+      "nodemon": "^2.0.22"
+    },
+    "engines": {
+      "node": ">=18.0.0"
+    }
+  }
