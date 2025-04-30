@@ -34,7 +34,7 @@ import { fileURLToPath } from 'url';
 
 // Get current directory if needed
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const MODELS_DIR = path.join(__dirname, '../models');
+const MODELS_DIR = path.join(__dirname, '../models/huggingface');
 
 // Initialize transformers
 let transformers;
@@ -45,39 +45,46 @@ console.log("Using models directory:", MODELS_DIR);
 
 async function initialize() {
   try {
+    console.log("Starting to initialize image search...");
+    console.log("TRANSFORMERS_CACHE:", process.env.TRANSFORMERS_CACHE);
+    
     // Import the transformers library
     transformers = await import('@huggingface/transformers');
+    console.log("Transformers library imported");
     
-    // Log the exact model paths you're trying to use
-    console.log("Looking for models in:", process.env.TRANSFORMERS_CACHE);
+    // Set any custom pipeline options
+    const pipelineOptions = {
+      local_files_only: false, // Change to false to allow downloads if needed
+      cache_dir: MODELS_DIR,
+    };
     
-    // Explicitly set the path to match your folder structure
-    const modelPath = "Xenova/clip-vit-base-patch16";
-    console.log("Attempting to load model from:", modelPath);
+    console.log("Loading tokenizer with options:", JSON.stringify(pipelineOptions));
+    console.log("From model path:", "Xenova/clip-vit-base-patch16");
     
-    // Initialize tokenizer and text model
+    // Try to load the tokenizer
     global.tokenizer = await transformers.AutoTokenizer.from_pretrained(
-      modelPath,
-      { 
-        local_files_only: false, // Set to false to allow downloading if not found
-        cache_dir: process.env.TRANSFORMERS_CACHE 
-      }
+      "Xenova/clip-vit-base-patch16",
+      pipelineOptions
     );
+    console.log("Tokenizer loaded successfully");
     
+    // Try to load the text model
+    console.log("Loading text model...");
     global.textModel = await transformers.CLIPTextModelWithProjection.from_pretrained(
-      modelPath,
-      { 
-        local_files_only: false, // Set to false to allow downloading if not found
-        cache_dir: process.env.TRANSFORMERS_CACHE 
-      }
+      "Xenova/clip-vit-base-patch16",
+      pipelineOptions
     );
+    console.log("Text model loaded successfully");
     
-    console.log("Models loaded successfully");
+    return true;
   } catch (error) {
     console.error("Failed to load models:", error);
-    // Create simple fallback
+    console.error("Error stack:", error.stack);
+    
+    // Create fallback
     global.mockEmbedding = true;
     console.log("Using fallback random embeddings");
+    return false;
   }
 }
 
