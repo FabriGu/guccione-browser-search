@@ -15,7 +15,9 @@ services:
       - key: NODE_ENV
         value: production
       - key: TRANSFORMERS_CACHE
-        value: /app/models/huggingface
+        value: /app/models
+
+        
     http_port: 3000
     instance_count: 1
     instance_size_slug: basic-s

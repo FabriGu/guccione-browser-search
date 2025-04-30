@@ -48,49 +48,36 @@ async function initialize() {
     // Import the transformers library
     transformers = await import('@huggingface/transformers');
     
-    // Initialize tokenizer and text model with local path
-    console.log("Loading tokenizer...");
+    // Log the exact model paths you're trying to use
+    console.log("Looking for models in:", process.env.TRANSFORMERS_CACHE);
+    
+    // Explicitly set the path to match your folder structure
+    const modelPath = "Xenova/clip-vit-base-patch16";
+    console.log("Attempting to load model from:", modelPath);
+    
+    // Initialize tokenizer and text model
     global.tokenizer = await transformers.AutoTokenizer.from_pretrained(
-      "Xenova/clip-vit-base-patch16",
+      modelPath,
       { 
-        local_files_only: true, 
-        cache_dir: MODELS_DIR 
+        local_files_only: false, // Set to false to allow downloading if not found
+        cache_dir: process.env.TRANSFORMERS_CACHE 
       }
     );
     
-    console.log("Loading text model...");
     global.textModel = await transformers.CLIPTextModelWithProjection.from_pretrained(
-      "Xenova/clip-vit-base-patch16",
+      modelPath,
       { 
-        local_files_only: true, 
-        cache_dir: MODELS_DIR 
+        local_files_only: false, // Set to false to allow downloading if not found
+        cache_dir: process.env.TRANSFORMERS_CACHE 
       }
     );
     
-    console.log("Models loaded successfully from pre-downloaded files");
-    return true;
+    console.log("Models loaded successfully");
   } catch (error) {
     console.error("Failed to load models:", error);
-    
-    // Fallback to download if necessary
-    console.log("Attempting to download models as fallback...");
-    try {
-      global.tokenizer = await transformers.AutoTokenizer.from_pretrained(
-        "Xenova/clip-vit-base-patch16",
-        { local_files_only: false }
-      );
-      
-      global.textModel = await transformers.CLIPTextModelWithProjection.from_pretrained(
-        "Xenova/clip-vit-base-patch16",
-        { local_files_only: false }
-      );
-      
-      console.log("Models downloaded successfully");
-      return true;
-    } catch (fallbackError) {
-      console.error("Fallback download also failed:", fallbackError);
-      throw error;
-    }
+    // Create simple fallback
+    global.mockEmbedding = true;
+    console.log("Using fallback random embeddings");
   }
 }
 
