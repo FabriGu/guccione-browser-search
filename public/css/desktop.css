@@ -1,0 +1,239 @@
+/* Create a new file: public/styles/google2009.css */
+
+
+/* 2009 Google styling */
+body, td, a, p, .h {
+    font-family: arial, sans-serif;
+  }
+  
+  input {
+    font-family: inherit;
+    height: 20px;
+  }
+  
+  main {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+  
+      z-index: 10;
+  }
+  
+  
+  html, body {
+    background-color: #FFF;
+    margin: 0;
+    padding: 0;
+  }
+  
+  canvas {
+    display: block;
+  }
+  
+  .wrapper {
+      border: solid 0px purple;
+  
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #searchItemsWrapper {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    /* height: 100vh; */
+  }
+  /* #homeScreen {} */
+  
+  #homeScreenNav {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 5px;
+      border-bottom: 1px solid black;
+  }
+  
+  #title {
+    font-family: googleFont-medium;
+    font-size: 50pt;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  #title img {
+    width: 70%;
+    padding: 5%;
+    padding-top: 0;
+    margin-top: -10%;
+  }
+  
+  #homeScreenSearchContainer {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    z-index: 10;
+  }
+  
+  #btnContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+      /* padding: 10px; */
+  }
+  
+  
+  
+  #searchBtn, #luckyBtn {
+      /* width: 30%; */
+      align-self: center;;
+      padding: 5px;
+      margin: 5px;
+    }
+  
+  #homeScreenInfo {
+    margin: 20px;
+    margin-top: 50px;
+  
+    text-align: center;
+  }
+  
+  #imageSearchScreen {
+    display: none;
+    flex-wrap: wrap;
+    flex-direction: row;
+    
+  }
+  
+  /* 
+  .resultDiv img {
+    width: 100 !important;
+    height: 200;
+  } */
+  
+  /* Additional CSS for navigation */
+  .navOption {
+    padding: 0 8px;
+    text-decoration: none;
+    color: #0000cc;
+  }
+  
+  .selectedNavOption {
+    color: #000;
+    font-family: gotham-medium;
+  }
+  
+  .navOption:hover {
+    text-decoration: underline;
+  }
+  
+  .result-item {
+    /* background-color: #f9f9f9; */
+    /* border: 1px #0000cc solid; */
+    /* border-radius: 4px; */
+    text-align: center;
+    object-fit: contain;
+    display: inline-block;
+    padding: 0;
+    width: 10%;
+  }
+  
+  .result-item img {
+    object-fit:contain;
+      padding: 0px;
+    margin: 0px;
+  
+  }
+  
+  
+
+/* body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+  } */
+  
+  /* #searchContainer {
+    margin: 10px 0 20px 10px;
+  } */
+  
+  /* #searchInput {
+    width: 400px;
+    height: 22px;
+    border: 1px solid #999;
+    padding: 3px;
+    font-size: 14px;
+  } */
+  
+  /* #searchBtn {
+    height: 30px;
+    margin-left: 5px;
+    font-weight: bold;
+    background: #f2f2f2;
+    border: 1px solid #ccc;
+    padding: 0 8px;
+  } */
+  
+  /* Google 2009 image search results styling */
+  .imageResult {
+    display: inline-block;
+    width: 140px;
+    height: 170px;
+    margin: 8px;
+    vertical-align: top;
+    overflow: hidden;
+    text-align: center;
+    position: relative;
+  }
+  
+  .imageResult img {
+    /* border: 1px solid #03c; */
+    padding: 2px;
+    max-width: 120px;
+    max-height: 120px;
+  }
+  
+  .imageResult:hover img {
+    border-color: #f00;
+  }
+  
+  .imageCaption {
+    margin-top: 3px;
+    width: 100%;
+    font-size: 11px;
+    line-height: 1.2;
+    color: #333;
+    text-align: center;
+    overflow: hidden;
+    height: 40px;
+  }
+  
+  #imageSearchScreen {
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  #title {
+    font-size: 22px;
+    margin: 10px;
+    color: #2200C1;
+  }
+  
+  .loadingMessage {
+    font-size: 14px;
+    color: #666;
+    margin: 10px;
+  }

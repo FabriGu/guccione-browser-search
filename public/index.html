@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Guccione</title>
+    <link rel="stylesheet" type="text/css" href="./css/desktop.css" />
+  </head>
+  <body>
+    <main>
+      <canvas id="statusCanvas" width="310" height="40"></canvas>
+      <div id="status">Ready to search!</div>
+    </main>
+    
+    <div id="homeScreen" class="wrapper">
+      <div id="homeScreenNav">
+        <a href="#" id="navImages" class="navOption selectedNavOption">Images</a> 
+        <!-- <a href="#" id="navTexts" class="navOption">Texts</a>  -->
+        <a href="#" id="navMaps" class="navOption">Work</a> 
+        <!-- <a href="#" id="navMaps" class="navOption">Gmail</a>  -->
+      </div>
+      
+      <div id="searchItemsWrapper">
+        <div id="title">
+          <img src="./assets/guccioneComV1.png">
+        </div>
+        
+        <div id="homeScreenSearchContainer">
+          <input id="searchInput">
+          <div id="btnContainer"> 
+            <button id="searchBtn">Guccione Search</button>
+            <button id="luckyBtn">I'm Feeling Lucky</button>
+          </div>
+        </div>
+      </div>
+     
+      
+      <div id="homeScreenInfo">
+        <a href="#">Avertising Programs</a> - 
+        <a href="#">Business Solutions</a> - 
+        <a href="#">About Guccione</a>
+        <p>
+          <font size=-2>&copy;2025 - <a href="#">Privacy</a></font>
+        </p>
+      </div>
+    </div>
+
+    <div id="imageSearchScreen" class="wrapper">
+      <!-- Results will be displayed here -->
+    </div>
+    
+    <script src="client.js"></script>
+  </body>
+  <script>
+    // Get the input field
+    let searchInput = document.getElementById("searchInput");
+
+    // Execute a function when the user presses a key on the keyboard
+    searchInput.addEventListener("keypress", function(event) {
+      // If the user presses the "Enter" key on the keyboard
+      if (event.key === "Enter") {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Trigger the button element with a click
+        document.getElementById("searchBtn").click();
+      }
+    });
+  </script>
+</html>
