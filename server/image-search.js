@@ -34,7 +34,7 @@ import { fileURLToPath } from 'url';
 
 // Get current directory if needed
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const MODELS_DIR = path.join(__dirname, '../models/huggingface');
+const MODELS_DIR = path.join(__dirname, '../models');
 
 // Initialize transformers
 let transformers;
