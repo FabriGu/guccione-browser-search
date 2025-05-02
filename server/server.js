@@ -1,4 +1,4 @@
-// import * as captionService from './caption-service.js';
+// server/server.js - Simplified version
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
@@ -6,60 +6,46 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import * as imageSearch from './image-search.js';
 
-// const express = require('express');
-// const cors = require('cors');
-// const path = require('path');
-// const fs = require('fs');
-// const imageSearch = require('./image-search');
+// Get current directory
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Initialize app
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-console.log(__dirname)
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Load image embeddings
-let imageEmbeddings = [];
-let imageCaptions = [];
-let mergedData;
+// Load image embeddings and captions
+let mergedData = [];
 try {
+  // Load embeddings
   const embeddingsData = fs.readFileSync(path.join(__dirname, '../data/image-embeddings.json'), 'utf8');
-  imageEmbeddings = JSON.parse(embeddingsData).images;
+  const imageEmbeddings = JSON.parse(embeddingsData).images;
   console.log(`Loaded ${imageEmbeddings.length} image embeddings`);
-
-  // load the image captions
+  
+  // Load captions
   const captionData = fs.readFileSync(path.join(__dirname, '../data/image-captions.json'), 'utf8');
-  // console.log(captionData)
-  imageCaptions = JSON.parse(captionData).images;
-  // console.log(imageCaptions)
-
-  // merge?
-
-  mergedData = imageEmbeddings.map( imageIdA => {
-  const matched = imageCaptions.find(imageIdB => imageIdB.url === imageIdA.url)
-  if(matched) {
-    return {...imageIdA, ...matched}
-  } else {
-    // return companyA element or customize it with your case
-  }
-  }
-  )
-
-
-  console.log(mergedData)
+  const imageCaptions = JSON.parse(captionData).images;
+  console.log(`Loaded ${imageCaptions.length} image captions`);
+  
+  // Merge embeddings and captions by URL
+  mergedData = imageEmbeddings.map(embedding => {
+    const matchedCaption = imageCaptions.find(caption => caption.url === embedding.url);
+    return {
+      ...embedding,
+      caption: matchedCaption ? matchedCaption.caption : ''
+    };
+  });
+  
+  console.log(`Merged ${mergedData.length} items with embeddings and captions`);
 } catch (error) {
-  console.error('Error loading embeddings:', error);
+  console.error('Error loading data:', error);
 }
 
-// captionService.loadCaptions();
-
-// Initialize the embedding service
+// Initialize the embedding service (CLIP model only)
 imageSearch.initialize()
   .then(() => {
     console.log('CLIP model loaded successfully');
@@ -76,29 +62,19 @@ app.post('/api/search', async (req, res) => {
       return res.status(400).json({ error: 'Query is required' });
     }
 
-    // Add "photo of" to the query for better results (as in your original code)
+    // Add "photo of" to the query for better results
     const fullQuery = "photo of " + query.trim();
     
     // Get search results
     const results = await imageSearch.search(fullQuery, mergedData);
     
-    // Return top 20 results with proper URLs
-    // const topResults = results.slice(0, 20).map(result => ({
-    //   url: result.item.url,
-    //   id: result.item.id,
-    //   similarity: result.similarity
-    // }));
-
-    // In your search results, add the caption field:
-    
-const topResults = results.slice(0, 20).map(result => ({
-  url: result.item.url,
-  id: result.item.id,
-  similarity: result.similarity,
-  
-  caption: result.item.caption
-}));
- 
+    // Return top 20 results with URLs, captions, and similarity scores
+    const topResults = results.slice(0, 20).map(result => ({
+      url: result.item.url,
+      id: result.item.id,
+      similarity: result.similarity,
+      caption: result.item.caption || ''
+    }));
     
     res.json({ results: topResults });
   } catch (error) {
