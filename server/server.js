@@ -126,6 +126,150 @@ Promise.all([
   textModelLoaded = false;
 });
 
+// Add this right after your Promise.all for model initialization
+
+// // Ensure we have a working suggestion mechanism regardless of model loading
+// if (!textModelLoaded) {
+//   console.log('Setting up fallback suggestion mechanism since text model failed to load');
+  
+//   // Override getSuggestions to use a simple prefix matching mechanism
+//   textEmbeddings.getSuggestions = async function(query, limit = 5) {
+//     console.log(`Using fallback prefix matching for: "${query}"`);
+    
+//     if (!query || query.trim() === '') {
+//       return [];
+//     }
+    
+//     // Normalize query
+//     query = query.trim().toLowerCase();
+    
+//     // Load search history
+//     const history = textEmbeddings.loadSearchHistory();
+    
+//     // Handle empty history
+//     if (!history.searches || history.searches.length === 0) {
+//       return [];
+//     }
+    
+//     // Simple prefix matching - find items that start with the query
+//     const prefixMatches = history.searches
+//       .filter(item => item.query.toLowerCase().startsWith(query))
+//       .map(item => ({
+//         query: item.query,
+//         score: 1.0,
+//         count: item.count || 1
+//       }));
+    
+//     // If not enough prefix matches, find items that include the query
+//     if (prefixMatches.length < limit) {
+//       const containsMatches = history.searches
+//         .filter(item => 
+//           !item.query.toLowerCase().startsWith(query) && 
+//           item.query.toLowerCase().includes(query)
+//         )
+//         .map(item => ({
+//           query: item.query,
+//           score: 0.8,  // Lower score for contains matches
+//           count: item.count || 1
+//         }));
+      
+//       // Combine and sort by score then count
+//       const allMatches = [...prefixMatches, ...containsMatches]
+//         .sort((a, b) => {
+//           if (a.score !== b.score) return b.score - a.score;
+//           return b.count - a.count;
+//         });
+      
+//       return allMatches.slice(0, limit);
+//     }
+    
+//     // Sort by count (popularity) for prefix matches
+//     return prefixMatches
+//       .sort((a, b) => b.count - a.count)
+//       .slice(0, limit);
+//   };
+  
+//   // Also override addSearchToHistory to not compute embeddings
+//   textEmbeddings.addSearchToHistory = async function(query) {
+//     if (!query || query.trim() === '') return false;
+    
+//     // Clean up the query
+//     query = query.trim();
+//     console.log(`Adding search to history (fallback mode): "${query}"`);
+    
+//     // Load current history
+//     const history = textEmbeddings.loadSearchHistory();
+    
+//     // Check if this query already exists
+//     const existingIndex = history.searches.findIndex(item => 
+//       item.query.toLowerCase() === query.toLowerCase()
+//     );
+    
+//     if (existingIndex >= 0) {
+//       // Update the count for existing query
+//       history.searches[existingIndex].count = (history.searches[existingIndex].count || 1) + 1;
+//       history.searches[existingIndex].lastUsed = new Date().toISOString();
+//       textEmbeddings.saveSearchHistory(history);
+//       return true;
+//     }
+    
+//     // Add new search to history (without embedding)
+//     history.searches.push({
+//       query: query,
+//       embedding: null,  // No embedding in fallback mode
+//       count: 1,
+//       lastUsed: new Date().toISOString(),
+//       created: new Date().toISOString()
+//     });
+    
+//     textEmbeddings.saveSearchHistory(history);
+//     return true;
+//   };
+  
+//   console.log('Fallback suggestion mechanism is ready');
+// }
+
+// // Similarly, ensure we have a working search mechanism
+// if (!modelLoaded) {
+//   console.log('Setting up fallback search mechanism since CLIP model failed to load');
+  
+//   // Override search to use simple text matching
+//   imageSearch.search = async function(query, imageItems) {
+//     console.log(`Using fallback text matching for: "${query}"`);
+    
+//     const normalizedQuery = query.toLowerCase();
+//     const queryTerms = normalizedQuery.split(/\s+/).filter(term => term.length > 2);
+    
+//     // Calculate a simple matching score based on caption text
+//     const matches = imageItems.map(item => {
+//       let similarity = 0;
+      
+//       if (item.caption) {
+//         const normalizedCaption = item.caption.toLowerCase();
+        
+//         // Check for exact phrase match
+//         if (normalizedCaption.includes(normalizedQuery)) {
+//           similarity += 2;
+//         }
+        
+//         // Check for individual term matches
+//         queryTerms.forEach(term => {
+//           if (normalizedCaption.includes(term)) {
+//             similarity += 0.5;
+//           }
+//         });
+//       }
+      
+//       return { item, similarity };
+//     });
+    
+//     // Sort by similarity score
+//     return matches.sort((a, b) => b.similarity - a.similarity);
+//   };
+  
+//   console.log('Fallback search mechanism is ready');
+// }
+
 // API endpoint for searching images
 app.post('/api/search', async (req, res) => {
   try {

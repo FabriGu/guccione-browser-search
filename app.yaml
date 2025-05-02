@@ -11,8 +11,8 @@ services:
       mkdir -p models/huggingface
       mkdir -p data
       export TRANSFORMERS_CACHE=$(pwd)/models/huggingface
-      echo "Running download-models script..."
-      node scripts/download-models.js
+      echo "Running download-all-models script..."
+      node scripts/download-all-models.js
       echo "Download complete"
     run_command: |
       export TRANSFORMERS_CACHE=/app/models/huggingface
@@ -22,8 +22,12 @@ services:
         value: production
       - key: TRANSFORMERS_CACHE
         value: /app/models/huggingface
+      # Add memory limit environment variable to avoid OOM errors
+      - key: NODE_OPTIONS
+        value: --max-old-space-size=4096
     http_port: 3000
+    # Increase instance size to handle model loading
     instance_count: 1
-    instance_size_slug: basic-s
+    instance_size_slug: basic-xxl
     git:
       git_lfs: true
