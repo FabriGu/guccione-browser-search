@@ -1,70 +1,34 @@
-// server/text-embeddings.js - Simplified approach
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
+// server/text-embeddings.js - Simple CommonJS version
+const path = require('path');
+const fs = require('fs');
 
 // Get current directory
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MODELS_DIR = path.join(__dirname, '../models/huggingface');
 
 // Default search history file
 const SEARCH_HISTORY_FILE = path.join(__dirname, '../data/search-history.json');
 
-// Set up transformers to use local models
-let transformers;
+// Set up environment variables
+process.env.TRANSFORMERS_CACHE = MODELS_DIR;
+
+// Will store the pipeline
 let embeddingPipeline = null;
+let transformers;
 
 // Initialize model
 async function initialize() {
   try {
     console.log("Initializing text embeddings model...");
     
-    // Set environment variables
-    process.env.TRANSFORMERS_CACHE = MODELS_DIR;
-    
-    // Import the transformers library
+    // Import the transformers library (must use dynamic import)
     transformers = await import('@huggingface/transformers');
     
-    const modelOptions = {
-      cache_dir: MODELS_DIR,
-      local_files_only: false, // Allow downloading if needed
-      quantized: false, // Use non-quantized model for better compatibility
-      progress_callback: progress => {
-        if (progress.status === 'progress' && progress.progress % 10 === 0) {
-          console.log(`Model download progress: ${progress.progress.toFixed(0)}%`);
-        }
-      }
-    };
-    
-    // Use environment-specific model loading (using web version to avoid ONNX issues)
-    const isNode = typeof process !== 'undefined' && 
-                   process.versions != null && 
-                   process.versions.node != null;
-                   
-    // For server environment, prefer web version which has better compatibility
-    const modelRevision = isNode ? 'main-web' : 'main';
-    
-    // Load pipeline for feature extraction with options
+    // Load pipeline for feature extraction
     console.log("Loading text embeddings pipeline...");
-    
-    try {
-      // First try with main-web revision (better for server)
-      embeddingPipeline = await transformers.pipeline(
-        "feature-extraction", 
-        "Xenova/all-MiniLM-L6-v2", 
-        {
-          ...modelOptions,
-          revision: modelRevision
-        }
-      );
-    } catch (error) {
-      console.log("Failed to load web model, trying standard model...");
-      embeddingPipeline = await transformers.pipeline(
-        "feature-extraction", 
-        "Xenova/all-MiniLM-L6-v2", 
-        modelOptions
-      );
-    }
+    embeddingPipeline = await transformers.pipeline(
+      "feature-extraction", 
+      "Xenova/all-MiniLM-L6-v2"
+    );
     
     console.log("Text embeddings model loaded successfully");
     return true;
@@ -307,7 +271,7 @@ async function initializeWithDefaultSearches() {
   console.log("Default search history initialized with", defaultSearches.length, "entries");
 }
 
-export { 
+module.exports = { 
   initialize, 
   computeEmbedding, 
   cosineSimilarity, 
