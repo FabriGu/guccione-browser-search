@@ -5,6 +5,8 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import * as imageSearch from './image-search.js';
+import * as textEmbeddings from './text-embeddings.js';
+
 
 // Get current directory
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -81,15 +83,39 @@ try {
 
 // Initialize the embedding service (CLIP model only)
 let modelLoaded = false;
-imageSearch.initialize()
-  .then((success) => {
-    modelLoaded = success;
-    console.log('CLIP model initialization completed, success:', success);
-  })
-  .catch(error => {
-    console.error('Failed to load CLIP model:', error);
-    modelLoaded = false;
-  });
+let textModelLoaded = false;
+/////////---------------------------------------------------------------------------OLD INITIALIZATION
+// imageSearch.initialize()
+//   .then((success) => {
+//     modelLoaded = success;
+//     console.log('CLIP model initialization completed, success:', success);
+//   })
+//   .catch(error => {
+//     console.error('Failed to load CLIP model:', error);
+//     modelLoaded = false;
+//   });
+
+Promise.all([
+  imageSearch.initialize(),
+  textEmbeddings.initialize()
+])
+.then(([imageSuccess, textSuccess]) => {
+  modelLoaded = imageSuccess;
+  textModelLoaded = textSuccess;
+  console.log('Models initialization completed:', 
+              'CLIP:', imageSuccess, 
+              'Text embeddings:', textSuccess);
+  
+  // Initialize default search history if text model loaded successfully
+  if (textSuccess) {
+    textEmbeddings.initializeWithDefaultSearches();
+  }
+})
+.catch(error => {
+  console.error('Failed to load models:', error);
+  modelLoaded = false;
+  textModelLoaded = false;
+});
 
 // API endpoint for searching images
 app.post('/api/search', async (req, res) => {
@@ -97,6 +123,10 @@ app.post('/api/search', async (req, res) => {
     const { query } = req.body;
     if (!query) {
       return res.status(400).json({ error: 'Query is required' });
+    }
+
+    if (textModelLoaded) {
+      textEmbeddings.addSearchToHistory(query);
     }
 
     // Add "photo of" to the query for better results
@@ -134,6 +164,23 @@ app.get('/health', (req, res) => {
     dataLoaded: mergedData.length > 0,
     environment: process.env.NODE_ENV || 'development'
   });
+});
+////////// ----------------------------------------------------------------------------new endpoing
+app.get('/api/suggestions', async (req, res) => {
+  try {
+    const { query } = req.query;
+    if (!query) {
+      return res.json({ suggestions: [] });
+    }
+    
+    // Get suggestions using text embeddings
+    const suggestions = await textEmbeddings.getSuggestions(query);
+    
+    res.json({ suggestions });
+  } catch (error) {
+    console.error('Suggestions error:', error);
+    res.status(500).json({ error: 'An error occurred while getting suggestions' });
+  }
 });
 
 // Start server

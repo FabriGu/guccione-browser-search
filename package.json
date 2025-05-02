@@ -9,7 +9,8 @@
     "dev": "nodemon server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "generate-captions": "node scripts/generate-captions.js",
-    "download-models": "node scripts/download-models.js"
+    "download-models": "node scripts/download-models.js",
+    "download-text-model": "node scripts/download-text-model.js"
   },
   "dependencies": {
     "@huggingface/transformers": "^3.5.0",
