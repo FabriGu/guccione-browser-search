@@ -1,4 +1,6 @@
-# node_modules
+# In project root directory, create or update .gitignore
+cat > .gitignore << EOL
+# Node modules
 node_modules/
 
 # Environment variables
@@ -16,3 +18,4 @@ Thumbs.db
 # Don't ignore models directory for LFS
 !models/
 !models/**/*.onnx
+EOL

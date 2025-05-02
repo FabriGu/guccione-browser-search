@@ -115,6 +115,10 @@ body, td, a, p, .h {
     flex-direction: row;
     
   }
+
+  .imageSource {
+    color: green;
+  }
   
   /* 
   .resultDiv img {
