@@ -1,5 +1,3 @@
-# In project root directory, create or update .gitignore
-cat > .gitignore << EOL
 # Node modules
 node_modules/
 
@@ -18,4 +16,7 @@ Thumbs.db
 # Don't ignore models directory for LFS
 !models/
 !models/**/*.onnx
-EOL
+
+# Don't ignore data directory
+!data/
+!data/*.json
