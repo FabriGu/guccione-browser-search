@@ -110,6 +110,15 @@ Promise.all([
   if (textSuccess) {
     textEmbeddings.initializeWithDefaultSearches();
   }
+  // if (textModelLoaded) {
+  //   // Validate the search history file structure
+  //   textEmbeddings.validateSearchHistory();
+    
+  //   // Initialize with default searches if needed
+  //   textEmbeddings.initializeWithDefaultSearches().then(() => {
+  //     console.log("Search suggestions ready");
+  //   });
+  // }
 })
 .catch(error => {
   console.error('Failed to load models:', error);
@@ -169,12 +178,19 @@ app.get('/health', (req, res) => {
 app.get('/api/suggestions', async (req, res) => {
   try {
     const { query } = req.query;
+    console.log(`Suggestion request received for: "${query}"`);
+    
     if (!query) {
+      console.log("Empty query, returning empty suggestions");
       return res.json({ suggestions: [] });
     }
     
     // Get suggestions using text embeddings
+    console.log(`Getting suggestions for: "${query}"`);
     const suggestions = await textEmbeddings.getSuggestions(query);
+    
+    console.log(`Returning ${suggestions.length} suggestions:`, 
+                suggestions.map(s => s.query).join(', '));
     
     res.json({ suggestions });
   } catch (error) {

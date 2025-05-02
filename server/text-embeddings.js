@@ -111,19 +111,29 @@ function cosineSimilarity(vecA, vecB) {
 
 // Load search history from file
 function loadSearchHistory() {
-  try {
-    if (fs.existsSync(SEARCH_HISTORY_FILE)) {
-      const data = fs.readFileSync(SEARCH_HISTORY_FILE, 'utf8');
-      return JSON.parse(data);
-    } else {
-      // Initialize with empty history
+    try {
+      if (fs.existsSync(SEARCH_HISTORY_FILE)) {
+        // Add debug output
+        console.log("Loading search history from:", SEARCH_HISTORY_FILE);
+        
+        const data = fs.readFileSync(SEARCH_HISTORY_FILE, 'utf8');
+        const history = JSON.parse(data);
+        
+        // Log the number of items found
+        console.log(`Loaded ${history.searches?.length || 0} search items from history`);
+        
+        return history;
+      } else {
+        console.log("Search history file not found. Creating empty history.");
+        // Initialize with empty history
+        return { searches: [] };
+      }
+    } catch (error) {
+      console.error("Error loading search history:", error);
       return { searches: [] };
     }
-  } catch (error) {
-    console.error("Error loading search history:", error);
-    return { searches: [] };
   }
-}
+  
 
 // Save search history to file
 function saveSearchHistory(history) {
@@ -138,83 +148,126 @@ function saveSearchHistory(history) {
 
 // Add a search to history
 async function addSearchToHistory(query) {
-  if (!query || query.trim() === '') return false;
-  
-  // Clean up the query
-  query = query.trim();
-  
-  // Load current history
-  const history = loadSearchHistory();
-  
-  // Check if this query already exists
-  const existingIndex = history.searches.findIndex(item => 
-    item.query.toLowerCase() === query.toLowerCase()
-  );
-  
-  if (existingIndex >= 0) {
-    // Update the count for existing query
-    history.searches[existingIndex].count += 1;
-    history.searches[existingIndex].lastUsed = new Date().toISOString();
+    if (!query || query.trim() === '') return false;
+    
+    // Clean up the query
+    query = query.trim();
+    console.log(`Adding search to history: "${query}"`);
+    
+    // Load current history
+    const history = loadSearchHistory();
+    
+    // Check if this query already exists
+    const existingIndex = history.searches.findIndex(item => 
+      item.query.toLowerCase() === query.toLowerCase()
+    );
+    
+    if (existingIndex >= 0) {
+      // Update the count for existing query
+      history.searches[existingIndex].count = (history.searches[existingIndex].count || 1) + 1;
+      history.searches[existingIndex].lastUsed = new Date().toISOString();
+      console.log(`Updating existing search: "${query}" (count: ${history.searches[existingIndex].count})`);
+      saveSearchHistory(history);
+      return true;
+    }
+    
+    // Compute embedding for the new query
+    console.log(`Computing embedding for new search: "${query}"`);
+    const embedding = await computeEmbedding(query);
+    
+    // Add new search to history
+    history.searches.push({
+      query: query,
+      embedding: embedding,
+      count: 1,
+      lastUsed: new Date().toISOString(),
+      created: new Date().toISOString()
+    });
+    
+    console.log(`Added new search to history: "${query}" (total: ${history.searches.length})`);
+    
+    // Save updated history
     saveSearchHistory(history);
     return true;
   }
-  
-  // Compute embedding for the new query
-  const embedding = await computeEmbedding(query);
-  
-  // Add new search to history
-  history.searches.push({
-    query: query,
-    embedding: embedding,
-    count: 1,
-    lastUsed: new Date().toISOString(),
-    created: new Date().toISOString()
-  });
-  
-  // Save updated history
-  saveSearchHistory(history);
-  return true;
-}
 
 // Get search suggestions
 async function getSuggestions(query, limit = 5) {
-  if (!query || query.trim() === '') {
-    return [];
-  }
-  
-  // Clean up the query
-  query = query.trim();
-  
-  // Load search history
-  const history = loadSearchHistory();
-  
-  // If no history, return empty suggestions
-  if (!history.searches || history.searches.length === 0) {
-    return [];
-  }
-  
-  // Compute embedding for the input query
-  const queryEmbedding = await computeEmbedding(query);
-  
-  // Calculate similarity for each search in history
-  const similarities = history.searches.map(item => {
-    return {
+    if (!query || query.trim() === '') {
+      return [];
+    }
+    
+    // Clean up the query
+    query = query.trim().toLowerCase();
+    
+    // Load search history (ensuring we get the latest data)
+    const history = loadSearchHistory();
+    
+    // If no history, return empty suggestions
+    if (!history.searches || history.searches.length === 0) {
+      console.log("No search history available for suggestions");
+      return [];
+    }
+    
+    console.log(`Finding suggestions for "${query}" among ${history.searches.length} items`);
+    
+    // Check for exact prefix matches first (better user experience for partial typing)
+    const prefixMatches = history.searches
+      .filter(item => item.query.toLowerCase().startsWith(query))
+      .map(item => ({
+        query: item.query,
+        score: 1.0,  // Give prefix matches a perfect score
+        count: item.count || 1
+      }));
+    
+    // If we have enough prefix matches, return those
+    if (prefixMatches.length >= limit) {
+      console.log(`Found ${prefixMatches.length} prefix matches for "${query}"`);
+      // Sort by count (popularity) for matches with same prefix
+      return prefixMatches
+        .sort((a, b) => b.count - a.count)
+        .slice(0, limit);
+    }
+    
+    // If not enough prefix matches, compute embedding for the input query
+    const queryEmbedding = await computeEmbedding(query);
+    
+    // Calculate similarity for each search in history
+    const similarities = history.searches.map(item => {
+      // Skip items without embeddings
+      if (!item.embedding) {
+        console.log(`Warning: Search item "${item.query}" has no embedding`);
+        return { query: item.query, similarity: 0, count: item.count || 1 };
+      }
+      
+      return {
+        query: item.query,
+        similarity: cosineSimilarity(queryEmbedding, item.embedding),
+        count: item.count || 1
+      };
+    });
+    
+    // Combine prefix matches with semantic matches
+    const allMatches = [
+      ...prefixMatches,
+      ...similarities.filter(item => 
+        !prefixMatches.some(match => match.query === item.query)
+      )
+    ];
+    
+    // Sort by similarity (highest first)
+    allMatches.sort((a, b) => b.similarity - a.similarity);
+    
+    // Log what we found
+    console.log(`Found ${allMatches.length} total matches, returning top ${limit}`);
+    
+    // Return top N suggestions
+    return allMatches.slice(0, limit).map(item => ({
       query: item.query,
-      similarity: cosineSimilarity(queryEmbedding, item.embedding),
-      count: item.count
-    };
-  });
-  
-  // Sort by similarity (highest first)
-  similarities.sort((a, b) => b.similarity - a.similarity);
-  
-  // Return top N suggestions
-  return similarities.slice(0, limit).map(item => ({
-    query: item.query,
-    score: item.similarity,
-    count: item.count
-  }));
-}
+      score: item.similarity,
+      count: item.count || 1
+    }));
+  }
 
 // Initialize with some default searches
 async function initializeWithDefaultSearches() {
@@ -265,6 +318,74 @@ async function initializeWithDefaultSearches() {
   console.log("Default search history initialized with", defaultSearches.length, "entries");
 }
 
+function validateSearchHistory() {
+    console.log("Validating search history file...");
+    try {
+      // Check if file exists
+      if (!fs.existsSync(SEARCH_HISTORY_FILE)) {
+        console.log("Search history file doesn't exist. Creating a new one.");
+        fs.writeFileSync(SEARCH_HISTORY_FILE, JSON.stringify({ searches: [] }, null, 2));
+        return false;
+      }
+      
+      // Read the file
+      const data = fs.readFileSync(SEARCH_HISTORY_FILE, 'utf8');
+      let history;
+      
+      try {
+        // Parse the JSON
+        history = JSON.parse(data);
+      } catch (parseError) {
+        console.error("Error parsing search history JSON:", parseError);
+        console.log("Creating a new search history file with valid JSON");
+        fs.writeFileSync(SEARCH_HISTORY_FILE, JSON.stringify({ searches: [] }, null, 2));
+        return false;
+      }
+      
+      // Check if history has the expected structure
+      if (!history || !Array.isArray(history.searches)) {
+        console.error("Invalid search history structure. Resetting file.");
+        fs.writeFileSync(SEARCH_HISTORY_FILE, JSON.stringify({ searches: [] }, null, 2));
+        return false;
+      }
+      
+      // Check each search item for valid structure
+      let hasInvalidItems = false;
+      const validSearches = history.searches.filter(item => {
+        if (!item || typeof item !== 'object') {
+          hasInvalidItems = true;
+          return false;
+        }
+        
+        if (!item.query || typeof item.query !== 'string') {
+          hasInvalidItems = true;
+          return false;
+        }
+        
+        if (!item.embedding || !Array.isArray(item.embedding)) {
+          console.log(`Search item "${item.query}" has no valid embedding`);
+          hasInvalidItems = true;
+          return false;
+        }
+        
+        return true;
+      });
+      
+      // If any items were invalid, update the file
+      if (hasInvalidItems) {
+        console.log(`Removed ${history.searches.length - validSearches.length} invalid items from search history`);
+        fs.writeFileSync(SEARCH_HISTORY_FILE, JSON.stringify({ searches: validSearches }, null, 2));
+        return false;
+      }
+      
+      console.log(`Search history validated: ${history.searches.length} valid items`);
+      return true;
+    } catch (error) {
+      console.error("Error validating search history:", error);
+      return false;
+    }
+  }
+
 export { 
   initialize, 
   computeEmbedding, 
@@ -273,5 +394,7 @@ export {
   saveSearchHistory, 
   addSearchToHistory, 
   getSuggestions,
-  initializeWithDefaultSearches
+  initializeWithDefaultSearches,
+  validateSearchHistory
 };
+
