@@ -1,4 +1,4 @@
-# app.yaml
+# app.yaml - Minimal but effective configuration
 name: guccione-browser-search
 services:
   - name: web
@@ -11,9 +11,8 @@ services:
       mkdir -p models/huggingface
       mkdir -p data
       export TRANSFORMERS_CACHE=$(pwd)/models/huggingface
-      echo "Running download-all-models script..."
-      node scripts/download-all-models.js
-      echo "Download complete"
+      echo "Downloading models..."
+      node scripts/download-models-simple.js
     run_command: |
       export TRANSFORMERS_CACHE=/app/models/huggingface
       npm start
@@ -22,12 +21,11 @@ services:
         value: production
       - key: TRANSFORMERS_CACHE
         value: /app/models/huggingface
-      # Add memory limit environment variable to avoid OOM errors
+      # Add memory limit to avoid OOM errors
       - key: NODE_OPTIONS
         value: --max-old-space-size=4096
     http_port: 3000
-    # Increase instance size to handle model loading
-    instance_count: 1
-    instance_size_slug: basic-xxl
+    # Use a larger instance to handle model loading
+    instance_size_slug: basic-xl
     git:
       git_lfs: true
