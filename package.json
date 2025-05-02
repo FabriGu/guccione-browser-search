@@ -10,7 +10,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "generate-captions": "node scripts/generate-captions.js",
     "download-models": "node scripts/download-models.js",
-    "download-text-model": "node scripts/download-text-model.js"
+    "download-text-model": "node scripts/download-text-model.js",
+    "download-all-models": "node scripts/download-all-models.js",
+    "prepare-deploy": "node scripts/prepare-deploy.js"
   },
   "dependencies": {
     "@huggingface/transformers": "^3.5.0",
