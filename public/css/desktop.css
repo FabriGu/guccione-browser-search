@@ -241,3 +241,50 @@ body, td, a, p, .h {
     color: #666;
     margin: 10px;
   }
+
+  /* ------------------------------ SEARCH COMPLETION */
+  /* Add these styles to your desktop.css file */
+
+/* Search suggestions styling */
+.suggestions-list {
+  position: absolute;
+  width: 400px;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-top: none;
+  z-index: 999;
+  display: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.suggestion-item {
+  padding: 8px 10px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 14px;
+}
+
+.suggestion-item:hover,
+.suggestion-item.selected {
+  background-color: #f2f2f2;
+}
+
+.highlight {
+  font-weight: bold;
+  color: #0000cc;
+}
+
+/* Position the suggestions correctly for both layouts */
+#homeScreenSearchContainer {
+  position: relative;
+}
+
+/* Make sure the suggestions appear below the search input in both layouts */
+#suggestionsList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+}

@@ -1,11 +1,40 @@
+  /// ----------------------------------------------------------- SEARCH COMPLETION VARIABLE DECLARATION
+  let suggestionsList;
+let suggestionTimeout;
+const SUGGESTION_DELAY = 300; // milliseconds to wait before fetching suggestions
+  /// ----------------------------------------------------------- SEARCH COMPLETION VARIABLE DECLARATION
+
+
 // Client-side JavaScript for image search
 document.addEventListener("DOMContentLoaded", function () {
+ 
   // Get references to DOM elements
   const searchInput = document.querySelector("#searchInput");
   const searchButton = document.querySelector("#searchBtn");
   const resultsDiv = document.querySelector("#imageSearchScreen");
   const title = document.querySelector("#title");
   const statusElement = document.querySelector("#status");
+
+   /// ----------------------------------------------------------- SEARCH COMPLETION logic
+// Create and add suggestions container
+suggestionsList = document.createElement("div");
+suggestionsList.id = "suggestionsList";
+suggestionsList.className = "suggestions-list";
+searchInput.parentNode.insertBefore(suggestionsList, searchInput.nextSibling);
+
+// Add event listener for input changes to show suggestions
+searchInput.addEventListener("input", handleInputChange);
+
+// Add event listener to hide suggestions when clicking outside
+document.addEventListener("click", function(event) {
+  if (event.target !== searchInput && event.target !== suggestionsList) {
+    hideSuggestions();
+  }
+});
+
+// Add keyboard navigation for suggestions
+searchInput.addEventListener("keydown", handleKeyNavigation);
+
 
   // Add event listener for search button
   searchButton.addEventListener("click", searchImages);
@@ -249,3 +278,145 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 });
+
+
+// ---------------------------------------------- SEARCH COMPLETION logic
+// Handle input change with debounce
+function handleInputChange() {
+  const query = searchInput.value.trim();
+  
+  // Clear previous timeout
+  if (suggestionTimeout) {
+    clearTimeout(suggestionTimeout);
+  }
+  
+  // Hide suggestions if query is empty
+  if (!query) {
+    hideSuggestions();
+    return;
+  }
+  
+  // Set timeout to fetch suggestions
+  suggestionTimeout = setTimeout(() => {
+    fetchSuggestions(query);
+  }, SUGGESTION_DELAY);
+}
+
+// Fetch suggestions from server
+async function fetchSuggestions(query) {
+  try {
+    const response = await fetch(`/api/suggestions?query=${encodeURIComponent(query)}`);
+    
+    if (!response.ok) {
+      throw new Error("Failed to fetch suggestions");
+    }
+    
+    const data = await response.json();
+    displaySuggestions(data.suggestions, query);
+  } catch (error) {
+    console.error("Error fetching suggestions:", error);
+    hideSuggestions();
+  }
+}
+
+// Display suggestions in the UI
+function displaySuggestions(suggestions, query) {
+  // Clear previous suggestions
+  suggestionsList.innerHTML = "";
+  
+  // Hide if no suggestions
+  if (!suggestions || suggestions.length === 0) {
+    hideSuggestions();
+    return;
+  }
+  
+  // Create suggestion items
+  suggestions.forEach((suggestion, index) => {
+    const item = document.createElement("div");
+    item.className = "suggestion-item";
+    item.dataset.index = index;
+    
+    // Highlight the matching part of the suggestion
+    const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
+    const highlightedText = suggestion.query.replace(
+      regex, 
+      '<span class="highlight">$1</span>'
+    );
+    
+    item.innerHTML = highlightedText;
+    
+    // Add click event to select this suggestion
+    item.addEventListener("click", () => {
+      selectSuggestion(suggestion.query);
+    });
+    
+    suggestionsList.appendChild(item);
+  });
+  
+  // Show the suggestions list
+  suggestionsList.style.display = "block";
+}
+
+// Helper function to escape special characters in regex
+function escapeRegExp(string) {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// Hide suggestions
+function hideSuggestions() {
+  suggestionsList.style.display = "none";
+}
+
+// Select a suggestion
+function selectSuggestion(text) {
+  searchInput.value = text;
+  hideSuggestions();
+  searchImages(); // Perform search with the selected suggestion
+}
+
+// Handle keyboard navigation
+function handleKeyNavigation(event) {
+  const items = document.querySelectorAll('.suggestion-item');
+  if (!items.length || suggestionsList.style.display === 'none') return;
+  
+  // Find the currently selected item (if any)
+  const selected = document.querySelector('.suggestion-item.selected');
+  const selectedIndex = selected ? parseInt(selected.dataset.index) : -1;
+  
+  switch (event.key) {
+    case 'ArrowDown':
+      event.preventDefault();
+      // Select next item or first if none selected
+      if (selectedIndex < items.length - 1) {
+        if (selected) selected.classList.remove('selected');
+        items[selectedIndex + 1].classList.add('selected');
+      } else if (selectedIndex === -1 && items.length > 0) {
+        items[0].classList.add('selected');
+      }
+      break;
+      
+    case 'ArrowUp':
+      event.preventDefault();
+      // Select previous item or last if none selected
+      if (selectedIndex > 0) {
+        if (selected) selected.classList.remove('selected');
+        items[selectedIndex - 1].classList.add('selected');
+      } else if (selectedIndex === -1 && items.length > 0) {
+        items[items.length - 1].classList.add('selected');
+      }
+      break;
+      
+    case 'Enter':
+      // If an item is selected, use it
+      if (selected) {
+        event.preventDefault();
+        selectSuggestion(selected.textContent);
+      }
+      break;
+      
+    case 'Escape':
+      // Hide suggestions
+      hideSuggestions();
+      break;
+  }
+}
