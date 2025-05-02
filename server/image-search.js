@@ -1,52 +1,31 @@
-// server/image-search.js - Using standard model approach
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
-
-// Get current directory
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// server/image-search.js - Simple CommonJS version
+const path = require('path');
 const MODELS_DIR = path.join(__dirname, '../models/huggingface');
 
-// Set up transformers to use local models
-let transformers;
-let tokenizer = null;
-let textModel = null;
+// Set up environment variables
+process.env.TRANSFORMERS_CACHE = MODELS_DIR;
 
-// Initialize model
+// Will store model objects
+let tokenizer;
+let textModel;
+let transformers;
+
 async function initialize() {
   try {
     console.log("Initializing CLIP model...");
     
-    // Set environment variables
-    process.env.TRANSFORMERS_CACHE = MODELS_DIR;
-    
-    // Import the transformers library
+    // Import the transformers library (must use dynamic import)
     transformers = await import('@huggingface/transformers');
+    console.log("Transformers library imported successfully");
     
-    const modelOptions = {
-      cache_dir: MODELS_DIR,
-      local_files_only: false, // Allow downloading if needed
-      quantized: false, // Use non-quantized model for better compatibility
-      progress_callback: progress => {
-        if (progress.status === 'progress' && progress.progress % 10 === 0) {
-          console.log(`Model download progress: ${progress.progress.toFixed(0)}%`);
-        }
-      }
-    };
-    
-    // Load tokenizer using standard options
-    console.log("Loading tokenizer...");
+    // Initialize tokenizer and text model
     tokenizer = await transformers.AutoTokenizer.from_pretrained(
-      "Xenova/clip-vit-base-patch16",
-      modelOptions
+      "Xenova/clip-vit-base-patch16"
     );
     console.log("Tokenizer loaded successfully");
     
-    // Load text model using standard options
-    console.log("Loading text model...");
     textModel = await transformers.CLIPTextModelWithProjection.from_pretrained(
-      "Xenova/clip-vit-base-patch16",
-      modelOptions
+      "Xenova/clip-vit-base-patch16"
     );
     console.log("Text model loaded successfully");
     
@@ -61,17 +40,12 @@ async function initialize() {
 // Compute text embedding for search query
 async function computeTextEmbedding(query) {
   try {
-    if (!tokenizer || !textModel) {
-      throw new Error("Models not initialized");
-    }
-    
     const textInputs = tokenizer([query], { padding: true, truncation: true });
     const { text_embeds } = await textModel(textInputs);
     return text_embeds.normalize().tolist()[0];
   } catch (error) {
     console.error("Error computing text embedding:", error);
-    // Return a zero vector as fallback
-    return Array(512).fill(0);
+    return null;
   }
 }
 
@@ -102,6 +76,14 @@ async function search(query, imageItems) {
   try {
     const textEmbedding = await computeTextEmbedding(query);
     
+    if (!textEmbedding) {
+      // If embedding failed, just return the original order
+      return imageItems.map(item => ({
+        item, 
+        similarity: 0
+      }));
+    }
+    
     const similarities = imageItems.map(item => {
       if (!item.embedding) return { item, similarity: 0 };
       const similarity = cosineSimilarity(textEmbedding, item.embedding);
@@ -112,12 +94,16 @@ async function search(query, imageItems) {
   } catch (error) {
     console.error("Error during search:", error);
     
-    // Just return items in original order if search fails
+    // Just return the original items if search fails
     return imageItems.map(item => ({
       item,
-      similarity: 0.5 // Neutral similarity
+      similarity: 0
     }));
   }
 }
 
-export { initialize, computeTextEmbedding, search };
+module.exports = {
+  initialize,
+  computeTextEmbedding,
+  search
+};
