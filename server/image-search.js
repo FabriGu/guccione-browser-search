@@ -1,4 +1,4 @@
-// server/image-search.js - With better error handling
+// server/image-search.js - Using standard model approach
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
@@ -7,93 +7,71 @@ import fs from 'fs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const MODELS_DIR = path.join(__dirname, '../models/huggingface');
 
-// Create models directory if it doesn't exist
-if (!fs.existsSync(MODELS_DIR)) {
-  console.log(`Creating models directory: ${MODELS_DIR}`);
-  fs.mkdirSync(MODELS_DIR, { recursive: true });
-}
-
 // Set up transformers to use local models
 let transformers;
-process.env.TRANSFORMERS_CACHE = MODELS_DIR;
-console.log("Using models directory:", MODELS_DIR);
+let tokenizer = null;
+let textModel = null;
 
+// Initialize model
 async function initialize() {
   try {
     console.log("Initializing CLIP model...");
     
+    // Set environment variables
+    process.env.TRANSFORMERS_CACHE = MODELS_DIR;
+    
     // Import the transformers library
     transformers = await import('@huggingface/transformers');
-    console.log("Transformers library imported successfully");
     
-    // Configure model loading options
-    const modelOptions = { 
+    const modelOptions = {
       cache_dir: MODELS_DIR,
-      local_files_only: process.env.NODE_ENV === 'production' ? false : true 
+      local_files_only: false, // Allow downloading if needed
+      quantized: false, // Use non-quantized model for better compatibility
+      progress_callback: progress => {
+        if (progress.status === 'progress' && progress.progress % 10 === 0) {
+          console.log(`Model download progress: ${progress.progress.toFixed(0)}%`);
+        }
+      }
     };
-    console.log("Model loading options:", JSON.stringify(modelOptions));
     
-    try {
-      // Load tokenizer
-      console.log("Loading tokenizer...");
-      global.tokenizer = await transformers.AutoTokenizer.from_pretrained(
-        "Xenova/clip-vit-base-patch16",
-        modelOptions
-      );
-      console.log("Tokenizer loaded successfully");
-    } catch (tokenError) {
-      console.error("Failed to load tokenizer:", tokenError);
-      throw new Error("Failed to load tokenizer: " + tokenError.message);
-    }
+    // Load tokenizer using standard options
+    console.log("Loading tokenizer...");
+    tokenizer = await transformers.AutoTokenizer.from_pretrained(
+      "Xenova/clip-vit-base-patch16",
+      modelOptions
+    );
+    console.log("Tokenizer loaded successfully");
     
-    try {
-      // Load text model
-      console.log("Loading text model...");
-      global.textModel = await transformers.CLIPTextModelWithProjection.from_pretrained(
-        "Xenova/clip-vit-base-patch16",
-        modelOptions
-      );
-      console.log("Text model loaded successfully");
-    } catch (modelError) {
-      console.error("Failed to load text model:", modelError);
-      throw new Error("Failed to load text model: " + modelError.message);
-    }
+    // Load text model using standard options
+    console.log("Loading text model...");
+    textModel = await transformers.CLIPTextModelWithProjection.from_pretrained(
+      "Xenova/clip-vit-base-patch16",
+      modelOptions
+    );
+    console.log("Text model loaded successfully");
     
     console.log("CLIP models loaded successfully");
     return true;
   } catch (error) {
     console.error("Failed to load CLIP models:", error);
-    
-    // Create fallback functionality for production
-    console.log("Setting up fallback search functionality");
-    global.mockSearch = true;
-    
-    // Define mock search functions
-    global.mockTextEmbedding = () => Array(512).fill(0).map(() => Math.random() - 0.5);
-    
     return false;
   }
 }
 
 // Compute text embedding for search query
 async function computeTextEmbedding(query) {
-  // If in fallback mode, use mock embedding
-  if (global.mockSearch) {
-    console.log("Using mock text embedding for query:", query);
-    return global.mockTextEmbedding();
-  }
-  
   try {
-    const textInputs = global.tokenizer([query], { padding: true, truncation: true });
-    const { text_embeds } = await global.textModel(textInputs);
+    if (!tokenizer || !textModel) {
+      throw new Error("Models not initialized");
+    }
+    
+    const textInputs = tokenizer([query], { padding: true, truncation: true });
+    const { text_embeds } = await textModel(textInputs);
     return text_embeds.normalize().tolist()[0];
   } catch (error) {
     console.error("Error computing text embedding:", error);
-    
-    // Use fallback in case of error
-    console.log("Falling back to mock embedding");
-    global.mockSearch = true;
-    return global.mockTextEmbedding();
+    // Return a zero vector as fallback
+    return Array(512).fill(0);
   }
 }
 
@@ -134,11 +112,11 @@ async function search(query, imageItems) {
   } catch (error) {
     console.error("Error during search:", error);
     
-    // Fallback: just return items in original order with random similarity
+    // Just return items in original order if search fails
     return imageItems.map(item => ({
       item,
-      similarity: Math.random()
-    })).sort((a, b) => b.similarity - a.similarity);
+      similarity: 0.5 // Neutral similarity
+    }));
   }
 }
 

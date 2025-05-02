@@ -25,16 +25,46 @@ async function initialize() {
     // Import the transformers library
     transformers = await import('@huggingface/transformers');
     
-    // Load pipeline for feature extraction
-    console.log("Loading text embeddings pipeline...");
-    embeddingPipeline = await transformers.pipeline(
-      "feature-extraction", 
-      "Xenova/all-MiniLM-L6-v2", 
-      { 
-        cache_dir: MODELS_DIR,
-        local_files_only: false  // Allow downloading if needed
+    const modelOptions = {
+      cache_dir: MODELS_DIR,
+      local_files_only: false, // Allow downloading if needed
+      quantized: false, // Use non-quantized model for better compatibility
+      progress_callback: progress => {
+        if (progress.status === 'progress' && progress.progress % 10 === 0) {
+          console.log(`Model download progress: ${progress.progress.toFixed(0)}%`);
+        }
       }
-    );
+    };
+    
+    // Use environment-specific model loading (using web version to avoid ONNX issues)
+    const isNode = typeof process !== 'undefined' && 
+                   process.versions != null && 
+                   process.versions.node != null;
+                   
+    // For server environment, prefer web version which has better compatibility
+    const modelRevision = isNode ? 'main-web' : 'main';
+    
+    // Load pipeline for feature extraction with options
+    console.log("Loading text embeddings pipeline...");
+    
+    try {
+      // First try with main-web revision (better for server)
+      embeddingPipeline = await transformers.pipeline(
+        "feature-extraction", 
+        "Xenova/all-MiniLM-L6-v2", 
+        {
+          ...modelOptions,
+          revision: modelRevision
+        }
+      );
+    } catch (error) {
+      console.log("Failed to load web model, trying standard model...");
+      embeddingPipeline = await transformers.pipeline(
+        "feature-extraction", 
+        "Xenova/all-MiniLM-L6-v2", 
+        modelOptions
+      );
+    }
     
     console.log("Text embeddings model loaded successfully");
     return true;
