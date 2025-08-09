@@ -76,9 +76,16 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     searchButton.textContent = "Search Works";
     searchButton.onclick = function() { searchWorks(); };
     
-    // Clear results and update status
-    resultsDiv.innerHTML = "";
-    updateStatus("Ready to search works!");
+    // Auto-search if there's a query in the input
+    const currentQuery = searchInput.value.trim();
+    if (currentQuery) {
+      updateStatus("Switching to works search...");
+      searchWorks();
+    } else {
+      // Clear results and update status
+      resultsDiv.innerHTML = "";
+      updateStatus("Ready to search works!");
+    }
   }
 
   // Switch to images search mode
@@ -91,9 +98,16 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     searchButton.textContent = "Image Search";
     searchButton.onclick = function() { searchImages(); };
     
-    // Clear results and update status
-    resultsDiv.innerHTML = "";
-    updateStatus("Ready to search images!");
+    // Auto-search if there's a query in the input
+    const currentQuery = searchInput.value.trim();
+    if (currentQuery) {
+      updateStatus("Switching to image search...");
+      searchImages();
+    } else {
+      // Clear results and update status
+      resultsDiv.innerHTML = "";
+      updateStatus("Ready to search images!");
+    }
   }
 
   // Function to update status
@@ -308,14 +322,33 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     const workDiv = document.createElement("div");
     workDiv.className = "work-result";
     
+    // Create thumbnail container
+    const thumbnailDiv = document.createElement("div");
+    thumbnailDiv.className = "work-thumbnail";
+    
+    if (work.thumbnailImage) {
+      const thumbnailImg = document.createElement("img");
+      thumbnailImg.src = work.thumbnailImage;
+      thumbnailImg.alt = work.title || "Work thumbnail";
+      thumbnailImg.className = "work-thumbnail-img";
+      thumbnailDiv.appendChild(thumbnailImg);
+    } else {
+      // Placeholder for works without thumbnails
+      const placeholder = document.createElement("div");
+      placeholder.className = "work-thumbnail-placeholder";
+      placeholder.textContent = "No Image";
+      thumbnailDiv.appendChild(placeholder);
+    }
+    
+    // Create content container
+    const contentDiv = document.createElement("div");
+    contentDiv.className = "work-content";
+    
     // Title link (Google blue)
     const titleLink = document.createElement("a");
     titleLink.href = work.url || "#";
     titleLink.className = "work-title";
     titleLink.textContent = work.title || "Untitled Work";
-    
-    // Debug: Log the URL being used
-    console.log(`Creating link for ${work.title} with URL: ${work.url}`);
     
     // URL display (Google green)
     const urlDiv = document.createElement("div");
@@ -349,10 +382,15 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
       metaDiv.appendChild(scoreDiv);
     }
     
-    workDiv.appendChild(titleLink);
-    workDiv.appendChild(urlDiv);
-    workDiv.appendChild(descDiv);
-    workDiv.appendChild(metaDiv);
+    // Add content to content container
+    contentDiv.appendChild(titleLink);
+    contentDiv.appendChild(urlDiv);
+    contentDiv.appendChild(descDiv);
+    contentDiv.appendChild(metaDiv);
+    
+    // Add thumbnail and content to main container
+    workDiv.appendChild(thumbnailDiv);
+    workDiv.appendChild(contentDiv);
     
     return workDiv;
   }
