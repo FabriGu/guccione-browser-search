@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>About - Fabrizio Guccione</title>
+    <link rel="stylesheet" type="text/css" href="./css/desktop.css" />
+    <style>
+        body {
+            font-family: arial, sans-serif;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .about-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+        
+        .about-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #000;
+        }
+        
+        .about-header h1 {
+            font-size: 36px;
+            font-weight: normal;
+            margin: 0 0 10px 0;
+            letter-spacing: 2px;
+        }
+        
+        .about-header .subtitle {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .about-section {
+            margin-bottom: 50px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #000;
+        }
+        
+        .about-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .about-section h2 {
+            font-size: 18px;
+            font-weight: normal;
+            margin: 0 0 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .bio {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+        
+        .education-item, .experience-item {
+            margin-bottom: 25px;
+        }
+        
+        .education-item h3, .experience-item h3 {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 0 0 5px 0;
+        }
+        
+        .education-item .date, .experience-item .date {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .education-item .details, .experience-item .details {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+        
+        .skills-category h3 {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .skills-list {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .contact-info {
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .contact-info a {
+            color: #1a0dab;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+        
+        .back-link {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: #1a0dab;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 600px) {
+            .about-container {
+                padding: 40px 20px;
+            }
+            
+            .about-header h1 {
+                font-size: 28px;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Back to Search</a>
+    
+    <div class="about-container">
+        <div class="about-header">
+            <h1>FABRIZIO GUCCIONE</h1>
+            <div class="subtitle">Creative Technologist & Masters Student</div>
+        </div>
+        
+        <div class="about-section">
+            <h2>About Me</h2>
+            <div class="bio">
+                I'm a creative technologist with Italian roots and a global perspective, living across three continents—Europe, Asia, and North America. My practice combines physical computing, creative coding, and machine learning with traditional crafts like sewing and fashion design. Through my cross-disciplinary approach, I create immersive experiences that bridge the digital and physical worlds, informed by my multicultural background and technical expertise.
+            </div>
+        </div>
+        
+        <div class="about-section">
+            <h2>Education</h2>
+            
+            <div class="education-item">
+                <h3>New York University</h3>
+                <div class="date">2024-Present</div>
+                <div class="details">Graduate School - Interactive Telecommunications Program (ITP)<br>Cumulative GPA 4.0</div>
+            </div>
+            
+            <div class="education-item">
+                <h3>New York University</h3>
+                <div class="date">2019-24</div>
+                <div class="details">Undergraduate Studies - Cumulative GPA 3.991<br>Psychology Major, Computer Science Minor, Web Development Minor</div>
+            </div>
+            
+            <div class="education-item">
+                <h3>British International School</h3>
+                <div class="date">2016-19</div>
+                <div class="details">International Baccalaureate (IB) (39/45)<br>British International School Of Chicago - South Loop<br>Higher level Biology (6), Higher level Spanish (7), Higher level Design & Technology (6)</div>
+            </div>
+            
+            <div class="education-item">
+                <h3>United World College</h3>
+                <div class="date">2014-16</div>
+                <div class="details">International General Certificate of Secondary Education (IGCSE)<br>United World College of South East Asia (Singapore)</div>
+            </div>
+        </div>
+        
+        <div class="about-section">
+            <h2>Recent Experience</h2>
+            
+            <div class="experience-item">
+                <h3>Graduate Assistant - New York University</h3>
+                <div class="date">Jan-May 2025</div>
+                <div class="details">Graduate Assistant for the class Interaction as Art Medium. Responsible for hosting in-class workshops, grading student's work, and helping students with their projects.</div>
+            </div>
+            
+            <div class="experience-item">
+                <h3>Creative Intern - McCann New York</h3>
+                <div class="date">Oct-Nov 2024</div>
+                <div class="details">Shadowed multiple creative teams in the agency. Participated in brainstorming and casting sessions. Shadowed in the design department.</div>
+            </div>
+            
+            <div class="experience-item">
+                <h3>Junior Web Designer - NYU CREATE Lab</h3>
+                <div class="date">May-Aug 2023</div>
+                <div class="details">Aided in the development of the NYU CREATE Lab's new platform using the React Javascript library.</div>
+            </div>
+            
+            <div class="experience-item">
+                <h3>Computer Science Tutor - New York University</h3>
+                <div class="date">Jan-May 2023</div>
+                <div class="details">Computer Science Tutor (Python) (NYU). Assisted students with writing and understanding python code.</div>
+            </div>
+        </div>
+        
+        <div class="about-section">
+            <h2>Skills</h2>
+            <div class="skills-grid">
+                <div class="skills-category">
+                    <h3>Coding Languages</h3>
+                    <div class="skills-list">
+                        Arduino, Python, Java, C,<br>
+                        Javascript, PHP, SQL
+                    </div>
+                </div>
+                
+                <div class="skills-category">
+                    <h3>Web Development</h3>
+                    <div class="skills-list">
+                        Responsive Design, User Experience,<br>
+                        Node.js
+                    </div>
+                </div>
+                
+                <div class="skills-category">
+                    <h3>3D Modeling</h3>
+                    <div class="skills-list">
+                        CAD Software (Fusion 360)
+                    </div>
+                </div>
+                
+                <div class="skills-category">
+                    <h3>Adobe Suite</h3>
+                    <div class="skills-list">
+                        Illustrator, Photoshop,<br>
+                        Premier Pro, Substance 3D Designer
+                    </div>
+                </div>
+                
+                <div class="skills-category">
+                    <h3>Design Skills</h3>
+                    <div class="skills-list">
+                        qPCR, gel electrophoresis,<br>
+                        bacterial transformation,<br>
+                        Western blots
+                    </div>
+                </div>
+                
+                <div class="skills-category">
+                    <h3>Languages</h3>
+                    <div class="skills-list">
+                        Italian (mother tongue)<br>
+                        English (mother tongue)<br>
+                        Spanish (fluent)<br>
+                        German (basic)
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="about-section">
+            <div class="contact-info">
+                <a href="tel:+13213158307">+1 (321) 315-8307</a>
+                <a href="mailto:fabrizio.guccione@gmail.com">fabrizio.guccione@gmail.com</a>
+                <a href="https://www.fabricated.it" target="_blank">www.fabricated.it</a>
+                <a href="https://www.linkedin.com/in/fabriziog" target="_blank">LinkedIn</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

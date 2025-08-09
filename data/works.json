@@ -20,6 +20,13 @@
       "category": "digital_art",
       "url": "work/digital-identity-series.html",
       "featured": true,
+      "theme": {
+        "backgroundColor": "#0a0a0a",
+        "textColor": "#ffffff",
+        "accentColor": "#00ff88",
+        "backgroundImage": null,
+        "backgroundGradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+      },
       "embedding": null,
       "textEmbedding": null,
       "imageEmbeddings": []
@@ -45,6 +52,13 @@
       "category": "installation",
       "url": "work/memory-palace-installation.html",
       "featured": true,
+      "theme": {
+        "backgroundColor": "#1a1a2e",
+        "textColor": "#eee",
+        "accentColor": "#0f3460",
+        "backgroundImage": null,
+        "backgroundGradient": "linear-gradient(45deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)"
+      },
       "embedding": null,
       "textEmbedding": null,
       "imageEmbeddings": []
@@ -68,6 +82,13 @@
       "category": "digital_art",
       "url": "work/algorithmic-portraits.html",
       "featured": false,
+      "theme": {
+        "backgroundColor": "#2c1810",
+        "textColor": "#f4f1eb",
+        "accentColor": "#d4af37",
+        "backgroundImage": null,
+        "backgroundGradient": "radial-gradient(circle at center, #8b4513 0%, #2c1810 70%)"
+      },
       "embedding": null,
       "textEmbedding": null,
       "imageEmbeddings": []
@@ -92,6 +113,13 @@
       "category": "data_art",
       "url": "work/data-landscapes.html",
       "featured": false,
+      "theme": {
+        "backgroundColor": "#0d1b2a",
+        "textColor": "#ffffff",
+        "accentColor": "#7209b7",
+        "backgroundImage": null,
+        "backgroundGradient": "linear-gradient(180deg, #0d1b2a 0%, #415a77 50%, #778da9 100%)"
+      },
       "embedding": null,
       "textEmbedding": null,
       "imageEmbeddings": []
