@@ -4,11 +4,12 @@
     "description": "CLIP-based image search app",
     "main": "server/server.js",
     "type": "commonjs",
-    "scripts": {
-      "start": "node server/server.js",
-      "dev": "nodemon server/server.js",
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
+      "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js",
+    "generate-work-embeddings": "node scripts/generate-work-embeddings.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
     "dependencies": {
       "@huggingface/transformers": "^3.5.0",
       "cors": "^2.8.5",
