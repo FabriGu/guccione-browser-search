@@ -1,0 +1,117 @@
+{
+  "works": [
+    {
+      "id": "work_001",
+      "title": "Digital Identity Series",
+      "description": "An exploration of digital identity through algorithmic art and generative processes. This series examines how technology shapes our sense of self in the digital age, questioning the boundaries between human creativity and machine generation.",
+      "year": "2023",
+      "medium": ["Digital Art", "Algorithm", "Generative"],
+      "status": "completed",
+      "textContent": "This series explores the concept of digital identity through generative algorithms that create unique visual representations of personal data. The work questions the nature of identity in digital spaces and how algorithms interpret human characteristics. Each piece in the series uses different data inputs - from social media patterns to biometric data - to generate abstract visual representations. The process involves machine learning models that analyze personal digital footprints and translate them into color, form, and movement. The resulting artworks serve as digital portraits that reflect our increasingly algorithmic existence.",
+      "tags": ["digital", "identity", "algorithm", "generative", "data", "portrait"],
+      "images": [
+        "images/165638_485141897734_228838_n.jpg",
+        "images/167998_485141242734_6531904_n.jpg"
+      ],
+      "videos": [
+        "videos/digital_identity_process.mp4"
+      ],
+      "thumbnailImage": "images/165638_485141897734_228838_n.jpg",
+      "category": "digital_art",
+      "url": "work/digital-identity-series.html",
+      "featured": true,
+      "embedding": null,
+      "textEmbedding": null,
+      "imageEmbeddings": []
+    },
+    {
+      "id": "work_002", 
+      "title": "Memory Palace Installation",
+      "description": "An interactive installation that visualizes collective memory through spatial computing and augmented reality interfaces.",
+      "year": "2022",
+      "medium": ["Installation", "AR", "Interactive"],
+      "status": "completed",
+      "textContent": "Memory Palace is an immersive installation that explores collective memory and spatial cognition. Visitors navigate through a physical space augmented with digital overlays that respond to their movement and presence. The piece draws from the ancient method of loci, where memories are associated with specific locations. Using spatial computing technologies, the installation creates a shared memory space where individual experiences contribute to a collective narrative. Motion sensors detect visitor movement, triggering audiovisual responses that build upon previous interactions. The work questions how digital technologies can enhance or distort our relationship with memory and place.",
+      "tags": ["installation", "memory", "space", "interactive", "AR", "collective"],
+      "images": [
+        "images/180742_485141017734_6400541_n.jpg",
+        "images/1909553_1100529275288_9184_n.jpg"
+      ],
+      "videos": [
+        "videos/memory_palace_documentation.mp4",
+        "videos/memory_palace_interactions.mp4"
+      ],
+      "thumbnailImage": "images/180742_485141017734_6400541_n.jpg",
+      "category": "installation",
+      "url": "work/memory-palace-installation.html",
+      "featured": true,
+      "embedding": null,
+      "textEmbedding": null,
+      "imageEmbeddings": []
+    },
+    {
+      "id": "work_003",
+      "title": "Algorithmic Portraits",
+      "description": "A series of portraits generated through machine learning algorithms trained on historical portraiture techniques.",
+      "year": "2023",
+      "medium": ["Digital Art", "Machine Learning", "Portrait"],
+      "status": "ongoing",
+      "textContent": "Algorithmic Portraits investigates the intersection of traditional portraiture and contemporary machine learning. The series uses neural networks trained on classical portrait paintings to generate new works that blend historical techniques with digital processes. Each portrait begins with contemporary photographic subjects but is processed through algorithms that have learned from masters like Rembrandt, Velázquez, and Vermeer. The resulting images question authorship, artistic tradition, and the role of technology in creative expression. The work explores whether machines can understand and replicate the emotional depth and technical mastery found in traditional portraiture, or if they create something entirely new.",
+      "tags": ["portrait", "machine learning", "classical", "contemporary", "neural networks", "tradition"],
+      "images": [
+        "images/20140701_175029-1.jpg",
+        "images/20140701_175311-1.jpg",
+        "images/215607_10150163469132055_1420500_n.jpg"
+      ],
+      "videos": [],
+      "thumbnailImage": "images/20140701_175029-1.jpg",
+      "category": "digital_art",
+      "url": "work/algorithmic-portraits.html",
+      "featured": false,
+      "embedding": null,
+      "textEmbedding": null,
+      "imageEmbeddings": []
+    },
+    {
+      "id": "work_004",
+      "title": "Data Landscapes",
+      "description": "Visualizations of personal and environmental data transformed into abstract landscape compositions.",
+      "year": "2021",
+      "medium": ["Data Visualization", "Digital Art", "Print"],
+      "status": "completed",
+      "textContent": "Data Landscapes transforms quantified personal and environmental information into abstract visual compositions reminiscent of landscape paintings. The series uses datasets ranging from personal health metrics to climate data, processing them through custom visualization algorithms that emphasize aesthetic beauty over analytical clarity. Each piece represents a different temporal scale - from daily personal rhythms to geological climate patterns. The work critiques our relationship with data by presenting it in a contemplative, artistic context rather than as utilitarian information. Colors, forms, and textures emerge from the underlying data patterns, creating landscapes that are both abstract and deeply rooted in lived experience.",
+      "tags": ["data", "landscape", "visualization", "personal", "environmental", "abstract"],
+      "images": [
+        "images/215622_10150163469172055_4669249_n.jpg",
+        "images/21935_250508262054_1986768_n.jpg"
+      ],
+      "videos": [
+        "videos/data_landscapes_process.mp4"
+      ],
+      "thumbnailImage": "images/215622_10150163469172055_4669249_n.jpg",
+      "category": "data_art",
+      "url": "work/data-landscapes.html",
+      "featured": false,
+      "embedding": null,
+      "textEmbedding": null,
+      "imageEmbeddings": []
+    }
+  ],
+  "categories": [
+    {
+      "id": "digital_art",
+      "name": "Digital Art",
+      "description": "Works exploring digital media and computational creativity"
+    },
+    {
+      "id": "installation", 
+      "name": "Installation",
+      "description": "Physical and mixed-media installations"
+    },
+    {
+      "id": "data_art",
+      "name": "Data Art",
+      "description": "Artistic explorations of data and information"
+    }
+  ]
+}
