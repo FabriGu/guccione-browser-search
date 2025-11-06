@@ -37,14 +37,15 @@ document.addEventListener("click", function(event) {
 searchInput.addEventListener("keydown", handleKeyNavigation);
 
 
-  // Add event listener for search button (default to work search)
-  searchButton.addEventListener("click", function() {
+  // Set initial search button behavior (default to work search)
+  // Note: Using onclick instead of addEventListener to allow mode switching to override
+  searchButton.onclick = function() {
     // Check if input is empty or only contains spaces
     if (!searchInput.value.trim()) {
       return; // Don't search if input is empty or only spaces
     }
     searchWorks();
-  });
+  };
 
   // Add event listener for "I'm Feeling Lucky" button
   const luckyBtn = document.getElementById("luckyBtn");
