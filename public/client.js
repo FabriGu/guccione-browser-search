@@ -450,8 +450,8 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     navBar.style.top = "0";
     navBar.style.left = "0";
     navBar.style.width = "100%";
-    navBar.style.padding = "5px 10px";
-    navBar.style.borderBottom = "1px solid #e5e5e5";
+    navBar.style.padding = "5px";
+    navBar.style.borderBottom = "1px solid black";
     navBar.style.backgroundColor = "transparent";
     navBar.style.textAlign = "left";
     
@@ -621,8 +621,8 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     navBar.style.top = "0";
     navBar.style.left = "0";
     navBar.style.width = "100%";
-    navBar.style.padding = "5px 10px";
-    navBar.style.borderBottom = "1px solid #e5e5e5";
+    navBar.style.padding = "5px";
+    navBar.style.borderBottom = "1px solid black";
     navBar.style.backgroundColor = "transparent";
     navBar.style.textAlign = "left";
 
@@ -708,8 +708,8 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     navBar.style.top = "0";
     navBar.style.left = "0";
     navBar.style.width = "100%";
-    navBar.style.padding = "5px 10px";
-    navBar.style.borderBottom = "1px solid #e5e5e5";
+    navBar.style.padding = "5px";
+    navBar.style.borderBottom = "1px solid black";
     navBar.style.backgroundColor = "transparent";
     navBar.style.textAlign = "left";
 
