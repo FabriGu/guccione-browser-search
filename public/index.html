@@ -16,7 +16,7 @@
       
       <div id="searchItemsWrapper">
         <div id="title">
-          <img src="./assets/guccioneComV1.png">
+          <img src="./assets/guccioneComV1.png" id="homeLogo">
         </div>
         
         <div id="homeScreenSearchContainer">
@@ -39,8 +39,14 @@
       </div>
     </div>
 
-    <div id="imageSearchScreen" class="wrapper">
-      <!-- Results will be displayed here -->
+    <!-- Works Results Container -->
+    <div id="worksResultsScreen" class="wrapper results-container">
+      <!-- Works results will be displayed here -->
+    </div>
+
+    <!-- Images Results Container -->
+    <div id="imageSearchScreen" class="wrapper results-container">
+      <!-- Image results will be displayed here -->
     </div>
     
     <script src="client.js"></script>
@@ -55,8 +61,11 @@
       if (event.key === "Enter") {
         // Cancel the default action, if needed
         event.preventDefault();
-        // Trigger the button element with a click
-        document.getElementById("searchBtn").click();
+        // Only trigger search if input is not empty or only spaces
+        if (searchInput.value.trim()) {
+          // Trigger the button element with a click
+          document.getElementById("searchBtn").click();
+        }
       }
     });
   </script>

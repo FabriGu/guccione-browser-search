@@ -11,7 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Get references to DOM elements
   const searchInput = document.querySelector("#searchInput");
   const searchButton = document.querySelector("#searchBtn");
-  const resultsDiv = document.querySelector("#imageSearchScreen");
+  const worksResultsDiv = document.querySelector("#worksResultsScreen");
+  const imagesResultsDiv = document.querySelector("#imageSearchScreen");
   const title = document.querySelector("#title");
   const statusElement = document.querySelector("#status");
 
@@ -37,7 +38,24 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
 
 
   // Add event listener for search button (default to work search)
-  searchButton.addEventListener("click", function() { searchWorks(); });
+  searchButton.addEventListener("click", function() { 
+    // Check if input is empty or only contains spaces
+    if (!searchInput.value.trim()) {
+      return; // Don't search if input is empty or only spaces
+    }
+    searchWorks(); 
+  });
+
+  // Make logo clickable to return to homepage
+  const logoImg = document.querySelector("#title img");
+  if (logoImg) {
+    logoImg.style.cursor = "pointer";
+    logoImg.addEventListener("click", function() {
+      // Reset to homepage state
+      returnToHome();
+      resetLayoutToHomepage();
+    });
+  }
 
   // Navigation functionality
   const navWorks = document.getElementById("navWorks");
@@ -74,7 +92,10 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     
     // Update search button
     searchButton.textContent = "Search Works";
-    searchButton.onclick = function() { searchWorks(); };
+    searchButton.onclick = function() { 
+      if (!searchInput.value.trim()) return;
+      searchWorks(); 
+    };
     
     // Auto-search if there's a query in the input
     const currentQuery = searchInput.value.trim();
@@ -83,7 +104,8 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
       searchWorks();
     } else {
       // Clear results and update status
-      resultsDiv.innerHTML = "";
+      worksResultsDiv.innerHTML = "";
+      imagesResultsDiv.style.display = "none";
       updateStatus("Ready to search works!");
     }
   }
@@ -96,7 +118,10 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     
     // Update search button
     searchButton.textContent = "Image Search";
-    searchButton.onclick = function() { searchImages(); };
+    searchButton.onclick = function() { 
+      if (!searchInput.value.trim()) return;
+      searchImages(); 
+    };
     
     // Auto-search if there's a query in the input
     const currentQuery = searchInput.value.trim();
@@ -105,7 +130,8 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
       searchImages();
     } else {
       // Clear results and update status
-      resultsDiv.innerHTML = "";
+      imagesResultsDiv.innerHTML = "";
+      worksResultsDiv.style.display = "none";
       updateStatus("Ready to search images!");
     }
   }
@@ -117,11 +143,43 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     }
   }
 
+  // Function to return to home page
+  function returnToHome() {
+    // Clear results and hide results area
+    worksResultsDiv.innerHTML = "";
+    worksResultsDiv.style.display = "none";
+    imagesResultsDiv.innerHTML = "";
+    imagesResultsDiv.style.display = "none";
+    
+    // Reset navigation styling
+    document.querySelectorAll('.navOption').forEach(nav => nav.classList.remove('selectedNavOption'));
+    navWorks.classList.add('selectedNavOption');
+    
+    // Reset search button
+    searchButton.textContent = "Search Works";
+    searchButton.onclick = function() { 
+      if (!searchInput.value.trim()) return;
+      searchWorks(); 
+    };
+    
+    // Clear search input
+    searchInput.value = "";
+    
+    // Hide suggestions safely
+    if (suggestionsList && suggestionsList.style) {
+      suggestionsList.style.display = "none";
+    }
+    
+    // Update status
+    updateStatus("Ready to search works!");
+  }
+
   // Function to search works (new primary search)
   async function searchWorks() {
     // Show loading state
     updateStatus("Searching...");
-    resultsDiv.innerHTML = "";
+    worksResultsDiv.innerHTML = "";
+    imagesResultsDiv.style.display = "none";
 
     workSearchFormat();
 
@@ -156,11 +214,11 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
       if (data.results && data.results.length > 0) {
         data.results.forEach((result) => {
           const workDiv = createWorkResultElement(result);
-          resultsDiv.appendChild(workDiv);
+          worksResultsDiv.appendChild(workDiv);
         });
 
         // Show results area
-        resultsDiv.style.display = "block";
+        worksResultsDiv.style.display = "block";
         updateStatus(`Found ${data.results.length} works`);
       } else {
         updateStatus("No works found");
@@ -175,7 +233,8 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
   async function searchImages() {
     // Show loading state
     updateStatus("Searching...");
-    resultsDiv.innerHTML = "";
+    imagesResultsDiv.innerHTML = "";
+    worksResultsDiv.style.display = "none";
 
     imageSearchFormat();
 
@@ -268,11 +327,11 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
 
           resultDiv.appendChild(img);
           resultDiv.appendChild(infoDiv);
-          resultsDiv.appendChild(resultDiv);
+          imagesResultsDiv.appendChild(resultDiv);
         });
 
         // Show results area
-        resultsDiv.style.display = "flex";
+        imagesResultsDiv.style.display = "flex";
         updateStatus("Results found!");
       } else {
         updateStatus("No results found");
@@ -286,6 +345,68 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
   // Initialize
   updateStatus("Ready to search!");
 
+  // Function to reset layout to homepage
+  function resetLayoutToHomepage() {
+    // Reset layout to homepage
+    const homeScreen = document.getElementById("homeScreen");
+    const searchItemsWrapper = document.getElementById("searchItemsWrapper");
+    const imageSearchScreen = document.getElementById("imageSearchScreen");
+    const title = document.getElementById("title");
+    const searchContainer = document.getElementById("homeScreenSearchContainer");
+    const navBar = document.getElementById("homeScreenNav");
+    const luckyBtn = document.getElementById("luckyBtn");
+    
+    // Reset home screen wrapper
+    homeScreen.style.padding = "0";
+    homeScreen.style.display = "flex";
+    homeScreen.style.height = "100vh";
+    homeScreen.style.justifyContent = "center";
+    homeScreen.style.alignItems = "center";
+
+    // Reset search items wrapper
+    searchItemsWrapper.style.flexDirection = "column";
+    searchItemsWrapper.style.marginTop = "0";
+    searchItemsWrapper.style.justifyContent = "center";
+    searchItemsWrapper.style.alignItems = "center";
+
+    // Reset search container
+    searchContainer.style.flexDirection = "column";
+    searchContainer.style.alignItems = "center";
+    searchContainer.style.marginTop = "0";
+    searchContainer.style.width = "50%";
+
+    // Reset title/logo
+    title.style.justifyContent = "center";
+    title.style.marginBottom = "0";
+    title.style.marginTop = "0";
+    
+    // Reset logo image
+    if (logoImg) {
+      logoImg.style.width = "70%";
+      logoImg.style.margin = "0";
+      logoImg.style.padding = "5%";
+      logoImg.style.paddingTop = "0";
+      logoImg.style.marginTop = "-10%";
+    }
+    
+    // Reset navigation bar
+    navBar.style.position = "absolute";
+    navBar.style.top = "0";
+    navBar.style.padding = "5px";
+    navBar.style.borderBottom = "1px solid black";
+    
+    // Show the "I'm Feeling Lucky" button
+    luckyBtn.style.display = "block";
+    
+    // Hide search results area
+    imageSearchScreen.style.display = "none";
+    
+    // Show footer info
+    const footerInfo = document.getElementById("homeScreenInfo");
+    if (footerInfo) {
+      footerInfo.style.display = "block";
+    }
+  }
 
   function truncateText(text, maxLength) {
     if (!text || typeof text !== 'string') return '';
@@ -322,33 +443,14 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     const workDiv = document.createElement("div");
     workDiv.className = "work-result";
     
-    // Create thumbnail container
-    const thumbnailDiv = document.createElement("div");
-    thumbnailDiv.className = "work-thumbnail";
-    
-    if (work.thumbnailImage) {
-      const thumbnailImg = document.createElement("img");
-      thumbnailImg.src = work.thumbnailImage;
-      thumbnailImg.alt = work.title || "Work thumbnail";
-      thumbnailImg.className = "work-thumbnail-img";
-      thumbnailDiv.appendChild(thumbnailImg);
-    } else {
-      // Placeholder for works without thumbnails
-      const placeholder = document.createElement("div");
-      placeholder.className = "work-thumbnail-placeholder";
-      placeholder.textContent = "No Image";
-      thumbnailDiv.appendChild(placeholder);
-    }
-    
-    // Create content container
-    const contentDiv = document.createElement("div");
-    contentDiv.className = "work-content";
-    
     // Title link (Google blue)
     const titleLink = document.createElement("a");
     titleLink.href = work.url || "#";
     titleLink.className = "work-title";
     titleLink.textContent = work.title || "Untitled Work";
+    
+    // Debug: Log the URL being used
+    console.log(`Creating link for ${work.title} with URL: ${work.url}`);
     
     // URL display (Google green)
     const urlDiv = document.createElement("div");
@@ -382,15 +484,10 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
       metaDiv.appendChild(scoreDiv);
     }
     
-    // Add content to content container
-    contentDiv.appendChild(titleLink);
-    contentDiv.appendChild(urlDiv);
-    contentDiv.appendChild(descDiv);
-    contentDiv.appendChild(metaDiv);
-    
-    // Add thumbnail and content to main container
-    workDiv.appendChild(thumbnailDiv);
-    workDiv.appendChild(contentDiv);
+    workDiv.appendChild(titleLink);
+    workDiv.appendChild(urlDiv);
+    workDiv.appendChild(descDiv);
+    workDiv.appendChild(metaDiv);
     
     return workDiv;
   }
@@ -399,6 +496,7 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     // Get references to elements
     const homeScreen = document.getElementById("homeScreen");
     const searchItemsWrapper = document.getElementById("searchItemsWrapper");
+    const worksResultsScreen = document.getElementById("worksResultsScreen");
     const imageSearchScreen = document.getElementById("imageSearchScreen");
     const title = document.getElementById("title");
     const searchContainer = document.getElementById("homeScreenSearchContainer");
@@ -406,60 +504,74 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     const btnContainer = document.getElementById("btnContainer");
     const luckyBtn = document.getElementById("luckyBtn");
     const searchBtn = document.getElementById("searchBtn");
-    
-    // Adjust home screen wrapper
-    homeScreen.style.padding = "10px 0 0 10px";
+
+    // Adjust home screen wrapper - center everything
+    homeScreen.style.padding = "0";
     homeScreen.style.display = "flex";
-    homeScreen.style.height = "10vh";
+    homeScreen.style.height = "auto";
+    homeScreen.style.justifyContent = "center";
 
     searchItemsWrapper.style.flexDirection = "row";
-    searchItemsWrapper.style.marginTop = "10vh";
+    searchItemsWrapper.style.marginTop = "80px";
+    searchItemsWrapper.style.justifyContent = "center";
+    searchItemsWrapper.style.alignItems = "center";
 
     searchContainer.style.flexDirection = "row";
     searchContainer.style.alignItems = "center";
-    searchContainer.style.marginTop = "2vh";
+    searchContainer.style.marginTop = "0";
+    searchContainer.style.marginLeft = "20px";
 
     searchInput.style.margin = "0";
     searchBtn.style.margin = "0";
     searchBtn.style.marginLeft = "5px";
-    
-    // Adjust title/logo
-    title.style.justifyContent = "flex-start";
-    title.style.marginBottom = "10px";
-    title.style.marginTop = "30px";
-    
+
+    // Adjust title/logo - center it
+    title.style.justifyContent = "center";
+    title.style.marginBottom = "0";
+    title.style.marginTop = "0";
+
     // Adjust logo image
     const logoImg = title.querySelector("img");
     if (logoImg) {
-      logoImg.style.width = "400px";
+      logoImg.style.width = "300px";
       logoImg.style.margin = "0";
     }
-    
+
     // Move navigation bar to top
-    navBar.style.position = "absolute";
+    navBar.style.position = "fixed";
     navBar.style.top = "0";
-    navBar.style.padding = "5px 10px";
+    navBar.style.left = "0";
+    navBar.style.width = "100%";
+    navBar.style.padding = "10px";
     navBar.style.borderBottom = "1px solid #e5e5e5";
-    
+    navBar.style.backgroundColor = "#fff";
+    navBar.style.textAlign = "center";
+
     // Adjust search container
-    searchContainer.style.width = "500px";
-    searchContainer.style.alignItems = "flex-start";
-    searchContainer.style.marginLeft = "10px";
-    
+    searchContainer.style.width = "auto";
+    searchContainer.style.alignItems = "center";
+
     // Adjust search button text
     searchBtn.textContent = "Search Works";
     
     // Hide the "I'm Feeling Lucky" button
     luckyBtn.style.display = "none";
-    
-    // Show work search results area
-    imageSearchScreen.style.marginTop = "150px";
-    imageSearchScreen.style.display = "block";
-    imageSearchScreen.style.justifyContent = "flex-start";
-    imageSearchScreen.style.paddingLeft = "20px";
-    imageSearchScreen.style.paddingRight = "20px";
-    imageSearchScreen.style.maxWidth = "800px";
-    
+
+    // Hide image search results
+    imageSearchScreen.style.display = "none";
+
+    // Show work search results area - centered
+    worksResultsScreen.style.marginTop = "200px";
+    worksResultsScreen.style.display = "flex";
+    worksResultsScreen.style.flexDirection = "column";
+    worksResultsScreen.style.alignItems = "center";
+    worksResultsScreen.style.justifyContent = "flex-start";
+    worksResultsScreen.style.padding = "0 20px";
+    worksResultsScreen.style.maxWidth = "800px";
+    worksResultsScreen.style.width = "100%";
+    worksResultsScreen.style.left = "50%";
+    worksResultsScreen.style.transform = "translateX(-50%)";
+
     // Adjust footer info position
     const footerInfo = document.getElementById("homeScreenInfo");
     if (footerInfo) {
@@ -471,6 +583,7 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     // Get references to elements
     const homeScreen = document.getElementById("homeScreen");
     const searchItemsWrapper = document.getElementById("searchItemsWrapper");
+    const worksResultsScreen = document.getElementById("worksResultsScreen");
     const imageSearchScreen = document.getElementById("imageSearchScreen");
     const title = document.getElementById("title");
     const searchContainer = document.getElementById("homeScreenSearchContainer");
@@ -478,58 +591,74 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     const btnContainer = document.getElementById("btnContainer");
     const luckyBtn = document.getElementById("luckyBtn");
     const searchBtn = document.getElementById("searchBtn");
-    
-    // Adjust home screen wrapper
-    homeScreen.style.padding = "10px 0 0 10px";
+
+    // Adjust home screen wrapper - center everything
+    homeScreen.style.padding = "0";
     homeScreen.style.display = "flex";
-    homeScreen.style.height = "10vh";
+    homeScreen.style.height = "auto";
+    homeScreen.style.justifyContent = "center";
 
     searchItemsWrapper.style.flexDirection = "row";
-    searchItemsWrapper.style.marginTop = "10vh";
+    searchItemsWrapper.style.marginTop = "80px";
+    searchItemsWrapper.style.justifyContent = "center";
+    searchItemsWrapper.style.alignItems = "center";
 
     searchContainer.style.flexDirection = "row";
     searchContainer.style.alignItems = "center";
-    searchContainer.style.marginTop = "2vh";
+    searchContainer.style.marginTop = "0";
+    searchContainer.style.marginLeft = "20px";
 
     searchInput.style.margin = "0";
     searchBtn.style.margin = "0";
     searchBtn.style.marginLeft = "5px";
-    
-    // Adjust title/logo
-    title.style.justifyContent = "flex-start";
-    title.style.marginBottom = "10px";
-    title.style.marginTop = "30px";
-    
+
+    // Adjust title/logo - center it
+    title.style.justifyContent = "center";
+    title.style.marginBottom = "0";
+    title.style.marginTop = "0";
+
     // Adjust logo image
     const logoImg = title.querySelector("img");
     if (logoImg) {
-      logoImg.style.width = "400px";
+      logoImg.style.width = "300px";
       logoImg.style.margin = "0";
     }
-    
+
     // Move navigation bar to top
-    navBar.style.position = "absolute";
+    navBar.style.position = "fixed";
     navBar.style.top = "0";
-    navBar.style.padding = "5px 10px";
+    navBar.style.left = "0";
+    navBar.style.width = "100%";
+    navBar.style.padding = "10px";
     navBar.style.borderBottom = "1px solid #e5e5e5";
-    
+    navBar.style.backgroundColor = "#fff";
+    navBar.style.textAlign = "center";
+
     // Adjust search container
-    searchContainer.style.width = "500px";
-    searchContainer.style.alignItems = "flex-start";
-    searchContainer.style.marginLeft = "10px";
-    
+    searchContainer.style.width = "auto";
+    searchContainer.style.alignItems = "center";
+
     // Adjust search button text
     searchBtn.textContent = "Image Search";
     
     // Hide the "I'm Feeling Lucky" button
     luckyBtn.style.display = "none";
-    
-    // Show image search results area
-    imageSearchScreen.style.marginTop = "150px";
+
+    // Hide works search results
+    worksResultsScreen.style.display = "none";
+
+    // Show image search results area - centered
+    imageSearchScreen.style.marginTop = "200px";
     imageSearchScreen.style.display = "flex";
-    imageSearchScreen.style.justifyContent = "flex-start";
-    imageSearchScreen.style.paddingLeft = "20px";
-    
+    imageSearchScreen.style.flexWrap = "wrap";
+    imageSearchScreen.style.justifyContent = "center";
+    imageSearchScreen.style.alignItems = "flex-start";
+    imageSearchScreen.style.padding = "0 20px";
+    imageSearchScreen.style.maxWidth = "1200px";
+    imageSearchScreen.style.width = "100%";
+    imageSearchScreen.style.left = "50%";
+    imageSearchScreen.style.transform = "translateX(-50%)";
+
     // Adjust footer info position
     const footerInfo = document.getElementById("homeScreenInfo");
     if (footerInfo) {
@@ -630,10 +759,13 @@ function hideSuggestions() {
 function selectSuggestion(text) {
   searchInput.value = text;
   hideSuggestions();
-  // Get the current search function from the button onclick
-  const searchButton = document.querySelector("#searchBtn");
-  if (searchButton && searchButton.onclick) {
-    searchButton.onclick();
+  // Only trigger search if input is not empty or only spaces
+  if (searchInput.value.trim()) {
+    // Get the current search function from the button onclick
+    const searchButton = document.querySelector("#searchBtn");
+    if (searchButton && searchButton.onclick) {
+      searchButton.onclick();
+    }
   }
 }
 
