@@ -373,8 +373,8 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     searchContainer.style.flexDirection = "column";
     searchContainer.style.alignItems = "center";
     searchContainer.style.marginTop = "0";
-    searchContainer.style.width = "auto";
-    searchContainer.style.maxWidth = "600px";
+    searchContainer.style.width = "500px";
+    searchContainer.style.maxWidth = "90%";
 
     // Reset title/logo
     title.style.justifyContent = "center";
@@ -393,10 +393,12 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     // Reset navigation bar
     navBar.style.position = "absolute";
     navBar.style.top = "0";
-    navBar.style.right = "0";
+    navBar.style.left = "0";
+    navBar.style.width = "100%";
     navBar.style.padding = "5px 10px";
-    navBar.style.borderBottom = "1px solid #e5e5e5";
-    navBar.style.textAlign = "right";
+    navBar.style.borderBottom = "none";
+    navBar.style.backgroundColor = "transparent";
+    navBar.style.textAlign = "left";
     
     // Show the "I'm Feeling Lucky" button
     luckyBtn.style.display = "block";
@@ -523,13 +525,14 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     searchContainer.style.alignItems = "center";
     searchContainer.style.marginTop = "0";
     searchContainer.style.marginLeft = "20px";
-    searchContainer.style.width = "auto";
-    searchContainer.style.maxWidth = "600px";
+    searchContainer.style.width = "500px";
+    searchContainer.style.maxWidth = "90%";
 
-    searchInput.style.width = "400px";
+    searchInput.style.width = "500px";
+    searchInput.style.maxWidth = "100%";
     searchInput.style.margin = "0";
-    searchBtn.style.margin = "0";
-    searchBtn.style.marginLeft = "5px";
+    searchBtn.style.margin = "0 0 0 5px";
+    searchBtn.style.padding = "7px 12px";
 
     // Adjust title/logo - center it
     title.style.justifyContent = "center";
@@ -543,14 +546,15 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
       logoImg.style.margin = "0";
     }
 
-    // Move navigation bar to top-right
+    // Move navigation bar to top-left
     navBar.style.position = "absolute";
     navBar.style.top = "0";
-    navBar.style.right = "0";
+    navBar.style.left = "0";
+    navBar.style.width = "100%";
     navBar.style.padding = "5px 10px";
-    navBar.style.borderBottom = "1px solid #e5e5e5";
-    navBar.style.backgroundColor = "#fff";
-    navBar.style.textAlign = "right";
+    navBar.style.borderBottom = "none";
+    navBar.style.backgroundColor = "transparent";
+    navBar.style.textAlign = "left";
 
     // Adjust search button text
     searchBtn.textContent = "Search Works";
@@ -608,13 +612,14 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     searchContainer.style.alignItems = "center";
     searchContainer.style.marginTop = "0";
     searchContainer.style.marginLeft = "20px";
-    searchContainer.style.width = "auto";
-    searchContainer.style.maxWidth = "600px";
+    searchContainer.style.width = "500px";
+    searchContainer.style.maxWidth = "90%";
 
-    searchInput.style.width = "400px";
+    searchInput.style.width = "500px";
+    searchInput.style.maxWidth = "100%";
     searchInput.style.margin = "0";
-    searchBtn.style.margin = "0";
-    searchBtn.style.marginLeft = "5px";
+    searchBtn.style.margin = "0 0 0 5px";
+    searchBtn.style.padding = "7px 12px";
 
     // Adjust title/logo - center it
     title.style.justifyContent = "center";
@@ -628,14 +633,15 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
       logoImg.style.margin = "0";
     }
 
-    // Move navigation bar to top-right
+    // Move navigation bar to top-left
     navBar.style.position = "absolute";
     navBar.style.top = "0";
-    navBar.style.right = "0";
+    navBar.style.left = "0";
+    navBar.style.width = "100%";
     navBar.style.padding = "5px 10px";
-    navBar.style.borderBottom = "1px solid #e5e5e5";
-    navBar.style.backgroundColor = "#fff";
-    navBar.style.textAlign = "right";
+    navBar.style.borderBottom = "none";
+    navBar.style.backgroundColor = "transparent";
+    navBar.style.textAlign = "left";
 
     // Adjust search container
     searchContainer.style.width = "auto";
