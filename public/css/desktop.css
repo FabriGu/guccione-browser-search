@@ -145,11 +145,12 @@ body, td, a, p, .h {
   }
 
   #searchInput {
-    width: 400px;
-    max-width: 90%;
-    padding: 4px 8px;
+    width: 500px;
+    max-width: 100%;
+    padding: 5px 8px;
     border: 1px solid #d9d9d9;
     border-radius: 1px;
+    box-sizing: border-box;
   }
 
   #searchInput:hover {
@@ -221,12 +222,13 @@ body, td, a, p, .h {
   #homeScreenNav {
       position: absolute;
       top: 0;
-      right: 0;
+      left: 0;
+      width: 100%;
       padding: 5px 10px;
-      border-bottom: 1px solid #e5e5e5;
-      z-index: 1000; /* Ensure navigation is always on top */
-      background-color: #fff;
-      text-align: right;
+      border-bottom: none;
+      z-index: 1000;
+      background-color: transparent;
+      text-align: left;
       box-sizing: border-box;
   }
   
@@ -254,8 +256,8 @@ body, td, a, p, .h {
   #homeScreenSearchContainer {
     display: flex;
     flex-direction: column;
-    width: auto;
-    max-width: 600px;
+    width: 500px;
+    max-width: 90%;
     z-index: 10;
   }
   
@@ -271,13 +273,14 @@ body, td, a, p, .h {
   
   #searchBtn, #luckyBtn {
       align-self: center;
-      padding: 8px 16px;
-      margin: 5px;
-      background-color: #f2f2f2;
-      border: 1px solid #f2f2f2;
+      padding: 7px 12px;
+      margin: 8px 4px;
+      background: #f2f2f2;
+      background: linear-gradient(top,#f5f5f5,#f1f1f1);
+      border: 1px solid #dcdcdc;
       border-radius: 2px;
-      color: #222;
-      font-size: 13px;
+      color: #444;
+      font-size: 11px;
       font-weight: bold;
       cursor: pointer;
     }
@@ -285,7 +288,8 @@ body, td, a, p, .h {
   #searchBtn:hover, #luckyBtn:hover {
       border-color: #c6c6c6;
       box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-      background-color: #f8f8f8;
+      background: #f8f8f8;
+      color: #222;
     }
   
   #homeScreenInfo {
@@ -299,7 +303,8 @@ body, td, a, p, .h {
     display: none;
     flex-wrap: wrap;
     flex-direction: row;
-    
+    justify-content: center;
+    gap: 0;
   }
 
   .imageSource {
@@ -314,16 +319,20 @@ body, td, a, p, .h {
   
   /* Additional CSS for navigation */
   .navOption {
-    padding: 0 8px;
+    padding: 0 10px;
     text-decoration: none;
     color: #0000cc;
     font-size: 13px;
     display: inline-block;
   }
 
+  .navOption:first-child {
+    padding-left: 0;
+  }
+
   .selectedNavOption {
     color: #000;
-    font-weight: normal;
+    font-weight: bold;
   }
 
   .navOption:hover {
@@ -331,21 +340,21 @@ body, td, a, p, .h {
   }
   
   .result-item {
-    /* background-color: #f9f9f9; */
-    /* border: 1px #0000cc solid; */
-    /* border-radius: 4px; */
     text-align: center;
     object-fit: contain;
     display: inline-block;
     padding: 0;
-    width: 10%;
+    width: calc(20% - 20px);
+    margin: 10px;
+    vertical-align: top;
   }
   
   .result-item img {
-    object-fit:contain;
-      padding: 0px;
-    margin: 0px;
-  
+    object-fit: contain;
+    padding: 0;
+    margin: 0;
+    max-width: 100%;
+    height: auto;
   }
   
   
@@ -481,20 +490,15 @@ body, td, a, p, .h {
 /* RESPONSIVE DESIGN - 3 BREAKPOINTS */
 /* ============================================ */
 
-/* Add spacing for images on all screens */
-.result-item {
-  margin: 10px;
-}
-
 /* TABLET (max-width: 1024px) */
 @media screen and (max-width: 1024px) {
   /* Homepage adjustments */
   #homeScreenSearchContainer {
-    width: 80% !important;
+    width: 90% !important;
   }
 
   #searchInput {
-    width: 400px;
+    width: 100%;
     font-size: 14px;
   }
 
@@ -502,6 +506,7 @@ body, td, a, p, .h {
   #worksResultsScreen {
     max-width: 90% !important;
     padding: 0 20px !important;
+    margin-top: 150px !important;
   }
 
   .work-result {
@@ -511,16 +516,12 @@ body, td, a, p, .h {
   /* Images results */
   #imageSearchScreen {
     max-width: 90% !important;
+    margin-top: 150px !important;
   }
 
   .result-item {
     width: calc(25% - 20px);
     margin: 10px;
-  }
-
-  .result-item img {
-    max-width: 100%;
-    height: auto;
   }
 }
 
@@ -528,13 +529,13 @@ body, td, a, p, .h {
 @media screen and (max-width: 768px) {
   /* Navigation */
   .navOption {
-    padding: 0 6px;
+    padding: 0 8px;
     font-size: 12px;
   }
 
   /* Homepage */
   #homeScreenSearchContainer {
-    width: 90% !important;
+    width: 95% !important;
     flex-direction: column !important;
     align-items: stretch !important;
   }
@@ -547,19 +548,19 @@ body, td, a, p, .h {
 
   #searchBtn, #luckyBtn {
     width: 100% !important;
-    margin: 5px 0 !important;
-    padding: 10px !important;
-    font-size: 14px;
+    margin: 8px 0 !important;
+    padding: 12px !important;
+    font-size: 13px;
   }
 
-  /* Results view - push content down to avoid nav overlap */
+  /* Results view - push search bar down to avoid nav overlap */
   #searchItemsWrapper {
-    margin-top: 50px !important;
+    margin-top: 40px !important;
   }
 
-  /* Works results */
+  /* Works results - ensure no overlap */
   #worksResultsScreen {
-    margin-top: 120px !important;
+    margin-top: 160px !important;
     max-width: 95% !important;
     padding: 0 10px !important;
   }
@@ -580,11 +581,10 @@ body, td, a, p, .h {
     font-size: 12px;
   }
 
-  /* Images results */
+  /* Images results - ensure no overlap */
   #imageSearchScreen {
-    margin-top: 120px !important;
+    margin-top: 160px !important;
     max-width: 95% !important;
-    gap: 10px;
   }
 
   .result-item {
