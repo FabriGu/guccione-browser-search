@@ -450,9 +450,9 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     navBar.style.top = "0";
     navBar.style.left = "0";
     navBar.style.width = "100%";
-    navBar.style.padding = "5px";
-    navBar.style.borderBottom = "1px solid black";
-    navBar.style.backgroundColor = "transparent";
+    navBar.style.padding = "14px 20px";
+    navBar.style.borderBottom = "1px solid #e8eaed";
+    navBar.style.backgroundColor = "#fff";
     navBar.style.textAlign = "left";
     
     // Show the "I'm Feeling Lucky" button
@@ -621,9 +621,9 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     navBar.style.top = "0";
     navBar.style.left = "0";
     navBar.style.width = "100%";
-    navBar.style.padding = "5px";
-    navBar.style.borderBottom = "1px solid black";
-    navBar.style.backgroundColor = "transparent";
+    navBar.style.padding = "14px 20px";
+    navBar.style.borderBottom = "1px solid #e8eaed";
+    navBar.style.backgroundColor = "#fff";
     navBar.style.textAlign = "left";
 
     // Adjust search button text
@@ -708,9 +708,9 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     navBar.style.top = "0";
     navBar.style.left = "0";
     navBar.style.width = "100%";
-    navBar.style.padding = "5px";
-    navBar.style.borderBottom = "1px solid black";
-    navBar.style.backgroundColor = "transparent";
+    navBar.style.padding = "14px 20px";
+    navBar.style.borderBottom = "1px solid #e8eaed";
+    navBar.style.backgroundColor = "#fff";
     navBar.style.textAlign = "left";
 
     // Adjust search container
