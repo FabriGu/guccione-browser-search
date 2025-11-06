@@ -140,7 +140,27 @@ body, td, a, p, .h {
   
   input {
     font-family: inherit;
-    height: 20px;
+    height: 26px;
+    font-size: 14px;
+  }
+
+  #searchInput {
+    width: 400px;
+    max-width: 90%;
+    padding: 4px 8px;
+    border: 1px solid #d9d9d9;
+    border-radius: 1px;
+  }
+
+  #searchInput:hover {
+    border-color: #b9b9b9;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+
+  #searchInput:focus {
+    outline: none;
+    border-color: #4d90fe;
+    box-shadow: 0 1px 2px rgba(77,144,254,0.2);
   }
   
 
@@ -201,13 +221,12 @@ body, td, a, p, .h {
   #homeScreenNav {
       position: absolute;
       top: 0;
-      left: 0;
-      width: 100%;
-      padding: 10px;
+      right: 0;
+      padding: 5px 10px;
       border-bottom: 1px solid #e5e5e5;
       z-index: 1000; /* Ensure navigation is always on top */
       background-color: #fff;
-      text-align: center;
+      text-align: right;
       box-sizing: border-box;
   }
   
@@ -235,7 +254,8 @@ body, td, a, p, .h {
   #homeScreenSearchContainer {
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: auto;
+    max-width: 600px;
     z-index: 10;
   }
   
@@ -250,10 +270,22 @@ body, td, a, p, .h {
   
   
   #searchBtn, #luckyBtn {
-      /* width: 30%; */
-      align-self: center;;
-      padding: 5px;
+      align-self: center;
+      padding: 8px 16px;
       margin: 5px;
+      background-color: #f2f2f2;
+      border: 1px solid #f2f2f2;
+      border-radius: 2px;
+      color: #222;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+  #searchBtn:hover, #luckyBtn:hover {
+      border-color: #c6c6c6;
+      box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+      background-color: #f8f8f8;
     }
   
   #homeScreenInfo {
@@ -282,16 +314,16 @@ body, td, a, p, .h {
   
   /* Additional CSS for navigation */
   .navOption {
-    padding: 0 15px;
+    padding: 0 8px;
     text-decoration: none;
     color: #0000cc;
-    font-size: 14px;
+    font-size: 13px;
     display: inline-block;
   }
 
   .selectedNavOption {
     color: #000;
-    font-weight: bold;
+    font-weight: normal;
   }
 
   .navOption:hover {
@@ -446,62 +478,90 @@ body, td, a, p, .h {
 }
 
 /* ============================================ */
-/* RESPONSIVE DESIGN - MEDIA QUERIES */
+/* RESPONSIVE DESIGN - 3 BREAKPOINTS */
 /* ============================================ */
 
-/* Tablet and smaller (max-width: 1024px) */
+/* Add spacing for images on all screens */
+.result-item {
+  margin: 10px;
+}
+
+/* TABLET (max-width: 1024px) */
 @media screen and (max-width: 1024px) {
-  #title img {
-    width: 60% !important;
-    max-width: 400px;
+  /* Homepage adjustments */
+  #homeScreenSearchContainer {
+    width: 80% !important;
+  }
+
+  #searchInput {
+    width: 400px;
+    font-size: 14px;
+  }
+
+  /* Works results */
+  #worksResultsScreen {
+    max-width: 90% !important;
+    padding: 0 20px !important;
   }
 
   .work-result {
-    max-width: 90%;
+    max-width: 100%;
   }
 
-  #worksResultsScreen {
-    max-width: 90% !important;
-    padding: 0 10px !important;
-  }
-
+  /* Images results */
   #imageSearchScreen {
     max-width: 90% !important;
-    padding: 0 10px !important;
   }
 
   .result-item {
-    width: 15%;
+    width: calc(25% - 20px);
+    margin: 10px;
   }
 
-  #searchInput {
-    width: 300px;
+  .result-item img {
+    max-width: 100%;
+    height: auto;
   }
 }
 
-/* Mobile landscape and smaller (max-width: 768px) */
+/* PHONE (max-width: 768px) */
 @media screen and (max-width: 768px) {
-  #title img {
-    width: 80% !important;
-    max-width: 300px;
+  /* Navigation */
+  .navOption {
+    padding: 0 6px;
+    font-size: 12px;
   }
 
+  /* Homepage */
   #homeScreenSearchContainer {
     width: 90% !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
   }
 
   #searchInput {
-    width: 100%;
-    max-width: 400px;
+    width: 100% !important;
+    margin: 5px 0 !important;
+    font-size: 16px;
   }
 
-  .navOption {
-    padding: 0 10px;
-    font-size: 13px;
+  #searchBtn, #luckyBtn {
+    width: 100% !important;
+    margin: 5px 0 !important;
+    padding: 10px !important;
+    font-size: 14px;
   }
 
-  #homeScreenNav {
-    padding: 8px 5px;
+  /* Results view - push content down to avoid nav overlap */
+  #searchItemsWrapper {
+    margin-top: 50px !important;
+  }
+
+  /* Works results */
+  #worksResultsScreen {
+    margin-top: 120px !important;
+    max-width: 95% !important;
+    padding: 0 10px !important;
   }
 
   .work-title {
@@ -513,142 +573,36 @@ body, td, a, p, .h {
   }
 
   .work-description {
-    font-size: 12px;
-  }
-
-  .result-item {
-    width: 30%;
-    margin: 10px;
-  }
-
-  .result-item img {
-    max-width: 100%;
-  }
-
-  #worksResultsScreen {
-    margin-top: 150px !important;
-  }
-
-  #imageSearchScreen {
-    margin-top: 150px !important;
-  }
-}
-
-/* Mobile portrait (max-width: 480px) */
-@media screen and (max-width: 480px) {
-  body {
-    font-size: 14px;
-  }
-
-  #title img {
-    width: 90% !important;
-    max-width: 250px;
-  }
-
-  #homeScreenSearchContainer {
-    width: 95% !important;
-    flex-direction: column !important;
-  }
-
-  #searchInput {
-    width: 100%;
-    margin-bottom: 8px !important;
-  }
-
-  #searchBtn {
-    width: 100%;
-    margin: 0 !important;
-  }
-
-  .navOption {
-    padding: 0 8px;
-    font-size: 12px;
-  }
-
-  #homeScreenNav {
-    padding: 8px 2px;
-  }
-
-  .work-result {
-    margin: 10px 0;
-    padding: 10px 0;
-  }
-
-  .work-title {
-    font-size: 15px;
-  }
-
-  .work-url {
-    font-size: 12px;
-  }
-
-  .work-description {
-    font-size: 11px;
+    font-size: 13px;
   }
 
   .work-meta {
-    font-size: 11px;
+    font-size: 12px;
+  }
+
+  /* Images results */
+  #imageSearchScreen {
+    margin-top: 120px !important;
+    max-width: 95% !important;
+    gap: 10px;
   }
 
   .result-item {
-    width: 45%;
-    margin: 5px;
+    width: calc(50% - 20px);
+    margin: 10px;
   }
 
   .imageCaption {
-    font-size: 10px;
-  }
-
-  .imageMeta {
-    font-size: 9px;
-  }
-
-  #worksResultsScreen {
-    margin-top: 120px !important;
-    padding: 0 10px !important;
-  }
-
-  #imageSearchScreen {
-    margin-top: 120px !important;
-    padding: 0 5px !important;
-  }
-
-  /* Adjust search container in results view for mobile */
-  #homeScreen[style*="height: auto"] #searchItemsWrapper {
-    flex-direction: column !important;
-    margin-top: 60px !important;
-  }
-
-  /* Autocomplete on mobile */
-  .suggestions-list {
-    width: 100% !important;
-    max-height: 150px;
-  }
-
-  .suggestion-item {
-    padding: 10px;
-    font-size: 13px;
-  }
-}
-
-/* Very small screens (max-width: 320px) */
-@media screen and (max-width: 320px) {
-  #title img {
-    width: 95% !important;
-    max-width: 200px;
-  }
-
-  .navOption {
-    padding: 0 5px;
     font-size: 11px;
   }
 
-  .work-title {
-    font-size: 14px;
+  .imageMeta {
+    font-size: 10px;
   }
 
-  .result-item {
-    width: 100%;
-    margin: 5px 0;
+  /* Autocomplete */
+  .suggestions-list {
+    width: 100% !important;
+    font-size: 14px;
   }
 }

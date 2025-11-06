@@ -373,7 +373,8 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     searchContainer.style.flexDirection = "column";
     searchContainer.style.alignItems = "center";
     searchContainer.style.marginTop = "0";
-    searchContainer.style.width = "50%";
+    searchContainer.style.width = "auto";
+    searchContainer.style.maxWidth = "600px";
 
     // Reset title/logo
     title.style.justifyContent = "center";
@@ -392,8 +393,10 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     // Reset navigation bar
     navBar.style.position = "absolute";
     navBar.style.top = "0";
-    navBar.style.padding = "5px";
-    navBar.style.borderBottom = "1px solid black";
+    navBar.style.right = "0";
+    navBar.style.padding = "5px 10px";
+    navBar.style.borderBottom = "1px solid #e5e5e5";
+    navBar.style.textAlign = "right";
     
     // Show the "I'm Feeling Lucky" button
     luckyBtn.style.display = "block";
@@ -520,7 +523,10 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     searchContainer.style.alignItems = "center";
     searchContainer.style.marginTop = "0";
     searchContainer.style.marginLeft = "20px";
+    searchContainer.style.width = "auto";
+    searchContainer.style.maxWidth = "600px";
 
+    searchInput.style.width = "400px";
     searchInput.style.margin = "0";
     searchBtn.style.margin = "0";
     searchBtn.style.marginLeft = "5px";
@@ -537,23 +543,18 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
       logoImg.style.margin = "0";
     }
 
-    // Move navigation bar to top
-    navBar.style.position = "fixed";
+    // Move navigation bar to top-right
+    navBar.style.position = "absolute";
     navBar.style.top = "0";
-    navBar.style.left = "0";
-    navBar.style.width = "100%";
-    navBar.style.padding = "10px";
+    navBar.style.right = "0";
+    navBar.style.padding = "5px 10px";
     navBar.style.borderBottom = "1px solid #e5e5e5";
     navBar.style.backgroundColor = "#fff";
-    navBar.style.textAlign = "center";
-
-    // Adjust search container
-    searchContainer.style.width = "auto";
-    searchContainer.style.alignItems = "center";
+    navBar.style.textAlign = "right";
 
     // Adjust search button text
     searchBtn.textContent = "Search Works";
-    
+
     // Hide the "I'm Feeling Lucky" button
     luckyBtn.style.display = "none";
 
@@ -607,7 +608,10 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     searchContainer.style.alignItems = "center";
     searchContainer.style.marginTop = "0";
     searchContainer.style.marginLeft = "20px";
+    searchContainer.style.width = "auto";
+    searchContainer.style.maxWidth = "600px";
 
+    searchInput.style.width = "400px";
     searchInput.style.margin = "0";
     searchBtn.style.margin = "0";
     searchBtn.style.marginLeft = "5px";
@@ -624,15 +628,14 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
       logoImg.style.margin = "0";
     }
 
-    // Move navigation bar to top
-    navBar.style.position = "fixed";
+    // Move navigation bar to top-right
+    navBar.style.position = "absolute";
     navBar.style.top = "0";
-    navBar.style.left = "0";
-    navBar.style.width = "100%";
-    navBar.style.padding = "10px";
+    navBar.style.right = "0";
+    navBar.style.padding = "5px 10px";
     navBar.style.borderBottom = "1px solid #e5e5e5";
     navBar.style.backgroundColor = "#fff";
-    navBar.style.textAlign = "center";
+    navBar.style.textAlign = "right";
 
     // Adjust search container
     searchContainer.style.width = "auto";
