@@ -38,13 +38,67 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
 
 
   // Add event listener for search button (default to work search)
-  searchButton.addEventListener("click", function() { 
+  searchButton.addEventListener("click", function() {
     // Check if input is empty or only contains spaces
     if (!searchInput.value.trim()) {
       return; // Don't search if input is empty or only spaces
     }
-    searchWorks(); 
+    searchWorks();
   });
+
+  // Add event listener for "I'm Feeling Lucky" button
+  const luckyBtn = document.getElementById("luckyBtn");
+  if (luckyBtn) {
+    luckyBtn.addEventListener("click", async function() {
+      const query = searchInput.value.trim();
+      if (!query) {
+        return; // Don't do anything if input is empty
+      }
+
+      try {
+        // Show loading state
+        updateStatus("Feeling lucky...");
+        luckyBtn.disabled = true;
+
+        // Perform search
+        const response = await fetch("/api/search", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            query,
+            searchType: "multimodal",
+            maxResults: 1  // Only get the top result
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Search request failed");
+        }
+
+        const data = await response.json();
+
+        // Navigate to the top result if it exists
+        if (data.results && data.results.length > 0) {
+          const topResult = data.results[0];
+          updateStatus(`Taking you to: ${topResult.title}`);
+
+          // Navigate to the work page after a brief delay
+          setTimeout(() => {
+            window.location.href = topResult.url;
+          }, 500);
+        } else {
+          updateStatus("No results found for your query");
+          luckyBtn.disabled = false;
+        }
+      } catch (error) {
+        console.error("Error during 'I'm Feeling Lucky':", error);
+        updateStatus("Error: Could not complete the search");
+        luckyBtn.disabled = false;
+      }
+    });
+  }
 
   // Make logo clickable to return to homepage
   const logoImg = document.querySelector("#title img");
