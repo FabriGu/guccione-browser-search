@@ -396,7 +396,7 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     navBar.style.left = "0";
     navBar.style.width = "100%";
     navBar.style.padding = "5px 10px";
-    navBar.style.borderBottom = "none";
+    navBar.style.borderBottom = "1px solid #e5e5e5";
     navBar.style.backgroundColor = "transparent";
     navBar.style.textAlign = "left";
     
@@ -447,26 +447,30 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
   function createWorkResultElement(work) {
     const workDiv = document.createElement("div");
     workDiv.className = "work-result";
-    
+
+    // Create content container for text
+    const contentDiv = document.createElement("div");
+    contentDiv.className = "work-result-content";
+
     // Title link (Google blue)
     const titleLink = document.createElement("a");
     titleLink.href = work.url || "#";
     titleLink.className = "work-title";
     titleLink.textContent = work.title || "Untitled Work";
-    
+
     // Debug: Log the URL being used
     console.log(`Creating link for ${work.title} with URL: ${work.url}`);
-    
+
     // URL display (Google green)
     const urlDiv = document.createElement("div");
     urlDiv.className = "work-url";
     urlDiv.textContent = `guccione.com${work.url || ""}`;
-    
+
     // Description (Google gray)
     const descDiv = document.createElement("div");
     descDiv.className = "work-description";
     descDiv.textContent = truncateText(work.description || "", 160);
-    
+
     // Metadata (year, medium, tags)
     const metaDiv = document.createElement("div");
     metaDiv.className = "work-meta";
@@ -479,7 +483,7 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     } else if (mediumText) {
       metaDiv.textContent = mediumText;
     }
-    
+
     // Add score for debugging (can be removed in production)
     if (work.score && work.score > 0) {
       const scoreDiv = document.createElement("div");
@@ -488,12 +492,23 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
       metaDiv.appendChild(document.createElement("br"));
       metaDiv.appendChild(scoreDiv);
     }
-    
-    workDiv.appendChild(titleLink);
-    workDiv.appendChild(urlDiv);
-    workDiv.appendChild(descDiv);
-    workDiv.appendChild(metaDiv);
-    
+
+    contentDiv.appendChild(titleLink);
+    contentDiv.appendChild(urlDiv);
+    contentDiv.appendChild(descDiv);
+    contentDiv.appendChild(metaDiv);
+
+    workDiv.appendChild(contentDiv);
+
+    // Add thumbnail image if available
+    if (work.thumbnailImage) {
+      const thumbnail = document.createElement("img");
+      thumbnail.src = work.thumbnailImage;
+      thumbnail.className = "work-thumbnail";
+      thumbnail.alt = work.title || "Work thumbnail";
+      workDiv.appendChild(thumbnail);
+    }
+
     return workDiv;
   }
 
@@ -552,7 +567,7 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     navBar.style.left = "0";
     navBar.style.width = "100%";
     navBar.style.padding = "5px 10px";
-    navBar.style.borderBottom = "none";
+    navBar.style.borderBottom = "1px solid #e5e5e5";
     navBar.style.backgroundColor = "transparent";
     navBar.style.textAlign = "left";
 
@@ -566,7 +581,7 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     imageSearchScreen.style.display = "none";
 
     // Show work search results area - centered
-    worksResultsScreen.style.marginTop = "200px";
+    worksResultsScreen.style.marginTop = "250px";
     worksResultsScreen.style.display = "flex";
     worksResultsScreen.style.flexDirection = "column";
     worksResultsScreen.style.alignItems = "center";
@@ -639,7 +654,7 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     navBar.style.left = "0";
     navBar.style.width = "100%";
     navBar.style.padding = "5px 10px";
-    navBar.style.borderBottom = "none";
+    navBar.style.borderBottom = "1px solid #e5e5e5";
     navBar.style.backgroundColor = "transparent";
     navBar.style.textAlign = "left";
 
@@ -649,7 +664,7 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
 
     // Adjust search button text
     searchBtn.textContent = "Image Search";
-    
+
     // Hide the "I'm Feeling Lucky" button
     luckyBtn.style.display = "none";
 
@@ -657,7 +672,7 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     worksResultsScreen.style.display = "none";
 
     // Show image search results area - centered
-    imageSearchScreen.style.marginTop = "200px";
+    imageSearchScreen.style.marginTop = "250px";
     imageSearchScreen.style.display = "flex";
     imageSearchScreen.style.flexWrap = "wrap";
     imageSearchScreen.style.justifyContent = "center";

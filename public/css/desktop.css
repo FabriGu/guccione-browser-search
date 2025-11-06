@@ -10,6 +10,21 @@ body, td, a, p, .h {
   margin: 8px 0;
   padding: 8px 0;
   max-width: 800px;
+  display: flex;
+  gap: 12px;
+}
+
+.work-result-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.work-thumbnail {
+  flex-shrink: 0;
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border: 1px solid #ddd;
 }
 
 .work-title {
@@ -151,6 +166,8 @@ body, td, a, p, .h {
     border: 1px solid #d9d9d9;
     border-radius: 1px;
     box-sizing: border-box;
+    background-color: #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
   #searchInput:hover {
@@ -225,7 +242,7 @@ body, td, a, p, .h {
       left: 0;
       width: 100%;
       padding: 5px 10px;
-      border-bottom: none;
+      border-bottom: 1px solid #e5e5e5;
       z-index: 1000;
       background-color: transparent;
       text-align: left;
@@ -276,20 +293,30 @@ body, td, a, p, .h {
       padding: 7px 12px;
       margin: 8px 4px;
       background: #f2f2f2;
-      background: linear-gradient(top,#f5f5f5,#f1f1f1);
+      background: -webkit-linear-gradient(top, #f5f5f5, #f1f1f1);
+      background: linear-gradient(to bottom, #f5f5f5, #f1f1f1);
       border: 1px solid #dcdcdc;
       border-radius: 2px;
       color: #444;
       font-size: 11px;
       font-weight: bold;
       cursor: pointer;
+      text-decoration: none;
     }
 
   #searchBtn:hover, #luckyBtn:hover {
       border-color: #c6c6c6;
       box-shadow: 0 1px 1px rgba(0,0,0,0.1);
       background: #f8f8f8;
+      background: -webkit-linear-gradient(top, #f8f8f8, #f5f5f5);
+      background: linear-gradient(to bottom, #f8f8f8, #f5f5f5);
       color: #222;
+    }
+
+  #searchBtn:active, #luckyBtn:active {
+      background: -webkit-linear-gradient(top, #f1f1f1, #f5f5f5);
+      background: linear-gradient(to bottom, #f1f1f1, #f5f5f5);
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
     }
   
   #homeScreenInfo {
@@ -506,7 +533,7 @@ body, td, a, p, .h {
   #worksResultsScreen {
     max-width: 90% !important;
     padding: 0 20px !important;
-    margin-top: 150px !important;
+    margin-top: 250px !important;
   }
 
   .work-result {
@@ -516,7 +543,7 @@ body, td, a, p, .h {
   /* Images results */
   #imageSearchScreen {
     max-width: 90% !important;
-    margin-top: 150px !important;
+    margin-top: 250px !important;
   }
 
   .result-item {
@@ -560,7 +587,7 @@ body, td, a, p, .h {
 
   /* Works results - ensure no overlap */
   #worksResultsScreen {
-    margin-top: 160px !important;
+    margin-top: 250px !important;
     max-width: 95% !important;
     padding: 0 10px !important;
   }
@@ -581,9 +608,15 @@ body, td, a, p, .h {
     font-size: 12px;
   }
 
+  /* Work thumbnails - smaller on mobile */
+  .work-thumbnail {
+    width: 70px;
+    height: 70px;
+  }
+
   /* Images results - ensure no overlap */
   #imageSearchScreen {
-    margin-top: 160px !important;
+    margin-top: 250px !important;
     max-width: 95% !important;
   }
 
