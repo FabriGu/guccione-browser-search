@@ -1,5 +1,6 @@
   /// ----------------------------------------------------------- SEARCH COMPLETION VARIABLE DECLARATION
   let suggestionsList;
+  let resultsSuggestionsList;
 let suggestionTimeout;
 const SUGGESTION_DELAY = 300; // milliseconds to wait before fetching suggestions
   /// ----------------------------------------------------------- SEARCH COMPLETION VARIABLE DECLARATION
@@ -7,34 +8,101 @@ const SUGGESTION_DELAY = 300; // milliseconds to wait before fetching suggestion
 
 // Client-side JavaScript for image search
 document.addEventListener("DOMContentLoaded", function () {
- 
+
   // Get references to DOM elements
   const searchInput = document.querySelector("#searchInput");
+  const resultsSearchInput = document.querySelector("#resultsSearchInput");
   const searchButton = document.querySelector("#searchBtn");
+  const resultsSearchButton = document.querySelector("#resultsSearchBtn");
   const worksResultsDiv = document.querySelector("#worksResultsScreen");
   const imagesResultsDiv = document.querySelector("#imageSearchScreen");
   const title = document.querySelector("#title");
   const statusElement = document.querySelector("#status");
+  const resultsSearchBar = document.querySelector("#resultsSearchBar");
+  const homeScreenNav = document.querySelector("#homeScreenNav");
+  const searchItemsWrapper = document.querySelector("#searchItemsWrapper");
 
    /// ----------------------------------------------------------- SEARCH COMPLETION logic
-// Create and add suggestions container
+// Create and add suggestions container for homepage
 suggestionsList = document.createElement("div");
 suggestionsList.id = "suggestionsList";
 suggestionsList.className = "suggestions-list";
 searchInput.parentNode.insertBefore(suggestionsList, searchInput.nextSibling);
 
+// Create and add suggestions container for results view
+resultsSuggestionsList = document.getElementById("resultsSuggestionsList");
+
 // Add event listener for input changes to show suggestions
 searchInput.addEventListener("input", handleInputChange);
+resultsSearchInput.addEventListener("input", handleResultsInputChange);
 
 // Add event listener to hide suggestions when clicking outside
 document.addEventListener("click", function(event) {
   if (event.target !== searchInput && event.target !== suggestionsList) {
     hideSuggestions();
   }
+  if (event.target !== resultsSearchInput && event.target !== resultsSuggestionsList) {
+    hideResultsSuggestions();
+  }
 });
 
 // Add keyboard navigation for suggestions
 searchInput.addEventListener("keydown", handleKeyNavigation);
+resultsSearchInput.addEventListener("keydown", handleResultsKeyNavigation);
+
+// Sync search inputs
+searchInput.addEventListener("input", function() {
+  resultsSearchInput.value = searchInput.value;
+});
+
+resultsSearchInput.addEventListener("input", function() {
+  searchInput.value = resultsSearchInput.value;
+});
+
+// Results search button click
+resultsSearchButton.addEventListener("click", function() {
+  if (resultsSearchInput.value.trim()) {
+    // Determine which search mode we're in based on selected nav
+    const selectedNav = document.querySelector(".selected-results-nav");
+    if (selectedNav && selectedNav.id === "resultsNavImages") {
+      searchImages();
+    } else {
+      searchWorks();
+    }
+  }
+});
+
+// Results search input enter key
+resultsSearchInput.addEventListener("keypress", function(event) {
+  if (event.key === "Enter" && resultsSearchInput.value.trim()) {
+    event.preventDefault();
+    resultsSearchButton.click();
+  }
+});
+
+// Results logo click
+document.getElementById("resultsLogo").addEventListener("click", function() {
+  returnToHome();
+  resetLayoutToHomepage();
+});
+
+// Results navigation
+document.getElementById("resultsNavWorks").addEventListener("click", function(e) {
+  e.preventDefault();
+  switchResultsNav("works");
+  switchToWorksMode();
+});
+
+document.getElementById("resultsNavImages").addEventListener("click", function(e) {
+  e.preventDefault();
+  switchResultsNav("images");
+  switchToImagesMode();
+});
+
+document.getElementById("resultsNavAbout").addEventListener("click", function(e) {
+  e.preventDefault();
+  window.open("about.html", "_blank");
+});
 
 
   // Set initial search button behavior (default to work search)
@@ -316,77 +384,9 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
 
       const data = await response.json();
 
-      // Display results
+      // Display results in Google Images row-based layout
       if (data.results && data.results.length > 0) {
-        data.results.forEach((result) => {
-          // Create result container
-          const resultDiv = document.createElement("div");
-          resultDiv.className = "result-item";
-          resultDiv.style.margin = "20px";
-
-          // Create image element
-          const img = document.createElement("img");
-          img.src = result.url;
-          img.style.width = "200px";
-          img.style.height = "auto";
-          img.style.border = "1px blue solid";
-
-          // Create score element
-          const captionP = document.createElement("p");
-          captionP.className = "image-caption";
-          captionP.textContent = truncateText(result.caption, 30);
-
-          // Get dimensions and filesize once the image loads
-          img.onload = function () {
-            const width = this.naturalWidth;
-            const height = this.naturalHeight;
-            const fileSize = estimateFileSize(width, height);
-
-            // Update the metadata element with actual dimensions
-            const metadataElement = resultDiv.querySelector(".imageMeta");
-            if (metadataElement) {
-              metadataElement.textContent = `${width} x ${height} - ${fileSize} - jpg`;
-            }
-          };
-          // Create wrapper for caption and metadata
-          const infoDiv = document.createElement("div");
-          infoDiv.className = "imageInfo";
-          // Create caption with truncation
-          const captionDiv = document.createElement("div");
-          captionDiv.className = "imageCaption";
-          captionDiv.textContent = truncateText(result.caption, 60);
-
-          // Create metadata element (with placeholder until image loads)
-          const metaDiv = document.createElement("div");
-          metaDiv.className = "imageMeta";
-          metaDiv.textContent = "-- x -- - --k - jpg";
-
-          // Create source element
-          const sourceDiv = document.createElement("div");
-          sourceDiv.className = "imageSource";
-
-          // Extract domain from URL or use placeholder
-          const domain = extractDomain(result.url);
-          sourceDiv.textContent = domain;
-
-          // Create source link
-          const sourceLink = document.createElement("a");
-          sourceLink.className = "image-source";
-          sourceLink.href = result.sourceUrl || "#";
-          sourceLink.textContent = truncateText(result.domain || "unknown", 25);
-
-          // Add elements to the DOM
-          infoDiv.appendChild(captionDiv);
-          infoDiv.appendChild(metaDiv);
-          infoDiv.appendChild(sourceDiv);
-
-          resultDiv.appendChild(img);
-          resultDiv.appendChild(infoDiv);
-          imagesResultsDiv.appendChild(resultDiv);
-        });
-
-        // Show results area
-        imagesResultsDiv.style.display = "flex";
+        layoutImagesInRows(data.results, imagesResultsDiv);
         updateStatus("Results found!");
       } else {
         updateStatus("No results found");
@@ -402,69 +402,38 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
 
   // Function to reset layout to homepage
   function resetLayoutToHomepage() {
-    // Reset layout to homepage
-    const homeScreen = document.getElementById("homeScreen");
-    const searchItemsWrapper = document.getElementById("searchItemsWrapper");
-    const imageSearchScreen = document.getElementById("imageSearchScreen");
-    const title = document.getElementById("title");
-    const searchContainer = document.getElementById("homeScreenSearchContainer");
-    const navBar = document.getElementById("homeScreenNav");
-    const luckyBtn = document.getElementById("luckyBtn");
-    
-    // Reset home screen wrapper
-    homeScreen.style.padding = "0";
-    homeScreen.style.display = "flex";
-    homeScreen.style.height = "100vh";
-    homeScreen.style.justifyContent = "center";
-    homeScreen.style.alignItems = "center";
+    // Hide results search bar
+    resultsSearchBar.style.display = "none";
 
-    // Reset search items wrapper
-    searchItemsWrapper.style.flexDirection = "column";
-    searchItemsWrapper.style.marginTop = "0";
-    searchItemsWrapper.style.justifyContent = "center";
-    searchItemsWrapper.style.alignItems = "center";
+    // Show homepage elements
+    searchItemsWrapper.style.display = "flex";
+    homeScreenNav.style.display = "flex";
 
-    // Reset search container
-    searchContainer.style.flexDirection = "column";
-    searchContainer.style.alignItems = "center";
-    searchContainer.style.marginTop = "0";
-    searchContainer.style.width = "500px";
-    searchContainer.style.maxWidth = "90%";
-
-    // Reset title/logo
-    title.style.justifyContent = "center";
-    title.style.marginBottom = "0";
-    title.style.marginTop = "0";
-    
-    // Reset logo image
-    if (logoImg) {
-      logoImg.style.width = "70%";
-      logoImg.style.margin = "0";
-      logoImg.style.padding = "5%";
-      logoImg.style.paddingTop = "0";
-      logoImg.style.marginTop = "-10%";
-    }
-    
-    // Reset navigation bar
-    navBar.style.position = "absolute";
-    navBar.style.top = "0";
-    navBar.style.left = "0";
-    navBar.style.width = "100%";
-    navBar.style.padding = "14px 20px";
-    navBar.style.borderBottom = "1px solid #e8eaed";
-    navBar.style.backgroundColor = "#fff";
-    navBar.style.textAlign = "left";
-    
-    // Show the "I'm Feeling Lucky" button
-    luckyBtn.style.display = "block";
-    
-    // Hide search results area
-    imageSearchScreen.style.display = "none";
-    
     // Show footer info
     const footerInfo = document.getElementById("homeScreenInfo");
     if (footerInfo) {
       footerInfo.style.display = "block";
+    }
+
+    // Hide results
+    worksResultsDiv.style.display = "none";
+    imagesResultsDiv.style.display = "none";
+  }
+
+  // Switch results navigation
+  function switchResultsNav(mode) {
+    const navWorks = document.getElementById("resultsNavWorks");
+    const navImages = document.getElementById("resultsNavImages");
+
+    // Remove selected class from all
+    navWorks.classList.remove("selected-results-nav");
+    navImages.classList.remove("selected-results-nav");
+
+    // Add to selected
+    if (mode === "works") {
+      navWorks.classList.add("selected-results-nav");
+    } else if (mode === "images") {
+      navImages.classList.add("selected-results-nav");
     }
   }
 
@@ -496,6 +465,156 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
     } catch (e) {
       return "www.example.com";
     }
+  }
+
+  // Layout images in rows like Google Images
+  function layoutImagesInRows(results, container) {
+    const TARGET_ROW_HEIGHT = 220; // Target height for each row in pixels
+    const GAP = 4; // Gap between images
+    const containerWidth = container.offsetWidth || window.innerWidth - 16;
+
+    // Store image data with dimensions
+    let imageData = [];
+    let loadedCount = 0;
+
+    // First, load all images to get their dimensions
+    results.forEach((result, index) => {
+      const img = new Image();
+      img.src = result.url;
+
+      img.onload = function() {
+        imageData[index] = {
+          result: result,
+          width: this.naturalWidth,
+          height: this.naturalHeight,
+          aspectRatio: this.naturalWidth / this.naturalHeight
+        };
+
+        loadedCount++;
+
+        // Once all images are loaded, arrange them in rows
+        if (loadedCount === results.length) {
+          arrangeIntoRows(imageData, container, containerWidth, TARGET_ROW_HEIGHT, GAP);
+        }
+      };
+
+      img.onerror = function() {
+        // Handle error by using placeholder dimensions
+        imageData[index] = {
+          result: result,
+          width: 300,
+          height: 200,
+          aspectRatio: 1.5
+        };
+
+        loadedCount++;
+
+        if (loadedCount === results.length) {
+          arrangeIntoRows(imageData, container, containerWidth, TARGET_ROW_HEIGHT, GAP);
+        }
+      };
+    });
+  }
+
+  function arrangeIntoRows(imageData, container, containerWidth, targetHeight, gap) {
+    container.innerHTML = ""; // Clear existing content
+
+    let currentRow = [];
+    let currentRowWidth = 0;
+
+    imageData.forEach((imgData, index) => {
+      // Calculate scaled width for this image at target height
+      const scaledWidth = imgData.aspectRatio * targetHeight;
+
+      // Add to current row
+      currentRow.push(imgData);
+      currentRowWidth += scaledWidth + (currentRow.length > 1 ? gap : 0);
+
+      // Check if row is full or this is the last image
+      const isLastImage = index === imageData.length - 1;
+      const isRowFull = currentRowWidth >= containerWidth - 50; // Leave some margin
+
+      if (isRowFull || isLastImage) {
+        // Create and append the row
+        createImageRow(currentRow, container, containerWidth, targetHeight, gap);
+
+        // Reset for next row
+        currentRow = [];
+        currentRowWidth = 0;
+      }
+    });
+  }
+
+  function createImageRow(rowImages, container, containerWidth, targetHeight, gap) {
+    // Calculate total width if all images were at target height
+    let totalWidth = 0;
+    rowImages.forEach((imgData, i) => {
+      totalWidth += imgData.aspectRatio * targetHeight;
+      if (i < rowImages.length - 1) totalWidth += gap;
+    });
+
+    // Calculate scaling factor to fit row to container width
+    const scalingFactor = Math.min(1, (containerWidth - gap * 2) / totalWidth);
+    const actualHeight = targetHeight * scalingFactor;
+
+    // Create row div
+    const rowDiv = document.createElement("div");
+    rowDiv.className = "image-row";
+    rowDiv.style.height = `${actualHeight}px`;
+
+    // Create each image in the row
+    rowImages.forEach((imgData) => {
+      const actualWidth = imgData.aspectRatio * actualHeight;
+
+      // Create result item
+      const resultDiv = document.createElement("div");
+      resultDiv.className = "result-item";
+      resultDiv.style.width = `${actualWidth}px`;
+
+      // Create image container
+      const imageContainer = document.createElement("div");
+      imageContainer.className = "image-container";
+      imageContainer.style.height = `${actualHeight}px`;
+
+      // Create image element
+      const img = document.createElement("img");
+      img.src = imgData.result.url;
+      img.alt = imgData.result.caption || "";
+
+      imageContainer.appendChild(img);
+
+      // Create info section (below image)
+      const infoDiv = document.createElement("div");
+      infoDiv.className = "imageInfo";
+
+      // Source
+      const sourceDiv = document.createElement("div");
+      sourceDiv.className = "imageSource";
+      sourceDiv.textContent = extractDomain(imgData.result.url);
+
+      // Caption
+      const captionDiv = document.createElement("div");
+      captionDiv.className = "imageCaption";
+      captionDiv.textContent = truncateText(imgData.result.caption, 60);
+
+      // Metadata
+      const metaDiv = document.createElement("div");
+      metaDiv.className = "imageMeta";
+      const fileSize = estimateFileSize(imgData.width, imgData.height);
+      metaDiv.textContent = `${imgData.width} × ${imgData.height} • ${fileSize}`;
+
+      // Assemble info
+      infoDiv.appendChild(sourceDiv);
+      infoDiv.appendChild(captionDiv);
+      infoDiv.appendChild(metaDiv);
+
+      // Assemble result item
+      resultDiv.appendChild(imageContainer);
+      resultDiv.appendChild(infoDiv);
+      rowDiv.appendChild(resultDiv);
+    });
+
+    container.appendChild(rowDiv);
   }
 
   // Create work result element with 2007 Google styling
@@ -568,181 +687,66 @@ searchInput.addEventListener("keydown", handleKeyNavigation);
   }
 
   function workSearchFormat() {
-    // Get references to elements
-    const homeScreen = document.getElementById("homeScreen");
-    const searchItemsWrapper = document.getElementById("searchItemsWrapper");
-    const worksResultsScreen = document.getElementById("worksResultsScreen");
-    const imageSearchScreen = document.getElementById("imageSearchScreen");
-    const title = document.getElementById("title");
-    const searchContainer = document.getElementById("homeScreenSearchContainer");
-    const navBar = document.getElementById("homeScreenNav");
-    const btnContainer = document.getElementById("btnContainer");
-    const luckyBtn = document.getElementById("luckyBtn");
-    const searchBtn = document.getElementById("searchBtn");
-
-    // Adjust home screen wrapper - center everything
-    homeScreen.style.padding = "0";
-    homeScreen.style.display = "flex";
-    homeScreen.style.height = "auto";
-    homeScreen.style.justifyContent = "center";
-
-    searchItemsWrapper.style.flexDirection = "row";
-    searchItemsWrapper.style.marginTop = "80px";
-    searchItemsWrapper.style.justifyContent = "center";
-    searchItemsWrapper.style.alignItems = "center";
-
-    searchContainer.style.flexDirection = "row";
-    searchContainer.style.alignItems = "center";
-    searchContainer.style.marginTop = "0";
-    searchContainer.style.marginLeft = "20px";
-    searchContainer.style.width = "500px";
-    searchContainer.style.maxWidth = "90%";
-
-    searchInput.style.width = "500px";
-    searchInput.style.maxWidth = "100%";
-    searchInput.style.margin = "0";
-    searchBtn.style.margin = "0 0 0 5px";
-    searchBtn.style.padding = "7px 12px";
-
-    // Adjust title/logo - center it
-    title.style.justifyContent = "center";
-    title.style.marginBottom = "0";
-    title.style.marginTop = "0";
-
-    // Adjust logo image
-    const logoImg = title.querySelector("img");
-    if (logoImg) {
-      logoImg.style.width = "300px";
-      logoImg.style.margin = "0";
-    }
-
-    // Move navigation bar to top-left
-    navBar.style.position = "absolute";
-    navBar.style.top = "0";
-    navBar.style.left = "0";
-    navBar.style.width = "100%";
-    navBar.style.padding = "14px 20px";
-    navBar.style.borderBottom = "1px solid #e8eaed";
-    navBar.style.backgroundColor = "#fff";
-    navBar.style.textAlign = "left";
-
-    // Adjust search button text
-    searchBtn.textContent = "Search Works";
-
-    // Hide the "I'm Feeling Lucky" button
-    luckyBtn.style.display = "none";
-
-    // Hide image search results
-    imageSearchScreen.style.display = "none";
-
-    // Show work search results area - centered
-    worksResultsScreen.style.marginTop = "250px";
-    worksResultsScreen.style.display = "flex";
-    worksResultsScreen.style.flexDirection = "column";
-    worksResultsScreen.style.alignItems = "center";
-    worksResultsScreen.style.justifyContent = "flex-start";
-    worksResultsScreen.style.padding = "0 20px";
-    worksResultsScreen.style.maxWidth = "800px";
-    worksResultsScreen.style.width = "100%";
-    worksResultsScreen.style.left = "50%";
-    worksResultsScreen.style.transform = "translateX(-50%)";
-
-    // Adjust footer info position
+    // Hide homepage elements
+    searchItemsWrapper.style.display = "none";
+    homeScreenNav.style.display = "none";
     const footerInfo = document.getElementById("homeScreenInfo");
     if (footerInfo) {
       footerInfo.style.display = "none";
     }
+
+    // Show results search bar
+    resultsSearchBar.style.display = "block";
+
+    // Update results nav
+    switchResultsNav("works");
+
+    // IMPORTANT: Hide image search results completely
+    imagesResultsDiv.style.display = "none !important";
+    imagesResultsDiv.innerHTML = ""; // Clear any lingering content
+
+    // Show work search results area
+    worksResultsDiv.style.display = "flex";
+    worksResultsDiv.style.flexDirection = "column";
+    worksResultsDiv.style.alignItems = "flex-start";
+    worksResultsDiv.style.justifyContent = "flex-start";
+    worksResultsDiv.style.padding = "0 20px";
+    worksResultsDiv.style.maxWidth = "800px";
+    worksResultsDiv.style.width = "100%";
+    worksResultsDiv.style.margin = "0 auto";
+    worksResultsDiv.style.position = "relative";
+    worksResultsDiv.style.left = "auto";
+    worksResultsDiv.style.transform = "none";
   }
 
   function imageSearchFormat() {
-    // Get references to elements
-    const homeScreen = document.getElementById("homeScreen");
-    const searchItemsWrapper = document.getElementById("searchItemsWrapper");
-    const worksResultsScreen = document.getElementById("worksResultsScreen");
-    const imageSearchScreen = document.getElementById("imageSearchScreen");
-    const title = document.getElementById("title");
-    const searchContainer = document.getElementById("homeScreenSearchContainer");
-    const navBar = document.getElementById("homeScreenNav");
-    const btnContainer = document.getElementById("btnContainer");
-    const luckyBtn = document.getElementById("luckyBtn");
-    const searchBtn = document.getElementById("searchBtn");
-
-    // Adjust home screen wrapper - center everything
-    homeScreen.style.padding = "0";
-    homeScreen.style.display = "flex";
-    homeScreen.style.height = "auto";
-    homeScreen.style.justifyContent = "center";
-
-    searchItemsWrapper.style.flexDirection = "row";
-    searchItemsWrapper.style.marginTop = "80px";
-    searchItemsWrapper.style.justifyContent = "center";
-    searchItemsWrapper.style.alignItems = "center";
-
-    searchContainer.style.flexDirection = "row";
-    searchContainer.style.alignItems = "center";
-    searchContainer.style.marginTop = "0";
-    searchContainer.style.marginLeft = "20px";
-    searchContainer.style.width = "500px";
-    searchContainer.style.maxWidth = "90%";
-
-    searchInput.style.width = "500px";
-    searchInput.style.maxWidth = "100%";
-    searchInput.style.margin = "0";
-    searchBtn.style.margin = "0 0 0 5px";
-    searchBtn.style.padding = "7px 12px";
-
-    // Adjust title/logo - center it
-    title.style.justifyContent = "center";
-    title.style.marginBottom = "0";
-    title.style.marginTop = "0";
-
-    // Adjust logo image
-    const logoImg = title.querySelector("img");
-    if (logoImg) {
-      logoImg.style.width = "300px";
-      logoImg.style.margin = "0";
-    }
-
-    // Move navigation bar to top-left
-    navBar.style.position = "absolute";
-    navBar.style.top = "0";
-    navBar.style.left = "0";
-    navBar.style.width = "100%";
-    navBar.style.padding = "14px 20px";
-    navBar.style.borderBottom = "1px solid #e8eaed";
-    navBar.style.backgroundColor = "#fff";
-    navBar.style.textAlign = "left";
-
-    // Adjust search container
-    searchContainer.style.width = "auto";
-    searchContainer.style.alignItems = "center";
-
-    // Adjust search button text
-    searchBtn.textContent = "Image Search";
-
-    // Hide the "I'm Feeling Lucky" button
-    luckyBtn.style.display = "none";
-
-    // Hide works search results
-    worksResultsScreen.style.display = "none";
-
-    // Show image search results area - centered
-    imageSearchScreen.style.marginTop = "250px";
-    imageSearchScreen.style.display = "flex";
-    imageSearchScreen.style.flexWrap = "wrap";
-    imageSearchScreen.style.justifyContent = "center";
-    imageSearchScreen.style.alignItems = "flex-start";
-    imageSearchScreen.style.padding = "0 20px";
-    imageSearchScreen.style.maxWidth = "1200px";
-    imageSearchScreen.style.width = "100%";
-    imageSearchScreen.style.left = "50%";
-    imageSearchScreen.style.transform = "translateX(-50%)";
-
-    // Adjust footer info position
+    // Hide homepage elements
+    searchItemsWrapper.style.display = "none";
+    homeScreenNav.style.display = "none";
     const footerInfo = document.getElementById("homeScreenInfo");
     if (footerInfo) {
       footerInfo.style.display = "none";
     }
+
+    // Show results search bar
+    resultsSearchBar.style.display = "block";
+
+    // Update results nav
+    switchResultsNav("images");
+
+    // IMPORTANT: Hide works search results completely
+    worksResultsDiv.style.display = "none !important";
+    worksResultsDiv.innerHTML = ""; // Clear any lingering content
+
+    // Show image search results area
+    imagesResultsDiv.style.display = "block"; // Changed from flex
+    imagesResultsDiv.style.padding = "0";
+    imagesResultsDiv.style.maxWidth = "100%";
+    imagesResultsDiv.style.width = "100%";
+    imagesResultsDiv.style.margin = "0";
+    imagesResultsDiv.style.position = "relative";
+    imagesResultsDiv.style.left = "auto";
+    imagesResultsDiv.style.transform = "none";
   }
 });
 
@@ -802,15 +806,44 @@ function displaySuggestions(suggestions, query) {
     const item = document.createElement("div");
     item.className = "suggestion-item";
     item.dataset.index = index;
-    
-    // Highlight the matching part of the suggestion
-    const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
-    const highlightedText = suggestion.query.replace(
-      regex, 
-      '<span class="highlight">$1</span>'
-    );
-    
-    item.innerHTML = highlightedText;
+
+    // Create text nodes to avoid spacing issues with innerHTML
+    const text = suggestion.query;
+    const lowerText = text.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+    const matchIndex = lowerText.indexOf(lowerQuery);
+
+    if (matchIndex !== -1) {
+      // Split into parts: before match, match, after match
+      const before = text.substring(0, matchIndex);
+      const match = text.substring(matchIndex, matchIndex + query.length);
+      const after = text.substring(matchIndex + query.length);
+
+      // Add non-matched part (bold)
+      if (before) {
+        const beforeSpan = document.createElement("span");
+        beforeSpan.className = "suggestion-bold";
+        beforeSpan.textContent = before;
+        item.appendChild(beforeSpan);
+      }
+
+      // Add matched part (regular)
+      const matchSpan = document.createElement("span");
+      matchSpan.className = "highlight";
+      matchSpan.textContent = match;
+      item.appendChild(matchSpan);
+
+      // Add remaining part (bold)
+      if (after) {
+        const afterSpan = document.createElement("span");
+        afterSpan.className = "suggestion-bold";
+        afterSpan.textContent = after;
+        item.appendChild(afterSpan);
+      }
+    } else {
+      // No match, just show text as bold
+      item.textContent = text;
+    }
     
     // Add click event to select this suggestion
     item.addEventListener("click", () => {
@@ -850,13 +883,13 @@ function selectSuggestion(text) {
 
 // Handle keyboard navigation
 function handleKeyNavigation(event) {
-  const items = document.querySelectorAll('.suggestion-item');
+  const items = document.querySelectorAll('#suggestionsList .suggestion-item');
   if (!items.length || suggestionsList.style.display === 'none') return;
-  
+
   // Find the currently selected item (if any)
-  const selected = document.querySelector('.suggestion-item.selected');
+  const selected = document.querySelector('#suggestionsList .suggestion-item.selected');
   const selectedIndex = selected ? parseInt(selected.dataset.index) : -1;
-  
+
   switch (event.key) {
     case 'ArrowDown':
       event.preventDefault();
@@ -868,7 +901,7 @@ function handleKeyNavigation(event) {
         items[0].classList.add('selected');
       }
       break;
-      
+
     case 'ArrowUp':
       event.preventDefault();
       // Select previous item or last if none selected
@@ -879,7 +912,7 @@ function handleKeyNavigation(event) {
         items[items.length - 1].classList.add('selected');
       }
       break;
-      
+
     case 'Enter':
       // If an item is selected, use it
       if (selected) {
@@ -887,10 +920,180 @@ function handleKeyNavigation(event) {
         selectSuggestion(selected.textContent);
       }
       break;
-      
+
     case 'Escape':
       // Hide suggestions
       hideSuggestions();
+      break;
+  }
+}
+
+// ============================================
+// RESULTS VIEW AUTOCOMPLETE FUNCTIONS
+// ============================================
+
+// Handle input change for results search bar
+function handleResultsInputChange() {
+  const query = resultsSearchInput.value.trim();
+
+  // Clear previous timeout
+  if (suggestionTimeout) {
+    clearTimeout(suggestionTimeout);
+  }
+
+  // Hide suggestions if query is empty
+  if (!query) {
+    hideResultsSuggestions();
+    return;
+  }
+
+  // Set timeout to fetch suggestions
+  suggestionTimeout = setTimeout(() => {
+    fetchResultsSuggestions(query);
+  }, SUGGESTION_DELAY);
+}
+
+// Fetch suggestions for results search bar
+async function fetchResultsSuggestions(query) {
+  try {
+    const response = await fetch(`/api/suggestions?query=${encodeURIComponent(query)}`);
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch suggestions");
+    }
+
+    const data = await response.json();
+    displayResultsSuggestions(data.suggestions, query);
+  } catch (error) {
+    console.error("Error fetching suggestions:", error);
+    hideResultsSuggestions();
+  }
+}
+
+// Display suggestions for results search bar
+function displayResultsSuggestions(suggestions, query) {
+  // Clear previous suggestions
+  resultsSuggestionsList.innerHTML = "";
+
+  // Hide if no suggestions
+  if (!suggestions || suggestions.length === 0) {
+    hideResultsSuggestions();
+    return;
+  }
+
+  // Create suggestion items
+  suggestions.forEach((suggestion, index) => {
+    const item = document.createElement("div");
+    item.className = "suggestion-item";
+    item.dataset.index = index;
+
+    // Create text nodes to avoid spacing issues
+    const text = suggestion.query;
+    const lowerText = text.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+    const matchIndex = lowerText.indexOf(lowerQuery);
+
+    if (matchIndex !== -1) {
+      // Split into parts: before match, match, after match
+      const before = text.substring(0, matchIndex);
+      const match = text.substring(matchIndex, matchIndex + query.length);
+      const after = text.substring(matchIndex + query.length);
+
+      // Add non-matched part (bold)
+      if (before) {
+        const beforeSpan = document.createElement("span");
+        beforeSpan.className = "suggestion-bold";
+        beforeSpan.textContent = before;
+        item.appendChild(beforeSpan);
+      }
+
+      // Add matched part (regular)
+      const matchSpan = document.createElement("span");
+      matchSpan.className = "highlight";
+      matchSpan.textContent = match;
+      item.appendChild(matchSpan);
+
+      // Add remaining part (bold)
+      if (after) {
+        const afterSpan = document.createElement("span");
+        afterSpan.className = "suggestion-bold";
+        afterSpan.textContent = after;
+        item.appendChild(afterSpan);
+      }
+    } else {
+      // No match, just show text as bold
+      item.textContent = text;
+    }
+
+    // Add click event to select this suggestion
+    item.addEventListener("click", () => {
+      selectResultsSuggestion(suggestion.query);
+    });
+
+    resultsSuggestionsList.appendChild(item);
+  });
+
+  // Show the suggestions list
+  resultsSuggestionsList.style.display = "block";
+}
+
+// Hide suggestions for results search bar
+function hideResultsSuggestions() {
+  resultsSuggestionsList.style.display = "none";
+}
+
+// Select a suggestion for results search bar
+function selectResultsSuggestion(text) {
+  resultsSearchInput.value = text;
+  searchInput.value = text; // Sync with homepage input
+  hideResultsSuggestions();
+  // Trigger search
+  resultsSearchButton.click();
+}
+
+// Handle keyboard navigation for results search bar
+function handleResultsKeyNavigation(event) {
+  const items = document.querySelectorAll('#resultsSuggestionsList .suggestion-item');
+  if (!items.length || resultsSuggestionsList.style.display === 'none') return;
+
+  // Find the currently selected item (if any)
+  const selected = document.querySelector('#resultsSuggestionsList .suggestion-item.selected');
+  const selectedIndex = selected ? parseInt(selected.dataset.index) : -1;
+
+  switch (event.key) {
+    case 'ArrowDown':
+      event.preventDefault();
+      // Select next item or first if none selected
+      if (selectedIndex < items.length - 1) {
+        if (selected) selected.classList.remove('selected');
+        items[selectedIndex + 1].classList.add('selected');
+      } else if (selectedIndex === -1 && items.length > 0) {
+        items[0].classList.add('selected');
+      }
+      break;
+
+    case 'ArrowUp':
+      event.preventDefault();
+      // Select previous item or last if none selected
+      if (selectedIndex > 0) {
+        if (selected) selected.classList.remove('selected');
+        items[selectedIndex - 1].classList.add('selected');
+      } else if (selectedIndex === -1 && items.length > 0) {
+        items[items.length - 1].classList.add('selected');
+      }
+      break;
+
+    case 'Enter':
+      // If an item is selected, use it
+      if (selected) {
+        event.preventDefault();
+        selectResultsSuggestion(selected.textContent);
+      }
+      break;
+
+    case 'Escape':
+      // Hide suggestions
+      hideResultsSuggestions();
       break;
   }
 }
