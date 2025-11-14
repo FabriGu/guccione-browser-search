@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 544 120" width="544" height="120">
+  <defs>
+    <!-- Import Poppins from Google Fonts -->
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&amp;display=swap');
+
+      .logo-letter {
+        font-family: 'Poppins', sans-serif;
+        font-size: 88px;
+        font-weight: 400;
+        dominant-baseline: text-before-edge;
+      }
+
+      /* Google colors */
+      .blue { fill: #4285F4; }
+      .red { fill: #EA4335; }
+      .yellow { fill: #FBBC04; }
+      .green { fill: #34A853; }
+
+      /* Subtle shadow for depth */
+      .shadow {
+        filter: drop-shadow(0px 2px 3px rgba(0,0,0,0.15));
+      }
+    </style>
+  </defs>
+
+  <g class="shadow">
+    <!-- G (Blue) -->
+    <text x="0" y="18" class="logo-letter blue">G</text>
+
+    <!-- u (Blue) -->
+    <text x="72" y="18" class="logo-letter blue">u</text>
+
+    <!-- c (Red) -->
+    <text x="133" y="18" class="logo-letter red">c</text>
+
+    <!-- c (Yellow) -->
+    <text x="183" y="18" class="logo-letter yellow">c</text>
+
+    <!-- i (Blue) with diamond -->
+    <text x="233" y="18" class="logo-letter blue">i</text>
+    <path d="M 249 0 L 254 6 L 249 12 L 244 6 Z" class="blue"/>
+
+    <!-- o (Green) -->
+    <text x="258" y="18" class="logo-letter green">o</text>
+
+    <!-- n (Blue) -->
+    <text x="323" y="18" class="logo-letter blue">n</text>
+
+    <!-- e (Red) -->
+    <text x="389" y="18" class="logo-letter red">e</text>
+  </g>
+</svg>
