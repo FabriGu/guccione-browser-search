@@ -779,11 +779,23 @@ body, td, a, p, .h {
     width: 100%;
   }
 
+  /* Results search bar */
+  .results-search-container {
+    padding: 0 12px 12px;
+  }
+
+  .results-logo img {
+    height: 28px;
+  }
+
+  .integrated-search-wrapper {
+    max-width: 600px;
+  }
+
   /* Works results */
   #worksResultsScreen {
     max-width: 90% !important;
     padding: 0 20px !important;
-    /* margin-top: 250px !important; */
   }
 
   .work-result {
@@ -795,24 +807,19 @@ body, td, a, p, .h {
     height: 92px;
   }
 
-  /* Images results */
+  /* Images results - row-based layout adapts automatically via JS */
   #imageSearchScreen {
-    max-width: 90% !important;
-    /* margin-top: 250px !important; */
-  }
-
-  .result-item {
-    width: calc(25% - 20px);
-    margin: 10px;
+    padding: 8px !important;
   }
 }
 
 /* PHONE (max-width: 768px) */
 @media screen and (max-width: 768px) {
   /* Navigation */
-  #homeScreenNav {
+  #homeScreenNav, .home-nav {
     padding: 12px 16px;
     gap: 12px;
+    justify-content: center;
   }
 
   .navOption {
@@ -825,6 +832,10 @@ body, td, a, p, .h {
     width: 95% !important;
     flex-direction: column !important;
     align-items: stretch !important;
+  }
+
+  #title {
+    text-align: center;
   }
 
   #searchInput {
@@ -841,14 +852,54 @@ body, td, a, p, .h {
     font-size: 14px;
   }
 
-  /* Results view - push search bar down to avoid nav overlap */
-  #searchItemsWrapper {
-    margin-top: 40px !important;
+  /* Results search bar - centered layout */
+  .results-search-bar {
+    padding: 12px 8px 0;
   }
 
-  /* Works results - ensure no overlap */
+  .results-search-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 0;
+  }
+
+  .results-logo {
+    order: -1;
+    margin-bottom: 8px;
+  }
+
+  .results-logo img {
+    height: 24px;
+  }
+
+  .integrated-search-wrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .integrated-search-input-container {
+    height: 40px;
+  }
+
+  .integrated-search-input {
+    font-size: 14px;
+  }
+
+  /* Results navigation */
+  .results-nav {
+    justify-content: center;
+    padding: 0 8px;
+    gap: 16px;
+  }
+
+  .results-nav-option {
+    font-size: 12px;
+    padding: 10px 0;
+  }
+
+  /* Works results */
   #worksResultsScreen {
-    /* margin-top: 250px !important; */
     max-width: 95% !important;
     padding: 0 10px !important;
   }
@@ -869,44 +920,27 @@ body, td, a, p, .h {
     font-size: 12px;
   }
 
-  /* Work results */
-  .work-title {
-    font-size: 18px;
-  }
-
-  .work-url {
-    font-size: 13px;
-  }
-
-  .work-description {
-    font-size: 14px;
-  }
-
-  .work-meta {
-    font-size: 13px;
-  }
-
   .work-thumbnail {
     width: 80px;
     height: 80px;
   }
 
-  /* Images results - ensure no overlap */
+  /* Images results - row-based layout adapts automatically via JS */
   #imageSearchScreen {
-    /* margin-top: 250px !important; */
-    max-width: 95% !important;
+    padding: 4px !important;
   }
 
-  .result-item {
-    width: calc(50% - 20px);
-    margin: 10px;
+  .image-row {
+    gap: 2px;
+    margin-bottom: 2px;
   }
 
   .imageCaption {
     font-size: 12px;
   }
 
-  .imageMeta {
+  .imageMeta,
+  .imageSource {
     font-size: 11px;
   }
 

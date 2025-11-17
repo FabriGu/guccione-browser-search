@@ -386,6 +386,7 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
 
       // Display results in Google Images row-based layout
       if (data.results && data.results.length > 0) {
+        lastImageResults = data.results; // Store for resize handling
         layoutImagesInRows(data.results, imagesResultsDiv);
         updateStatus("Results found!");
       } else {
@@ -399,6 +400,22 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
 
   // Initialize
   updateStatus("Ready to search!");
+
+  // Handle window resize for image grid re-layout
+  let resizeTimeout;
+  let lastImageResults = null;
+
+  window.addEventListener('resize', function() {
+    // Debounce resize events
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(function() {
+      // Re-layout image grid if we're on the image search page
+      const imagesDiv = document.getElementById("imageSearchScreen");
+      if (imagesDiv && imagesDiv.style.display === "block" && lastImageResults) {
+        layoutImagesInRows(lastImageResults, imagesDiv);
+      }
+    }, 250); // Wait 250ms after resize ends
+  });
 
   // Function to reset layout to homepage
   function resetLayoutToHomepage() {
