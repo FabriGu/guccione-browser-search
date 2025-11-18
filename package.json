@@ -7,8 +7,11 @@
       "scripts": {
     "start": "node server/server.js",
     "dev": "nodemon server/server.js",
-    "generate-work-embeddings": "node scripts/generate-work-embeddings.js",
-    "generate-work-pages": "node scripts/generate-work-pages.js",
+    "build:works": "node server/build-works-index.js",
+    "build:images": "node server/build-image-catalog.js",
+    "embed:text": "node server/generate-text-embeddings.js",
+    "embed:images": "node server/generate-image-embeddings.js",
+    "rebuild": "node server/rebuild-search-index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
     "dependencies": {

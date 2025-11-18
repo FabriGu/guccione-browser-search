@@ -1,0 +1,70 @@
+{
+  "id": "SpokenWardrobe",
+  "title": "Spoken Wardrobe",
+  "year": "2023",
+  "thumbnail": "projects/SpokenWardrobe/SWOutfit1.jpg",
+  "description": "Utilizing a combination of AI technologies, this installation takes any words you speak, generates an article of clothing from it, and shows you wearing it.",
+  "tags": ["design", "interactive", "installation", "fashion", "AI"],
+
+  "theme": {
+    "backgroundColor": "#ffffff",
+    "accentColor": "#ff0000",
+    "textColor": "rgba(0, 0, 0, 0.85)",
+    "secondaryTextColor": "rgba(0, 0, 0, 0.6)",
+    "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+  },
+
+  "layout": {
+    "type": "default",
+    "columnGutter": "5rem",
+    "sectionSpacing": "6rem"
+  },
+
+  "content": {
+    "hero": {
+      "subtitle": "Exploring minimalist design patterns for creative technology portfolios",
+      "image": "projects/SpokenWardrobe/SWOutfit1.jpg"
+    },
+
+    "overview": {
+      "longDescription": "Utilizing a combination of AI technologies, this installation takes any words you speak, generates an article of clothing from it, and shows you wearing it. As users speak, their words are converted to text, via Whisper (a browser-based speech recognition model run using Transformers.js), and appear around them in 3D space mimicking a sor t of magical incantation. These spoken wishes are then used to query a Stable Diffusion inpainting model that gene rates custom digital garments, baked on the user’s request, and overlays them onto the user ’s body; from dresses made of flames to suits of thorns and tr ee bark.",
+
+      "metadata": {
+        "role": "Artist & Creative Technologist",
+        "technologies": ["JavaScript", "CSS Grid", "JSON"],
+        "client": "Personal Project",
+        "duration": "3 months"
+      },
+
+      "links": [
+      
+      ]
+    },
+
+    "gallery": {
+      "layout": "justified",
+      "gutter": "1.1rem",
+      "images": [
+        {
+          "src": "projects/SpokenWardrobe/SWOutfit1.jpg",
+          "caption": "First example image",
+          "alt": "Sample project screenshot 1"
+        },
+        {
+          "src": "projects/SpokenWardrobe/SWOutfit2.jpg",
+          "caption": "Second example image",
+          "alt": "Sample project screenshot 2"
+        },
+        {
+          "src": "projects/SpokenWardrobe/SWWords.jpg",
+          "caption": "Third example image",
+          "alt": "Sample project screenshot 3"
+        }
+      ]
+    },
+
+    "customSections": [
+     
+    ]
+  }
+}

@@ -1,0 +1,277 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Schema for Guccione Browser project pages - inspired by minimalist portfolio design patterns",
+
+  "type": "object",
+  "required": ["id", "title", "year", "thumbnail", "description"],
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the project (used in URL, e.g., 'algorithmic-portraits')"
+    },
+
+    "title": {
+      "type": "string",
+      "description": "Project title"
+    },
+
+    "year": {
+      "type": "string",
+      "description": "Year or date range (e.g., '2024' or '2023-2024')"
+    },
+
+    "thumbnail": {
+      "type": "string",
+      "description": "Path to thumbnail image for search results (relative to /public/assets/)"
+    },
+
+    "description": {
+      "type": "string",
+      "description": "Short description for search results and project overview"
+    },
+
+    "tags": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Tags for categorization and search (e.g., ['interactive', 'installation', 'generative'])"
+    },
+
+    "theme": {
+      "type": "object",
+      "description": "Visual theme configuration for the project page",
+      "properties": {
+        "backgroundColor": {
+          "type": "string",
+          "description": "CSS background color (e.g., '#ffffff', 'rgb(40,40,40)', 'rgba(255,18,34,1)')",
+          "default": "#ffffff"
+        },
+        "accentColor": {
+          "type": "string",
+          "description": "Accent color for links and highlights",
+          "default": "#000000"
+        },
+        "textColor": {
+          "type": "string",
+          "description": "Primary text color",
+          "default": "rgba(0,0,0,0.85)"
+        },
+        "secondaryTextColor": {
+          "type": "string",
+          "description": "Secondary text color for metadata",
+          "default": "rgba(0,0,0,0.6)"
+        },
+        "fontFamily": {
+          "type": "string",
+          "description": "CSS font-family (can use Google Fonts)",
+          "default": "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+        }
+      }
+    },
+
+    "layout": {
+      "type": "object",
+      "description": "Layout configuration using grid-based positioning",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["default", "full-bleed", "asymmetric", "gallery-focus"],
+          "description": "Layout template type",
+          "default": "default"
+        },
+        "columnGutter": {
+          "type": "string",
+          "description": "Space between grid columns (CSS unit, e.g., '5rem', '60px')",
+          "default": "5rem"
+        },
+        "sectionSpacing": {
+          "type": "string",
+          "description": "Vertical space between sections",
+          "default": "6rem"
+        }
+      }
+    },
+
+    "content": {
+      "type": "object",
+      "description": "Main content sections",
+      "properties": {
+        "hero": {
+          "type": "object",
+          "description": "Hero section at top of page",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Override default title if needed"
+            },
+            "subtitle": {
+              "type": "string",
+              "description": "Optional subtitle or tagline"
+            },
+            "image": {
+              "type": "string",
+              "description": "Hero image path (optional)"
+            }
+          }
+        },
+
+        "overview": {
+          "type": "object",
+          "description": "Project overview section",
+          "properties": {
+            "longDescription": {
+              "type": "string",
+              "description": "Detailed project description (supports simple HTML/markdown)"
+            },
+            "metadata": {
+              "type": "object",
+              "description": "Structured metadata",
+              "properties": {
+                "role": {"type": "string"},
+                "collaborators": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                },
+                "technologies": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                },
+                "client": {"type": "string"},
+                "duration": {"type": "string"}
+              }
+            },
+            "links": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "label": {"type": "string"},
+                  "url": {"type": "string"}
+                }
+              },
+              "description": "External links (website, github, etc.)"
+            }
+          }
+        },
+
+        "gallery": {
+          "type": "object",
+          "description": "Image gallery configuration",
+          "properties": {
+            "layout": {
+              "type": "string",
+              "enum": ["masonry", "grid", "justified", "slideshow", "custom"],
+              "default": "justified"
+            },
+            "columns": {
+              "type": "number",
+              "description": "Number of columns for grid layout (2-6)",
+              "default": 3
+            },
+            "gutter": {
+              "type": "string",
+              "description": "Space between images",
+              "default": "1.1rem"
+            },
+            "images": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["src"],
+                "properties": {
+                  "src": {
+                    "type": "string",
+                    "description": "Image path (relative to /public/assets/)"
+                  },
+                  "caption": {
+                    "type": "string",
+                    "description": "Image caption"
+                  },
+                  "alt": {
+                    "type": "string",
+                    "description": "Alt text for accessibility"
+                  },
+                  "width": {
+                    "type": "number",
+                    "description": "Optional column span (1-6) for custom layouts"
+                  }
+                }
+              }
+            }
+          }
+        },
+
+        "customSections": {
+          "type": "array",
+          "description": "Additional custom content sections",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["text", "image", "video", "embed", "two-column", "quote"],
+                "description": "Section type"
+              },
+              "title": {
+                "type": "string",
+                "description": "Section heading"
+              },
+              "content": {
+                "type": "string",
+                "description": "Section content (HTML/markdown)"
+              },
+              "columnSpan": {
+                "type": "number",
+                "description": "Grid columns to span (1-6)",
+                "default": 6
+              },
+              "backgroundColor": {
+                "type": "string",
+                "description": "Optional background color override"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "examples": [
+    {
+      "id": "algorithmic-portraits",
+      "title": "Algorithmic Portraits",
+      "year": "2024",
+      "thumbnail": "projects/algo-portraits/thumb.jpg",
+      "description": "Generative portrait series exploring identity through computational aesthetics",
+      "tags": ["generative", "creative-coding", "p5js"],
+      "theme": {
+        "backgroundColor": "#ffffff",
+        "accentColor": "#ff0000",
+        "textColor": "rgba(0,0,0,0.85)"
+      },
+      "layout": {
+        "type": "default",
+        "columnGutter": "5rem"
+      },
+      "content": {
+        "overview": {
+          "longDescription": "A series of generative portraits created using algorithmic processes...",
+          "metadata": {
+            "role": "Creative Technologist",
+            "technologies": ["p5.js", "TensorFlow.js", "CLIP"]
+          }
+        },
+        "gallery": {
+          "layout": "justified",
+          "images": [
+            {
+              "src": "projects/algo-portraits/image1.jpg",
+              "caption": "Portrait variation 1",
+              "alt": "Generative portrait with blue tones"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

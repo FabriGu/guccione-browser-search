@@ -6,20 +6,11 @@
     <link rel="stylesheet" type="text/css" href="./css/desktop.css" />
   </head>
   <body>
-    <div id="homeScreen" class="wrapper">
-      <!-- Top navigation for homepage only -->
-      <div id="homeScreenNav" class="home-nav">
-        <a href="#" id="navWorks" class="navOption selectedNavOption">Works</a>
-        <a href="#" id="navImages" class="navOption">Images</a>
-        <!-- <a href="#" id="navTexts" class="navOption">Texts</a>  -->
-        <a href="#" id="navAbout" class="navOption">About</a>
-      </div>
-
-      <!-- Results view search bar (hidden on homepage) -->
-      <div id="resultsSearchBar" class="results-search-bar" style="display: none;">
+    <!-- Results view search bar (shown when on results pages) -->
+    <div id="resultsSearchBar" class="results-search-bar" style="display: none;">
         <div class="results-search-container">
           <div id="resultsLogo" class="results-logo">
-            <img src="./assets/guccione-logo.svg" alt="Guccione">
+            <img src="./assets/guccione-logo-3.svg" alt="Guccione">
           </div>
 
           <div class="integrated-search-wrapper">
@@ -44,11 +35,22 @@
           <a href="#" id="resultsNavAbout" class="results-nav-option">About</a>
         </div>
       </div>
+    </div>
+
+    <!-- Homepage screen wrapper -->
+    <div id="homeScreen" class="wrapper">
+      <!-- Top navigation for homepage only -->
+      <div id="homeScreenNav" class="home-nav">
+        <a href="#" id="navWorks" class="navOption selectedNavOption">Works</a>
+        <a href="#" id="navImages" class="navOption">Images</a>
+        <!-- <a href="#" id="navTexts" class="navOption">Texts</a>  -->
+        <a href="#" id="navAbout" class="navOption">About</a>
+      </div>
 
       <!-- Homepage search -->
       <div id="searchItemsWrapper">
         <div id="title">
-          <img src="./assets/guccione-logo.svg" id="homeLogo">
+          <img src="./assets/guccione-logo-3.svg" id="homeLogo">
         </div>
 
         <div id="homeScreenSearchContainer">
@@ -72,12 +74,12 @@
     </div>
 
     <!-- Works Results Container -->
-    <div id="worksResultsScreen" class="wrapper results-container">
+    <div id="worksResultsScreen" class="results-container">
       <!-- Works results will be displayed here -->
     </div>
 
     <!-- Images Results Container -->
-    <div id="imageSearchScreen" class="wrapper results-container">
+    <div id="imageSearchScreen" class="results-container">
       <!-- Image results will be displayed here -->
     </div>
     

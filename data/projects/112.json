@@ -1,0 +1,75 @@
+{
+  "id": "1+1≠2",
+  "title": "1+1≠2",
+  "year": "2023",
+  "thumbnail": "projects/112/FrontShotPieces.png",
+  "description": "A collection of two pieces that explore the intersection of fashion and technology in unexpected ways.",
+  "tags": ["design", "interactive", "wearable", "electronics", "3D printing", "sewing", "code"],
+
+  "theme": {
+    "backgroundColor": "#ffffff",
+    "accentColor": "#ff0000",
+    "textColor": "rgba(0, 0, 0, 0.85)",
+    "secondaryTextColor": "rgba(0, 0, 0, 0.6)",
+    "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+  },
+
+  "layout": {
+    "type": "default",
+    "columnGutter": "5rem",
+    "sectionSpacing": "6rem"
+  },
+
+  "content": {
+    "hero": {
+      "subtitle": "Exploring the intersection of fashion and technology in unexpected ways"
+    },
+
+    "overview": {
+      "longDescription": "This project stems from my obsession with combining fashion and technology. The two pieces in the collection aim to showcase that often innovation is forced into fashion and generates articles of clothing that can be inconvenient to wear and provide no additional functionality. I designed and sewed the pieces myself, created 3D printed custom parts and mechanisms for the project, as well as put together all the electronic components and the code that made them function.",
+
+      "metadata": {
+        "role": "Creative Technologist",
+        "collaborators": [],
+        "technologies": ["Arduino", "3D printing", "Electronics", "Sewing"],
+        "client": "Personal Project",
+        "duration": "1 month"
+      },
+
+      "links": [
+      
+      ]
+    },
+
+    "gallery": {
+      "layout": "justified",
+      "gutter": "1.1rem",
+      "images": [
+        {
+          "src": "projects/112/FrontShotPieces.png",
+          "caption": "Front view of both pieces",
+          "alt": "Front shot of the two wearable pieces"
+        },
+        {
+          "src": "projects/112/bagSide.jpg",
+          "caption": "Side view of the bag piece",
+          "alt": "Side view of the wearable bag"
+        },
+        {
+          "src": "projects/112/hat1.jpg",
+          "caption": "The hat piece",
+          "alt": "Close-up of the hat piece"
+        },
+        {
+          "src": "projects/112/wearingBagSide.png",
+          "caption": "Wearing the bag piece",
+          "alt": "Person wearing the bag from the side"
+        }
+      ]
+    },
+
+    "customSections": [
+     
+    ]
+  }
+}

@@ -5,6 +5,22 @@ let suggestionTimeout;
 const SUGGESTION_DELAY = 300; // milliseconds to wait before fetching suggestions
   /// ----------------------------------------------------------- SEARCH COMPLETION VARIABLE DECLARATION
 
+// Utility function to normalize image paths
+function normalizeImagePath(path) {
+  if (!path) return '';
+
+  // Remove leading slash if present
+  let normalized = path.replace(/^\/+/, '');
+
+  // Remove 'public/assets/' prefix if present (common mistake)
+  normalized = normalized.replace(/^public\/assets\//, '');
+
+  // Remove 'assets/' prefix if present
+  normalized = normalized.replace(/^assets\//, '');
+
+  // Ensure path starts with /assets/
+  return `/assets/${normalized}`;
+}
 
 // Client-side JavaScript for image search
 document.addEventListener("DOMContentLoaded", function () {
@@ -19,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const title = document.querySelector("#title");
   const statusElement = document.querySelector("#status");
   const resultsSearchBar = document.querySelector("#resultsSearchBar");
+  const homeScreen = document.querySelector("#homeScreen");
   const homeScreenNav = document.querySelector("#homeScreenNav");
   const searchItemsWrapper = document.querySelector("#searchItemsWrapper");
 
@@ -341,9 +358,24 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
         });
 
         // Show results area
-        worksResultsDiv.style.display = "block";
+        worksResultsDiv.style.display = "flex";
         updateStatus(`Found ${data.results.length} works`);
       } else {
+        // No results - show helpful message
+        const noResultsDiv = document.createElement("div");
+        noResultsDiv.className = "no-results-message";
+        noResultsDiv.style.padding = "40px 20px";
+        noResultsDiv.style.textAlign = "center";
+        noResultsDiv.style.color = "#70757a";
+        noResultsDiv.innerHTML = `
+          <p style="font-size: 16px; margin-bottom: 16px;">No results found for "<strong>${query}</strong>"</p>
+          <p style="font-size: 14px; line-height: 1.6;">
+            Our search uses semantic matching to find works based on meaning, not just keywords.
+            Try using different words that describe what you're looking for, or try a broader search term.
+          </p>
+        `;
+        worksResultsDiv.appendChild(noResultsDiv);
+        worksResultsDiv.style.display = "block";
         updateStatus("No works found");
       }
     } catch (error) {
@@ -419,20 +451,15 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
 
   // Function to reset layout to homepage
   function resetLayoutToHomepage() {
+    // Show homeScreen wrapper (standard approach - only one screen visible at a time)
+    if (homeScreen) {
+      homeScreen.style.display = "flex";
+    }
+
     // Hide results search bar
     resultsSearchBar.style.display = "none";
 
-    // Show homepage elements
-    searchItemsWrapper.style.display = "flex";
-    homeScreenNav.style.display = "flex";
-
-    // Show footer info
-    const footerInfo = document.getElementById("homeScreenInfo");
-    if (footerInfo) {
-      footerInfo.style.display = "block";
-    }
-
-    // Hide results
+    // Hide results screens
     worksResultsDiv.style.display = "none";
     imagesResultsDiv.style.display = "none";
   }
@@ -484,6 +511,16 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
     }
   }
 
+  // Create URL-friendly slug from title
+  function createSlugFromTitle(title) {
+    return title
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, '') // Remove special characters
+      .replace(/\s+/g, '-')      // Replace spaces with hyphens
+      .replace(/-+/g, '-');      // Replace multiple hyphens with single hyphen
+  }
+
   // Layout images in rows like Google Images
   function layoutImagesInRows(results, container) {
     const TARGET_ROW_HEIGHT = 220; // Target height for each row in pixels
@@ -497,7 +534,7 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
     // First, load all images to get their dimensions
     results.forEach((result, index) => {
       const img = new Image();
-      img.src = result.url;
+      img.src = normalizeImagePath(result.url);
 
       img.onload = function() {
         imageData[index] = {
@@ -595,7 +632,7 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
 
       // Create image element
       const img = document.createElement("img");
-      img.src = imgData.result.url;
+      img.src = normalizeImagePath(imgData.result.url);
       img.alt = imgData.result.caption || "";
 
       imageContainer.appendChild(img);
@@ -619,6 +656,17 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
       metaDiv.className = "imageMeta";
       const fileSize = estimateFileSize(imgData.width, imgData.height);
       metaDiv.textContent = `${imgData.width} × ${imgData.height} • ${fileSize}`;
+
+      // Relevance score
+      if (imgData.result.similarity && imgData.result.similarity > 0) {
+        const relevanceDiv = document.createElement("div");
+        relevanceDiv.className = "imageRelevance";
+        relevanceDiv.style.fontSize = "12px";
+        relevanceDiv.style.color = "#70757a";
+        relevanceDiv.style.marginTop = "4px";
+        relevanceDiv.textContent = `Relevance: ${(imgData.result.similarity * 100).toFixed(1)}%`;
+        infoDiv.appendChild(relevanceDiv);
+      }
 
       // Assemble info
       infoDiv.appendChild(sourceDiv);
@@ -645,17 +693,20 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
 
     // Title link (Google blue)
     const titleLink = document.createElement("a");
-    titleLink.href = work.url || "#";
+
+    // Use project ID if available, otherwise create slug from title
+    const projectId = work.id || work.slug || createSlugFromTitle(work.title || "untitled");
+    titleLink.href = `/project.html?id=${projectId}`;
     titleLink.className = "work-title";
     titleLink.textContent = work.title || "Untitled Work";
 
     // Debug: Log the URL being used
-    console.log(`Creating link for ${work.title} with URL: ${work.url}`);
+    console.log(`Creating link for ${work.title} with URL: /project.html?id=${projectId}`);
 
     // URL display (Google green)
     const urlDiv = document.createElement("div");
     urlDiv.className = "work-url";
-    urlDiv.textContent = `guccione.com${work.url || ""}`;
+    urlDiv.textContent = `guccione.com/work/${projectId}`;
 
     // Description (Google gray)
     const descDiv = document.createElement("div");
@@ -694,7 +745,7 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
     // Add thumbnail image if available
     if (work.thumbnailImage) {
       const thumbnail = document.createElement("img");
-      thumbnail.src = work.thumbnailImage;
+      thumbnail.src = normalizeImagePath(work.thumbnailImage);
       thumbnail.className = "work-thumbnail";
       thumbnail.alt = work.title || "Work thumbnail";
       workDiv.appendChild(thumbnail);
@@ -704,12 +755,9 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
   }
 
   function workSearchFormat() {
-    // Hide homepage elements
-    searchItemsWrapper.style.display = "none";
-    homeScreenNav.style.display = "none";
-    const footerInfo = document.getElementById("homeScreenInfo");
-    if (footerInfo) {
-      footerInfo.style.display = "none";
+    // Hide homeScreen wrapper (standard approach - only one screen visible at a time)
+    if (homeScreen) {
+      homeScreen.style.display = "none";
     }
 
     // Show results search bar
@@ -718,31 +766,17 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
     // Update results nav
     switchResultsNav("works");
 
-    // IMPORTANT: Hide image search results completely
-    imagesResultsDiv.style.display = "none !important";
-    imagesResultsDiv.innerHTML = ""; // Clear any lingering content
+    // Hide image search results screen
+    imagesResultsDiv.style.display = "none";
 
-    // Show work search results area
+    // Show work search results screen (CSS handles centering)
     worksResultsDiv.style.display = "flex";
-    worksResultsDiv.style.flexDirection = "column";
-    worksResultsDiv.style.alignItems = "flex-start";
-    worksResultsDiv.style.justifyContent = "flex-start";
-    worksResultsDiv.style.padding = "0 20px";
-    worksResultsDiv.style.maxWidth = "800px";
-    worksResultsDiv.style.width = "100%";
-    worksResultsDiv.style.margin = "0 auto";
-    worksResultsDiv.style.position = "relative";
-    worksResultsDiv.style.left = "auto";
-    worksResultsDiv.style.transform = "none";
   }
 
   function imageSearchFormat() {
-    // Hide homepage elements
-    searchItemsWrapper.style.display = "none";
-    homeScreenNav.style.display = "none";
-    const footerInfo = document.getElementById("homeScreenInfo");
-    if (footerInfo) {
-      footerInfo.style.display = "none";
+    // Hide homeScreen wrapper (standard approach - only one screen visible at a time)
+    if (homeScreen) {
+      homeScreen.style.display = "none";
     }
 
     // Show results search bar
@@ -751,19 +785,11 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
     // Update results nav
     switchResultsNav("images");
 
-    // IMPORTANT: Hide works search results completely
-    worksResultsDiv.style.display = "none !important";
-    worksResultsDiv.innerHTML = ""; // Clear any lingering content
+    // Hide works search results screen
+    worksResultsDiv.style.display = "none";
 
-    // Show image search results area
-    imagesResultsDiv.style.display = "block"; // Changed from flex
-    imagesResultsDiv.style.padding = "0";
-    imagesResultsDiv.style.maxWidth = "100%";
-    imagesResultsDiv.style.width = "100%";
-    imagesResultsDiv.style.margin = "0";
-    imagesResultsDiv.style.position = "relative";
-    imagesResultsDiv.style.left = "auto";
-    imagesResultsDiv.style.transform = "none";
+    // Show image search results screen
+    imagesResultsDiv.style.display = "block";
   }
 });
 
