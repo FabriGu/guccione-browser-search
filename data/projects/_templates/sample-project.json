@@ -1,0 +1,85 @@
+{
+  "id": "sample-project",
+  "title": "Sample Project",
+  "year": "2024",
+  "thumbnail": "projects/sample-project/thumbnail.jpg",
+  "description": "A demonstration project showcasing the minimalist template system for Guccione Browser portfolio pages",
+  "tags": ["design", "interactive", "web"],
+
+  "theme": {
+    "backgroundColor": "#ffffff",
+    "accentColor": "#ff0000",
+    "textColor": "rgba(0, 0, 0, 0.85)",
+    "secondaryTextColor": "rgba(0, 0, 0, 0.6)",
+    "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+  },
+
+  "layout": {
+    "type": "default",
+    "columnGutter": "5rem",
+    "sectionSpacing": "6rem"
+  },
+
+  "content": {
+    "hero": {
+      "subtitle": "Exploring minimalist design patterns for creative technology portfolios"
+    },
+
+    "overview": {
+      "longDescription": "This is a sample project demonstrating the flexible JSON-driven template system for Guccione Browser portfolio pages. The system draws inspiration from minimalist portfolio designs while providing maximum flexibility for customization.\n\nEach project can have its own unique theme, color palette, typography, and layout configuration. The grid-based positioning system allows for sophisticated layouts while maintaining simplicity and ease of content management.",
+
+      "metadata": {
+        "role": "Creative Technologist",
+        "collaborators": ["Designer Name", "Developer Name"],
+        "technologies": ["JavaScript", "CSS Grid", "JSON"],
+        "client": "Personal Project",
+        "duration": "2 weeks"
+      },
+
+      "links": [
+        {
+          "label": "View Live Site",
+          "url": "https://example.com"
+        },
+        {
+          "label": "GitHub Repository",
+          "url": "https://github.com/example"
+        }
+      ]
+    },
+
+    "gallery": {
+      "layout": "justified",
+      "gutter": "1.1rem",
+      "images": [
+        {
+          "src": "projects/sample-project/image1.jpg",
+          "caption": "First example image",
+          "alt": "Sample project screenshot 1"
+        },
+        {
+          "src": "projects/sample-project/image2.jpg",
+          "caption": "Second example image",
+          "alt": "Sample project screenshot 2"
+        },
+        {
+          "src": "projects/sample-project/image3.jpg",
+          "caption": "Third example image",
+          "alt": "Sample project screenshot 3"
+        }
+      ]
+    },
+
+    "customSections": [
+      {
+        "type": "text",
+        "title": "Design Process",
+        "content": "<p>The design process began with research into minimalist portfolio websites, analyzing patterns from sites like jnackash.com, shuangli.info, and shuangcai.cargo.site.</p><p>Key principles included generous whitespace, typography-driven hierarchy, and content-focused layouts with minimal decoration.</p>"
+      },
+      {
+        "type": "quote",
+        "content": "Simplicity is the ultimate sophistication."
+      }
+    ]
+  }
+}

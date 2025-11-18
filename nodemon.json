@@ -1,0 +1,8 @@
+{
+  "watch": ["server", "public"],
+  "ignore": ["data/search-history.json", "public/css/**/*.css"],
+  "ext": "js,json,html",
+  "execMap": {
+    "js": "node"
+  }
+}

@@ -390,15 +390,50 @@ app.get('/api/works', (req, res) => {
 app.get('/api/works/:id', (req, res) => {
   try {
     const work = workSearch.getWorkById(req.params.id, worksData);
-    
+
     if (!work) {
       return res.status(404).json({ error: 'Work not found' });
     }
-    
+
     res.json({ work });
   } catch (error) {
     console.error('Error fetching work:', error);
     res.status(500).json({ error: 'An error occurred while fetching the work' });
+  }
+});
+
+// API endpoint for project pages
+app.get('/api/projects/:id', (req, res) => {
+  try {
+    const projectId = req.params.id;
+    const projectPath = path.join(__dirname, '../data/projects', `${projectId}.json`);
+
+    console.log(`Project request received for: "${projectId}"`);
+    console.log(`Looking for project at: ${projectPath}`);
+
+    // Check if project file exists
+    if (!fs.existsSync(projectPath)) {
+      console.log(`Project not found: ${projectId}`);
+      return res.status(404).json({ error: 'Project not found' });
+    }
+
+    // Read and parse project JSON
+    const projectData = fs.readFileSync(projectPath, 'utf8');
+    const project = JSON.parse(projectData);
+
+    console.log(`Successfully loaded project: ${project.title}`);
+
+    // Return project data
+    res.json(project);
+  } catch (error) {
+    console.error('Error fetching project:', error);
+
+    // Check if it's a JSON parse error
+    if (error instanceof SyntaxError) {
+      return res.status(400).json({ error: 'Invalid project data format' });
+    }
+
+    res.status(500).json({ error: 'An error occurred while fetching the project' });
   }
 });
 

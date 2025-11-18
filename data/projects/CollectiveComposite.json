@@ -1,0 +1,74 @@
+{
+  "id": "CollectiveComposite",
+  "title": "Collective Composite",
+  "year": "2024",
+  "thumbnail": "projects/CollectiveComposite/Grid.jpg",
+  "description": "An interactive installation that transforms individual portraits into a collective-ever changing identity through a grid system.",
+  "tags": ["design", "interactive", "installation", "physical-computing"],
+
+  "theme": {
+    "backgroundColor": "#ffffff",
+    "accentColor": "#ff0000",
+    "textColor": "rgba(0, 0, 0, 0.85)",
+    "secondaryTextColor": "rgba(0, 0, 0, 0.6)",
+    "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+  },
+
+  "layout": {
+    "type": "default",
+    "columnGutter": "5rem",
+    "sectionSpacing": "6rem"
+  },
+
+  "content": {
+    "hero": {
+      "subtitle": "An interactive installation that transforms individual portraits into a collective-ever changing identity through a grid system."
+    },
+
+    "overview": {
+      "longDescription": "This interactive installation transforms individual portraits into a collective-ever changing identity through a grid system. Participants step on a floor switch to trigger a countdo wn sequence, after which their por trait is captured, processed, and a single random cell is extracted from a 7×7 grid (overlaid on their face using ml5 face tr acking). This cell is printed on thermal paper using a custom dithering algorithm that converts full-color images to black and white while preserving visual quality. Participants then place their printed cell fragment on the corresponding coordinate of an illuminated lightbox display, gradually building a composite community portrait over time. As new contributions accumulate, earlier portraits become partially obscured, creating a layered timeline of collective portraits that visualizes the ever changing community identity. The project challenges self-representation by blurring the lines of individual identity, creating a communal whole that evolves throughout the exhibition.",
+
+      "metadata": {
+        "role": "Artist & Creative Technologist",
+        "technologies": ["Arduino", "Processing", "ML5.js", "Thermal Printing"],
+        "client": "Personal Project in collaboration with Surya Nareddi",
+        "duration": "3 month"
+      },
+
+      "links": [
+        
+      ]
+    },
+
+    "gallery": {
+      "layout": "justified",
+      "gutter": "1.1rem",
+      "images": [
+        {
+          "src": "projects/CollectiveComposite/Grid.jpg",
+          "caption": "The grid system",
+          "alt": "Sample project screenshot 1"
+        },
+        {
+          "src": "projects/CollectiveComposite/closeUp.jpg",
+          "caption": "Close-up of the grid system",
+          "alt": "Sample project screenshot 2"
+        },
+        {
+          "src": "projects/CollectiveComposite/PrintingBoxLR.jpg",
+          "caption": "Front view of the installation",
+          "alt": "Sample project screenshot 3"
+        },
+        {
+          "src": "projects/CollectiveComposite/CollectiveCompositeSteps.png",
+          "caption": "User Interaction Steps",
+          "alt": "Sample project screenshot 3"
+        }
+      ]
+    },
+
+    "customSections": [
+    
+    ]
+  }
+}

@@ -20,3 +20,6 @@ Thumbs.db
 # Don't ignore data directory
 !data/
 !data/*.json
+
+# Exclude search history (test data)
+data/search-history.json

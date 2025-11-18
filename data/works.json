@@ -1,124 +1,127 @@
 {
   "works": [
     {
-      "id": "work_001",
-      "title": "Digital Identity Series",
-      "description": "An exploration of digital identity through algorithmic art and generative processes. This series examines how technology shapes our sense of self in the digital age, questioning the boundaries between human creativity and machine generation.",
+      "id": "1+1≠2",
+      "title": "1+1≠2",
+      "description": "A collection of two pieces that explore the intersection of fashion and technology in unexpected ways.",
       "year": "2023",
-      "medium": ["Digital Art", "Algorithm", "Generative"],
+      "medium": [
+        "Design",
+        "Interactive",
+        "Wearable"
+      ],
       "status": "completed",
-      "textContent": "This series explores the concept of digital identity through generative algorithms that create unique visual representations of personal data. The work questions the nature of identity in digital spaces and how algorithms interpret human characteristics. Each piece in the series uses different data inputs - from social media patterns to biometric data - to generate abstract visual representations. The process involves machine learning models that analyze personal digital footprints and translate them into color, form, and movement. The resulting artworks serve as digital portraits that reflect our increasingly algorithmic existence.",
-      "tags": ["digital", "identity", "algorithm", "generative", "data", "portrait"],
+      "textContent": "This project stems from my obsession with combining fashion and technology. The two pieces in the collection aim to showcase that often innovation is forced into fashion and generates articles of clothing that can be inconvenient to wear and provide no additional functionality. I designed and sewed the pieces myself, created 3D printed custom parts and mechanisms for the project, as well as put together all the electronic components and the code that made them function.",
+      "tags": [
+        "design",
+        "interactive",
+        "wearable",
+        "electronics",
+        "3D printing",
+        "sewing",
+        "code"
+      ],
       "images": [
-        "images/165638_485141897734_228838_n.jpg",
-        "images/167998_485141242734_6531904_n.jpg"
-      ],
-      "videos": [
-        "videos/digital_identity_process.mp4"
-      ],
-      "thumbnailImage": "images/165638_485141897734_228838_n.jpg",
-      "category": "digital_art",
-      "url": "work/digital-identity-series.html",
-      "featured": true,
-      "theme": {
-        "backgroundColor": "#0a0a0a",
-        "textColor": "#ffffff",
-        "accentColor": "#00ff88",
-        "backgroundImage": null,
-        "backgroundGradient": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
-      },
-      "embedding": null,
-      "textEmbedding": null,
-      "imageEmbeddings": []
-    },
-    {
-      "id": "work_002", 
-      "title": "Memory Palace Installation",
-      "description": "An interactive installation that visualizes collective memory through spatial computing and augmented reality interfaces.",
-      "year": "2022",
-      "medium": ["Installation", "AR", "Interactive"],
-      "status": "completed",
-      "textContent": "Memory Palace is an immersive installation that explores collective memory and spatial cognition. Visitors navigate through a physical space augmented with digital overlays that respond to their movement and presence. The piece draws from the ancient method of loci, where memories are associated with specific locations. Using spatial computing technologies, the installation creates a shared memory space where individual experiences contribute to a collective narrative. Motion sensors detect visitor movement, triggering audiovisual responses that build upon previous interactions. The work questions how digital technologies can enhance or distort our relationship with memory and place.",
-      "tags": ["installation", "memory", "space", "interactive", "AR", "collective"],
-      "images": [
-        "images/180742_485141017734_6400541_n.jpg",
-        "images/1909553_1100529275288_9184_n.jpg"
-      ],
-      "videos": [
-        "videos/memory_palace_documentation.mp4",
-        "videos/memory_palace_interactions.mp4"
-      ],
-      "thumbnailImage": "images/180742_485141017734_6400541_n.jpg",
-      "category": "installation",
-      "url": "work/memory-palace-installation.html",
-      "featured": true,
-      "theme": {
-        "backgroundColor": "#1a1a2e",
-        "textColor": "#eee",
-        "accentColor": "#0f3460",
-        "backgroundImage": null,
-        "backgroundGradient": "linear-gradient(45deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)"
-      },
-      "embedding": null,
-      "textEmbedding": null,
-      "imageEmbeddings": []
-    },
-    {
-      "id": "work_003",
-      "title": "Algorithmic Portraits",
-      "description": "A series of portraits generated through machine learning algorithms trained on historical portraiture techniques.",
-      "year": "2023",
-      "medium": ["Digital Art", "Machine Learning", "Portrait"],
-      "status": "ongoing",
-      "textContent": "Algorithmic Portraits investigates the intersection of traditional portraiture and contemporary machine learning. The series uses neural networks trained on classical portrait paintings to generate new works that blend historical techniques with digital processes. Each portrait begins with contemporary photographic subjects but is processed through algorithms that have learned from masters like Rembrandt, Velázquez, and Vermeer. The resulting images question authorship, artistic tradition, and the role of technology in creative expression. The work explores whether machines can understand and replicate the emotional depth and technical mastery found in traditional portraiture, or if they create something entirely new.",
-      "tags": ["portrait", "machine learning", "classical", "contemporary", "neural networks", "tradition"],
-      "images": [
-        "images/20140701_175029-1.jpg",
-        "images/20140701_175311-1.jpg",
-        "images/215607_10150163469132055_1420500_n.jpg"
+        "projects/112/FrontShotPieces.png",
+        "projects/112/FrontShotPieces.png",
+        "projects/112/bagSide.jpg",
+        "projects/112/hat1.jpg",
+        "projects/112/wearingBagSide.png"
       ],
       "videos": [],
-      "thumbnailImage": "images/20140701_175029-1.jpg",
-      "category": "digital_art",
-      "url": "work/algorithmic-portraits.html",
+      "thumbnailImage": "projects/112/FrontShotPieces.png",
+      "category": "physical_computing",
+      "url": "/project.html?id=1+1≠2",
       "featured": false,
       "theme": {
-        "backgroundColor": "#2c1810",
-        "textColor": "#f4f1eb",
-        "accentColor": "#d4af37",
-        "backgroundImage": null,
-        "backgroundGradient": "radial-gradient(circle at center, #8b4513 0%, #2c1810 70%)"
+        "backgroundColor": "#ffffff",
+        "accentColor": "#ff0000",
+        "textColor": "rgba(0, 0, 0, 0.85)",
+        "secondaryTextColor": "rgba(0, 0, 0, 0.6)",
+        "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
       },
       "embedding": null,
       "textEmbedding": null,
       "imageEmbeddings": []
     },
     {
-      "id": "work_004",
-      "title": "Data Landscapes",
-      "description": "Visualizations of personal and environmental data transformed into abstract landscape compositions.",
-      "year": "2021",
-      "medium": ["Data Visualization", "Digital Art", "Print"],
+      "id": "CollectiveComposite",
+      "title": "Collective Composite",
+      "description": "An interactive installation that transforms individual portraits into a collective-ever changing identity through a grid system.",
+      "year": "2024",
+      "medium": [
+        "Design",
+        "Interactive",
+        "Installation"
+      ],
       "status": "completed",
-      "textContent": "Data Landscapes transforms quantified personal and environmental information into abstract visual compositions reminiscent of landscape paintings. The series uses datasets ranging from personal health metrics to climate data, processing them through custom visualization algorithms that emphasize aesthetic beauty over analytical clarity. Each piece represents a different temporal scale - from daily personal rhythms to geological climate patterns. The work critiques our relationship with data by presenting it in a contemplative, artistic context rather than as utilitarian information. Colors, forms, and textures emerge from the underlying data patterns, creating landscapes that are both abstract and deeply rooted in lived experience.",
-      "tags": ["data", "landscape", "visualization", "personal", "environmental", "abstract"],
+      "textContent": "This interactive installation transforms individual portraits into a collective-ever changing identity through a grid system. Participants step on a floor switch to trigger a countdo wn sequence, after which their por trait is captured, processed, and a single random cell is extracted from a 7×7 grid (overlaid on their face using ml5 face tr acking). This cell is printed on thermal paper using a custom dithering algorithm that converts full-color images to black and white while preserving visual quality. Participants then place their printed cell fragment on the corresponding coordinate of an illuminated lightbox display, gradually building a composite community portrait over time. As new contributions accumulate, earlier portraits become partially obscured, creating a layered timeline of collective portraits that visualizes the ever changing community identity. The project challenges self-representation by blurring the lines of individual identity, creating a communal whole that evolves throughout the exhibition.",
+      "tags": [
+        "design",
+        "interactive",
+        "installation",
+        "physical-computing"
+      ],
       "images": [
-        "images/215622_10150163469172055_4669249_n.jpg",
-        "images/21935_250508262054_1986768_n.jpg"
+        "projects/CollectiveComposite/Grid.jpg",
+        "projects/CollectiveComposite/Grid.jpg",
+        "projects/CollectiveComposite/closeUp.jpg",
+        "projects/CollectiveComposite/PrintingBoxLR.jpg",
+        "projects/CollectiveComposite/CollectiveCompositeSteps.png"
       ],
-      "videos": [
-        "videos/data_landscapes_process.mp4"
-      ],
-      "thumbnailImage": "images/215622_10150163469172055_4669249_n.jpg",
-      "category": "data_art",
-      "url": "work/data-landscapes.html",
+      "videos": [],
+      "thumbnailImage": "projects/CollectiveComposite/Grid.jpg",
+      "category": "installation",
+      "url": "/project.html?id=CollectiveComposite",
       "featured": false,
       "theme": {
-        "backgroundColor": "#0d1b2a",
-        "textColor": "#ffffff",
-        "accentColor": "#7209b7",
-        "backgroundImage": null,
-        "backgroundGradient": "linear-gradient(180deg, #0d1b2a 0%, #415a77 50%, #778da9 100%)"
+        "backgroundColor": "#ffffff",
+        "accentColor": "#ff0000",
+        "textColor": "rgba(0, 0, 0, 0.85)",
+        "secondaryTextColor": "rgba(0, 0, 0, 0.6)",
+        "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+      },
+      "embedding": null,
+      "textEmbedding": null,
+      "imageEmbeddings": []
+    },
+    {
+      "id": "SpokenWardrobe",
+      "title": "Spoken Wardrobe",
+      "description": "Utilizing a combination of AI technologies, this installation takes any words you speak, generates an article of clothing from it, and shows you wearing it.",
+      "year": "2023",
+      "medium": [
+        "Design",
+        "Interactive",
+        "Installation"
+      ],
+      "status": "completed",
+      "textContent": "Utilizing a combination of AI technologies, this installation takes any words you speak, generates an article of clothing from it, and shows you wearing it. As users speak, their words are converted to text, via Whisper (a browser-based speech recognition model run using Transformers.js), and appear around them in 3D space mimicking a sor t of magical incantation. These spoken wishes are then used to query a Stable Diffusion inpainting model that gene rates custom digital garments, baked on the user’s request, and overlays them onto the user ’s body; from dresses made of flames to suits of thorns and tr ee bark.",
+      "tags": [
+        "design",
+        "interactive",
+        "installation",
+        "fashion",
+        "AI"
+      ],
+      "images": [
+        "projects/SpokenWardrobe/SWOutfit1.jpg",
+        "projects/SpokenWardrobe/SWOutfit1.jpg",
+        "projects/SpokenWardrobe/SWOutfit1.jpg",
+        "projects/SpokenWardrobe/SWOutfit2.jpg",
+        "projects/SpokenWardrobe/SWWords.jpg"
+      ],
+      "videos": [],
+      "thumbnailImage": "projects/SpokenWardrobe/SWOutfit1.jpg",
+      "category": "installation",
+      "url": "/project.html?id=SpokenWardrobe",
+      "featured": false,
+      "theme": {
+        "backgroundColor": "#ffffff",
+        "accentColor": "#ff0000",
+        "textColor": "rgba(0, 0, 0, 0.85)",
+        "secondaryTextColor": "rgba(0, 0, 0, 0.6)",
+        "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
       },
       "embedding": null,
       "textEmbedding": null,
@@ -127,19 +130,14 @@
   ],
   "categories": [
     {
-      "id": "digital_art",
-      "name": "Digital Art",
-      "description": "Works exploring digital media and computational creativity"
+      "id": "physical_computing",
+      "name": "Physical Computing",
+      "count": 1
     },
     {
-      "id": "installation", 
+      "id": "installation",
       "name": "Installation",
-      "description": "Physical and mixed-media installations"
-    },
-    {
-      "id": "data_art",
-      "name": "Data Art",
-      "description": "Artistic explorations of data and information"
+      "count": 2
     }
   ]
 }
