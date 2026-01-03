@@ -188,8 +188,8 @@ app.get('/api/suggestions', async (req, res) => {
 // API endpoint for searching works (new primary search)
 app.post('/api/search/works', async (req, res) => {
   try {
-    const { query, searchType = 'multimodal', maxResults = 20 } = req.body;
-    
+    const { query, searchType = 'hybrid', maxResults = 20 } = req.body;
+
     if (!query) {
       return res.status(400).json({ error: 'Query is required' });
     }
@@ -198,23 +198,25 @@ app.post('/api/search/works', async (req, res) => {
     if (textModelLoaded) {
       textEmbeddings.addSearchToHistory(query);
     }
-    
+
     // If no works data is loaded, return empty results
     if (worksData.length === 0) {
       console.log('No works data available, returning empty results');
       return res.json({ results: [] });
     }
-    
+
     let results = [];
-    
-    if (searchType === 'multimodal') {
+
+    if (searchType === 'hybrid') {
+      results = await workSearch.searchHybrid(query, worksData, { maxResults });
+    } else if (searchType === 'multimodal') {
       results = await workSearch.searchMultimodal(query, worksData, { maxResults });
     } else if (searchType === 'text') {
       results = await workSearch.searchText(query, worksData, { maxResults });
     } else {
-      return res.status(400).json({ error: 'Invalid search type. Use "multimodal" or "text"' });
+      return res.status(400).json({ error: 'Invalid search type. Use "hybrid", "multimodal", or "text"' });
     }
-    
+
     // Format results for frontend
     const formattedResults = results.map(result => ({
       id: result.work.id,
@@ -229,10 +231,11 @@ app.post('/api/search/works', async (req, res) => {
       featured: result.work.featured,
       score: result.score,
       textScore: result.textScore,
-      imageScore: result.imageScore
+      imageScore: result.imageScore,
+      breakdown: result.breakdown // Include hybrid search breakdown if available
     }));
-    
-    res.json({ 
+
+    res.json({
       results: formattedResults,
       searchType,
       query,
@@ -405,7 +408,7 @@ app.get('/api/works/:id', (req, res) => {
 // API endpoint for project pages
 app.get('/api/projects/:id', (req, res) => {
   try {
-    const projectId = req.params.id;
+    const projectId = decodeURIComponent(req.params.id);
     const projectPath = path.join(__dirname, '../data/projects', `${projectId}.json`);
 
     console.log(`Project request received for: "${projectId}"`);

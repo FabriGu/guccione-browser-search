@@ -6,7 +6,8 @@
 // Get project ID from URL query parameter
 function getProjectId() {
   const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get('id');
+  const id = urlParams.get('id');
+  return id ? decodeURIComponent(id) : null;
 }
 
 // Load project JSON data
@@ -524,8 +525,8 @@ async function init() {
 
   // Render all sections
   renderHero(projectData);
-  renderOverview(projectData);
-  renderGallery(projectData);
+  renderGallery(projectData);    // MOVED UP - gallery now appears second
+  renderOverview(projectData);   // Overview now third
   renderCustomSections(projectData);
 }
 

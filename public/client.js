@@ -378,6 +378,11 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
         worksResultsDiv.style.display = "block";
         updateStatus("No works found");
       }
+
+      // Push state to browser history for back button support
+      const state = { query, mode: 'works', timestamp: Date.now() };
+      const url = `/?q=${encodeURIComponent(query)}&mode=works`;
+      history.pushState(state, `Search: ${query}`, url);
     } catch (error) {
       console.error("Error during search:", error);
       updateStatus("Error searching for works");
@@ -424,6 +429,11 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
       } else {
         updateStatus("No results found");
       }
+
+      // Push state to browser history for back button support
+      const state = { query, mode: 'images', timestamp: Date.now() };
+      const url = `/?q=${encodeURIComponent(query)}&mode=images`;
+      history.pushState(state, `Search: ${query}`, url);
     } catch (error) {
       console.error("Error during search:", error);
       updateStatus("Error searching for images");
@@ -432,6 +442,42 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
 
   // Initialize
   updateStatus("Ready to search!");
+
+  // Handle browser back button
+  window.addEventListener('popstate', function(event) {
+    if (event.state && event.state.query) {
+      // Restore search from history state
+      searchInput.value = event.state.query;
+      resultsSearchInput.value = event.state.query;
+
+      if (event.state.mode === 'works') {
+        searchWorks();
+      } else if (event.state.mode === 'images') {
+        searchImages();
+      }
+    } else {
+      // No state, return to homepage
+      returnToHome();
+      resetLayoutToHomepage();
+    }
+  });
+
+  // Check URL parameters on page load (for shareable URLs)
+  const urlParams = new URLSearchParams(window.location.search);
+  const queryParam = urlParams.get('q');
+  const modeParam = urlParams.get('mode');
+
+  if (queryParam) {
+    searchInput.value = queryParam;
+    resultsSearchInput.value = queryParam;
+
+    // Trigger search based on mode
+    if (modeParam === 'works' || !modeParam) {
+      searchWorks();
+    } else if (modeParam === 'images') {
+      searchImages();
+    }
+  }
 
   // Handle window resize for image grid re-layout
   let resizeTimeout;
@@ -696,12 +742,12 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
 
     // Use project ID if available, otherwise create slug from title
     const projectId = work.id || work.slug || createSlugFromTitle(work.title || "untitled");
-    titleLink.href = `/project.html?id=${projectId}`;
+    titleLink.href = `/project.html?id=${encodeURIComponent(projectId)}`;
     titleLink.className = "work-title";
     titleLink.textContent = work.title || "Untitled Work";
 
     // Debug: Log the URL being used
-    console.log(`Creating link for ${work.title} with URL: /project.html?id=${projectId}`);
+    console.log(`Creating link for ${work.title} with URL: /project.html?id=${encodeURIComponent(projectId)}`);
 
     // URL display (Google green)
     const urlDiv = document.createElement("div");

@@ -2,6 +2,10 @@
 const path = require('path');
 const textEmbeddings = require('./text-embeddings');
 const imageSearch = require('./image-search');
+const HybridSearchEngine = require('./hybrid-search');
+
+// Hybrid search engine instance (initialized after models are loaded)
+let hybridSearchEngine = null;
 
 // Calculate cosine similarity between two vectors
 function cosineSimilarity(a, b) {
@@ -240,21 +244,90 @@ async function computeWorkEmbeddings(work) {
 // Batch compute embeddings for all works
 async function computeAllWorkEmbeddings(works) {
   console.log(`Computing embeddings for ${works.length} works`);
-  
+
   const worksWithEmbeddings = [];
-  
+
   for (const work of works) {
     const workWithEmbeddings = await computeWorkEmbeddings(work);
     worksWithEmbeddings.push(workWithEmbeddings);
   }
-  
+
   console.log(`Completed embedding computation for ${worksWithEmbeddings.length} works`);
   return worksWithEmbeddings;
+}
+
+// Initialize hybrid search engine
+function initializeHybridSearch(works) {
+  try {
+    console.log('Initializing hybrid search engine...');
+
+    // Get the text embedding model from textEmbeddings module
+    const textModel = textEmbeddings.getModel ? textEmbeddings.getModel() : null;
+    const imageModel = imageSearch.getModel ? imageSearch.getModel() : null;
+
+    hybridSearchEngine = new HybridSearchEngine(works, textModel, imageModel);
+
+    console.log('Hybrid search engine initialized successfully');
+    return true;
+  } catch (error) {
+    console.error('Error initializing hybrid search engine:', error);
+    return false;
+  }
+}
+
+// Hybrid search combining semantic, keyword, fuzzy, and metadata matching
+async function searchHybrid(query, works, options = {}) {
+  try {
+    const { maxResults = 20 } = options;
+
+    console.log(`Starting hybrid search for: "${query}"`);
+
+    // Initialize hybrid search engine if not already done
+    if (!hybridSearchEngine) {
+      console.log('Hybrid search engine not initialized, initializing now...');
+      initializeHybridSearch(works);
+    }
+
+    // Re-initialize if works data has changed
+    if (hybridSearchEngine && hybridSearchEngine.works.length !== works.length) {
+      console.log('Works data changed, re-initializing hybrid search engine...');
+      initializeHybridSearch(works);
+    }
+
+    if (!hybridSearchEngine) {
+      console.warn('Hybrid search engine failed to initialize, falling back to text search');
+      return searchText(query, works, options);
+    }
+
+    // Perform hybrid search
+    const results = await hybridSearchEngine.search(query, {
+      limit: maxResults
+    });
+
+    // Format results to match the expected format
+    const formattedResults = results.map(result => ({
+      work: result.work,
+      score: result.score,
+      textScore: result.breakdown.semantic,
+      imageScore: 0, // Hybrid search doesn't separate image scores
+      breakdown: result.breakdown // Include detailed score breakdown
+    }));
+
+    console.log(`Hybrid search returned ${formattedResults.length} results`);
+
+    return formattedResults;
+  } catch (error) {
+    console.error('Error in hybrid search:', error);
+    // Fallback to text search on error
+    return searchText(query, works, options);
+  }
 }
 
 module.exports = {
   searchMultimodal,
   searchText,
+  searchHybrid,
+  initializeHybridSearch,
   searchByCategory,
   searchByYear,
   searchByMedium,
