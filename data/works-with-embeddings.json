@@ -1,7 +1,7 @@
 {
   "works": [
     {
-      "id": "1+1≠2",
+      "id": "112",
       "title": "1+1≠2",
       "description": "A collection of two pieces that explore the intersection of fashion and technology in unexpected ways.",
       "year": "2023",
@@ -31,7 +31,7 @@
       "videos": [],
       "thumbnailImage": "projects/112/FrontShotPieces.png",
       "category": "physical_computing",
-      "url": "/project.html?id=1+1≠2",
+      "url": "/project.html?id=112",
       "featured": false,
       "theme": {
         "backgroundColor": "#ffffff",

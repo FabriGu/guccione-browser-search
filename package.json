@@ -4,26 +4,27 @@
     "description": "CLIP-based image search app",
     "main": "server/server.js",
     "type": "commonjs",
-      "scripts": {
-    "start": "node server/server.js",
-    "dev": "nodemon server/server.js",
-    "build:works": "node server/build-works-index.js",
-    "build:images": "node server/build-image-catalog.js",
-    "embed:text": "node server/generate-text-embeddings.js",
-    "embed:images": "node server/generate-image-embeddings.js",
-    "rebuild": "node server/rebuild-search-index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+    "scripts": {
+        "start": "node server/server.js",
+        "dev": "nodemon server/server.js",
+        "build:works": "node server/build-works-index.js",
+        "build:images": "node server/build-image-catalog.js",
+        "embed:text": "node server/generate-text-embeddings.js",
+        "embed:images": "node server/generate-image-embeddings.js",
+        "rebuild": "node server/rebuild-search-index.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
     "dependencies": {
-      "@huggingface/transformers": "^3.5.0",
-      "cors": "^2.8.5",
-      "express": "^4.21.2",
-      "node-fetch": "^3.3.2"
+        "@huggingface/transformers": "^3.5.0",
+        "cors": "^2.8.5",
+        "express": "^4.21.2",
+        "fuse.js": "^7.1.0",
+        "node-fetch": "^3.3.2"
     },
     "devDependencies": {
-      "nodemon": "^2.0.22"
+        "nodemon": "^2.0.22"
     },
     "engines": {
-      "node": ">=18.0.0"
+        "node": ">=18.0.0"
     }
-  }
+}
