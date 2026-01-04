@@ -390,6 +390,39 @@ app.get('/api/works', (req, res) => {
   }
 });
 
+// API endpoint for getting all works (chronological listing for recruiter mode)
+app.get('/api/works/all', (req, res) => {
+  try {
+    const { sortBy = 'year', order = 'desc' } = req.query;
+
+    let sorted = [...worksData];
+
+    if (sortBy === 'year') {
+      sorted.sort((a, b) => {
+        const yearA = parseInt(a.year) || 0;
+        const yearB = parseInt(b.year) || 0;
+        return order === 'desc' ? yearB - yearA : yearA - yearB;
+      });
+    } else if (sortBy === 'title') {
+      sorted.sort((a, b) => {
+        const titleA = a.title || '';
+        const titleB = b.title || '';
+        return order === 'desc'
+          ? titleB.localeCompare(titleA)
+          : titleA.localeCompare(titleB);
+      });
+    }
+
+    res.json({
+      works: sorted,
+      totalCount: sorted.length
+    });
+  } catch (error) {
+    console.error('Error fetching all works:', error);
+    res.status(500).json({ error: 'An error occurred while fetching all works' });
+  }
+});
+
 app.get('/api/works/:id', (req, res) => {
   try {
     const work = workSearch.getWorkById(req.params.id, worksData);
