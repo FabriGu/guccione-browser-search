@@ -549,3 +549,24 @@ window.addEventListener('resize', function() {
     }
   }, 250);
 });
+
+// Handle "Back to Search" button with browser history
+document.addEventListener('DOMContentLoaded', function() {
+  const backButton = document.getElementById('backToSearch');
+
+  if (backButton) {
+    backButton.addEventListener('click', function(e) {
+      e.preventDefault();
+
+      // Use browser history
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        // Fallback: if opened directly (no history), go to homepage
+        window.location.href = '/';
+      }
+    });
+  }
+
+  // Logo should still go to homepage (existing behavior preserved)
+});

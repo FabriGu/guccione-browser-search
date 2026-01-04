@@ -330,6 +330,13 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
       return;
     }
 
+    // Check for recruiter view special query
+    const RECRUITER_VIEW_QUERY = "All of Fabrizio Guccione's Work";
+    if (query.toLowerCase() === RECRUITER_VIEW_QUERY.toLowerCase()) {
+      loadRecruiterView();
+      return; // Don't continue with normal search
+    }
+
     try {
       // Send search request to the server
       const response = await fetch("/api/search", {

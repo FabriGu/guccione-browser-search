@@ -821,8 +821,9 @@ body, td, a, p, .h {
   }
 
   .navOption {
-    padding: 10px 14px;
-    font-size: 12px;
+    padding: 12px 16px;
+    font-size: 14px;        /* Was 12px */
+    min-height: 44px;       /* Touch target */
   }
 
   /* Homepage */
@@ -839,15 +840,17 @@ body, td, a, p, .h {
   #searchInput {
     width: 100% !important;
     margin: 5px 0 !important;
-    font-size: 16px;
-    height: 48px;
+    font-size: 17px;        /* Was 16px - prevents iOS zoom */
+    height: 56px;           /* Was 48px - matches Google */
+    padding: 0 20px;        /* Add explicit padding */
   }
 
   #searchBtn, #luckyBtn {
     width: 100% !important;
     margin: 8px 0 !important;
-    padding: 14px !important;
-    font-size: 14px;
+    padding: 16px !important;   /* Was 14px */
+    font-size: 16px;            /* Was 14px */
+    min-height: 48px;           /* Apple touch target minimum */
   }
 
   /* Results search bar - centered layout */
@@ -877,11 +880,12 @@ body, td, a, p, .h {
   }
 
   .integrated-search-input-container {
-    height: 40px;
+    height: 52px;           /* Was 40px */
+    padding: 0 16px;
   }
 
   .integrated-search-input {
-    font-size: 14px;
+    font-size: 17px;        /* Was 14px */
   }
 
   /* Results navigation */
@@ -892,8 +896,8 @@ body, td, a, p, .h {
   }
 
   .results-nav-option {
-    font-size: 12px;
-    padding: 10px 0;
+    font-size: 14px;        /* Was 12px */
+    padding: 14px 0;        /* Was 10px */
   }
 
   /* Works results */
@@ -903,24 +907,29 @@ body, td, a, p, .h {
   }
 
   .work-title {
-    font-size: 16px;
+    font-size: 20px;        /* Was 16px */
+    line-height: 1.4;
+    margin-bottom: 6px;
   }
 
   .work-url {
-    font-size: 13px;
+    font-size: 14px;        /* Was 13px */
+    margin-bottom: 6px;
   }
 
   .work-description {
-    font-size: 13px;
+    font-size: 15px;        /* Was 13px */
+    line-height: 1.5;
   }
 
   .work-meta {
-    font-size: 12px;
+    font-size: 13px;        /* Was 12px */
   }
 
   .work-thumbnail {
-    width: 80px;
-    height: 80px;
+    width: 112px;           /* Was 80px */
+    height: 112px;
+    border-radius: 8px;
   }
 
   /* Images results - row-based layout adapts automatically via JS */
@@ -946,11 +955,12 @@ body, td, a, p, .h {
   .suggestions-list {
     width: 100% !important;
     font-size: 16px;
-    max-height: 300px;
+    max-height: 400px;      /* Was 300px */
   }
 
   .suggestion-item {
-    padding: 12px 16px;
+    padding: 16px 20px;     /* Was 12px 16px */
     font-size: 16px;
+    min-height: 52px;       /* Touch target */
   }
 }
