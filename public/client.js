@@ -440,12 +440,71 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
     }
   }
 
+  // Function to load recruiter view (all works chronologically, no AI)
+  async function loadRecruiterView() {
+    // Show loading state
+    updateStatus("Loading portfolio...");
+    worksResultsDiv.innerHTML = "";
+    imagesResultsDiv.style.display = "none";
+
+    workSearchFormat();
+
+    // Set search input to indicate what we're showing
+    const displayText = "All of Fabrizio Guccione's Work";
+    searchInput.value = displayText;
+    resultsSearchInput.value = displayText;
+
+    try {
+      // Fetch all works chronologically
+      const response = await fetch("/api/works/all?sortBy=year&order=desc");
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch works");
+      }
+
+      const data = await response.json();
+
+      // Display results
+      if (data.works && data.works.length > 0) {
+        data.works.forEach((work) => {
+          const workDiv = createWorkResultElement(work);
+          worksResultsDiv.appendChild(workDiv);
+        });
+
+        // Show results area
+        worksResultsDiv.style.display = "flex";
+        updateStatus(`Showing ${data.works.length} works (newest first)`);
+      } else {
+        const noResultsDiv = document.createElement("div");
+        noResultsDiv.className = "no-results-message";
+        noResultsDiv.style.padding = "40px 20px";
+        noResultsDiv.style.textAlign = "center";
+        noResultsDiv.style.color = "#70757a";
+        noResultsDiv.innerHTML = `<p style="font-size: 16px;">No works available</p>`;
+        worksResultsDiv.appendChild(noResultsDiv);
+        worksResultsDiv.style.display = "block";
+        updateStatus("No works found");
+      }
+
+      // Push state to browser history for back button support
+      const state = { mode: 'recruiter', timestamp: Date.now() };
+      const url = `/?view=recruiter`;
+      history.pushState(state, `Portfolio - All Works`, url);
+    } catch (error) {
+      console.error("Error loading recruiter view:", error);
+      updateStatus("Error loading portfolio");
+    }
+  }
+
   // Initialize
   updateStatus("Ready to search!");
 
   // Handle browser back button
   window.addEventListener('popstate', function(event) {
-    if (event.state && event.state.query) {
+    if (event.state && event.state.mode === 'recruiter') {
+      // Restore recruiter view
+      loadRecruiterView();
+    } else if (event.state && event.state.query) {
       // Restore search from history state
       searchInput.value = event.state.query;
       resultsSearchInput.value = event.state.query;
@@ -466,8 +525,12 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
   const urlParams = new URLSearchParams(window.location.search);
   const queryParam = urlParams.get('q');
   const modeParam = urlParams.get('mode');
+  const viewParam = urlParams.get('view');
 
-  if (queryParam) {
+  // Check for recruiter mode first
+  if (viewParam === 'recruiter' || modeParam === 'portfolio') {
+    loadRecruiterView();
+  } else if (queryParam) {
     searchInput.value = queryParam;
     resultsSearchInput.value = queryParam;
 
