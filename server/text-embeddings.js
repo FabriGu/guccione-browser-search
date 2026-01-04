@@ -248,6 +248,7 @@ async function initializeWithDefaultSearches() {
   
   // List of default searches
   const defaultSearches = [
+    "All of Fabrizio Guccione's Work",  // RECRUITER VIEW - first for priority
     "person",
     "people",
     "family",
