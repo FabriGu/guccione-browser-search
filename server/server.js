@@ -259,26 +259,45 @@ app.post('/api/search/images', async (req, res) => {
     if (textModelLoaded) {
       textEmbeddings.addSearchToHistory(query);
     }
-    
+
     // Add "photo of" to the query for better results
     const fullQuery = "photo of " + query.trim();
-    
+
     // If no data is loaded, return empty results
     if (mergedData.length === 0) {
       console.log('No image data available, returning empty results');
       return res.json({ results: [] });
     }
-    
-    // Get search results
+
+    // Get search results using CLIP
     const results = await imageSearch.search(fullQuery, mergedData);
     
-    // Return top 20 results with URLs, captions, and similarity scores
-    const topResults = results.slice(0, 20).map(result => ({
-      url: result.item.url,
-      id: result.item.id,
-      similarity: result.similarity,
-      caption: result.item.caption || ''
-    }));
+    // Return top 20 results with URLs, captions, similarity scores, and work info
+    const topResults = results.slice(0, 20).map(result => {
+      // Extract workId from path like "projects/112/image.png" or "projects/CollectiveComposite/image.png"
+      let workId = null;
+      let workTitle = null;
+
+      if (result.item.url) {
+        const match = result.item.url.match(/projects\/([^\/]+)\//);
+        if (match) {
+          workId = match[1];
+          // Find work title from works data
+          const work = worksData.find(w => w.id === workId);
+          workTitle = work ? work.title : null;
+          console.log(`Image ${result.item.url} -> workId: ${workId}, workTitle: ${workTitle}`);
+        }
+      }
+
+      return {
+        url: result.item.url,
+        id: result.item.id,
+        similarity: result.similarity,
+        caption: result.item.caption || '',
+        workId: workId,
+        workTitle: workTitle
+      };
+    });
     
     res.json({ results: topResults });
   } catch (error) {
