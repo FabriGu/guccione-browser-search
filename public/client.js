@@ -229,12 +229,12 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
     // Update navigation styling
     document.querySelectorAll('.navOption').forEach(nav => nav.classList.remove('selectedNavOption'));
     navWorks.classList.add('selectedNavOption');
-    
+
     // Update search button
-    searchButton.textContent = "Search Works";
-    searchButton.onclick = function() { 
+    searchButton.textContent = "Search Work";
+    searchButton.onclick = function() {
       if (!searchInput.value.trim()) return;
-      searchWorks(); 
+      searchWorks();
     };
     
     // Auto-search if there's a query in the input
@@ -294,12 +294,12 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
     // Reset navigation styling
     document.querySelectorAll('.navOption').forEach(nav => nav.classList.remove('selectedNavOption'));
     navWorks.classList.add('selectedNavOption');
-    
+
     // Reset search button
-    searchButton.textContent = "Search Works";
-    searchButton.onclick = function() { 
+    searchButton.textContent = "Search Work";
+    searchButton.onclick = function() {
       if (!searchInput.value.trim()) return;
-      searchWorks(); 
+      searchWorks();
     };
     
     // Clear search input
@@ -610,20 +610,26 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
     return `${sizeInKB}k`;
   }
 
-  // Extract domain from URL or use a placeholder
-  function extractDomain(url) {
-    if (!url) return "unknown";
+  // Extract domain from URL or use work title
+  function extractDomain(imgData) {
+    // Use workTitle if available
+    if (imgData.workTitle) {
+      return imgData.workTitle;
+    }
+
+    // Fallback to URL parsing
+    if (!imgData.url) return "unknown";
 
     try {
-      // For local files, use a placeholder
-      if (url.startsWith("images/")) {
-        return "www.example.com";
+      // For local files without workTitle, return placeholder
+      if (imgData.url.startsWith("projects/") || imgData.url.startsWith("images/")) {
+        return "Portfolio Work";
       }
 
-      const urlObj = new URL(url);
+      const urlObj = new URL(imgData.url);
       return urlObj.hostname;
     } catch (e) {
-      return "www.example.com";
+      return "unknown";
     }
   }
 
@@ -751,7 +757,15 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
       img.src = normalizeImagePath(imgData.result.url);
       img.alt = imgData.result.caption || "";
 
-      imageContainer.appendChild(img);
+      // Make image clickable if workId available
+      if (imgData.result.workId) {
+        const link = document.createElement('a');
+        link.href = `project.html?id=${encodeURIComponent(imgData.result.workId)}`;
+        link.appendChild(img);
+        imageContainer.appendChild(link);
+      } else {
+        imageContainer.appendChild(img);
+      }
 
       // Create info section (below image)
       const infoDiv = document.createElement("div");
@@ -760,7 +774,7 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
       // Source
       const sourceDiv = document.createElement("div");
       sourceDiv.className = "imageSource";
-      sourceDiv.textContent = extractDomain(imgData.result.url);
+      sourceDiv.textContent = extractDomain(imgData.result);
 
       // Caption
       const captionDiv = document.createElement("div");
