@@ -9,9 +9,10 @@ Complete guide for managing project content in your portfolio using the JSON-dri
 3. [Project JSON Structure](#project-json-structure)
 4. [Theme Customization](#theme-customization)
 5. [Gallery Layouts](#gallery-layouts)
-6. [Adding New Projects](#adding-new-projects)
-7. [Updating Search Index](#updating-search-index)
-8. [Examples](#examples)
+6. [Video Support](#video-support)
+7. [Adding New Projects](#adding-new-projects)
+8. [Updating Search Index](#updating-search-index)
+9. [Examples](#examples)
 
 ---
 
@@ -269,6 +270,244 @@ File location:     /public/assets/projects/112/bagSide.jpg
 Your JSON:         "src": "projects/112/bagSide.jpg"
 Browser requests:  http://localhost:3000/assets/projects/112/bagSide.jpg
 ```
+
+---
+
+## Video Support
+
+The Guccione Browser now supports **native video playback** in galleries and hero sections. Videos integrate seamlessly with images and support hover/tap interactions.
+
+### Video Behavior
+
+**Desktop (hover interaction):**
+- Hover over video → plays automatically
+- Move mouse away → pauses and resets to beginning
+
+**Mobile/Tablet (tap interaction):**
+- Tap video → plays
+- Tap again → pauses and resets to beginning
+
+Videos have **no visible controls** for a clean, minimal aesthetic that matches the overall design philosophy.
+
+### Video Object Structure
+
+Videos use the same structure as images, with additional parameters:
+
+```json
+{
+  "src": "projects/my-project/demo.mp4",     // Path to video file
+  "caption": "Video caption",                 // Optional: displayed below video
+  "alt": "Video description",                 // Optional: accessibility
+  "loop": true,                               // Optional: loop video (default: false)
+  "muted": false,                            // Optional: mute audio (default: false)
+  "poster": "projects/my-project/thumb.jpg"  // Optional: thumbnail before play
+}
+```
+
+### Video Parameters
+
+#### `loop` (boolean, default: `false`)
+Controls whether the video loops continuously.
+
+```json
+// Video plays once and stops
+{"src": "projects/demo/video.mp4", "loop": false}
+
+// Video loops continuously
+{"src": "projects/demo/video.mp4", "loop": true}
+```
+
+#### `muted` (boolean, default: `false`)
+Controls audio playback.
+
+```json
+// Video plays with sound
+{"src": "projects/demo/video.mp4", "muted": false}
+
+// Video plays silently
+{"src": "projects/demo/video.mp4", "muted": true}
+```
+
+**Note**: For videos that autoplay on hover, unmuted audio may be blocked by browser autoplay policies. Videos with `muted: false` will play with sound when clicked/tapped.
+
+#### `poster` (string, optional)
+Thumbnail image displayed before video plays.
+
+```json
+{
+  "src": "projects/demo/video.mp4",
+  "poster": "projects/demo/video-thumb.jpg"
+}
+```
+
+If no poster is provided, browsers will use the first frame of the video.
+
+### Supported Video Formats
+
+- **MP4** (.mp4, .MP4) - Recommended for best compatibility
+- **WebM** (.webm, .WEBM) - Excellent quality/size ratio
+- **MOV** (.mov, .MOV) - macOS/iOS native format
+
+**Recommendation**: Use H.264 encoded MP4 for maximum browser compatibility.
+
+### Video in Galleries
+
+Videos can be mixed with images in any gallery layout. The system automatically detects video files by extension.
+
+#### Example: Justified Gallery with Mixed Media
+
+```json
+"gallery": {
+  "layout": "justified",
+  "gutter": "1.1rem",
+  "images": [
+    {
+      "src": "projects/my-project/image1.jpg",
+      "caption": "Static image"
+    },
+    {
+      "src": "projects/my-project/demo.mp4",
+      "caption": "Interactive demo",
+      "loop": true,
+      "muted": true
+    },
+    {
+      "src": "projects/my-project/image2.jpg",
+      "caption": "Another image"
+    },
+    {
+      "src": "projects/my-project/process.mp4",
+      "caption": "Process video",
+      "loop": false,
+      "muted": false,
+      "poster": "projects/my-project/process-thumb.jpg"
+    }
+  ]
+}
+```
+
+**Note**: Despite the field name being "images", the array can contain both image and video objects.
+
+#### Example: Grid Gallery with Videos
+
+```json
+"gallery": {
+  "layout": "grid",
+  "columns": 3,
+  "gutter": "1.1rem",
+  "images": [
+    {"src": "projects/demo/screen1.jpg"},
+    {"src": "projects/demo/interaction.mp4", "loop": true, "muted": true},
+    {"src": "projects/demo/screen2.jpg"},
+    {"src": "projects/demo/detail.mp4", "loop": true, "muted": true},
+    {"src": "projects/demo/screen3.jpg"},
+    {"src": "projects/demo/screen4.jpg"}
+  ]
+}
+```
+
+Grid and Masonry layouts use `object-fit: cover` to crop videos to fit cells perfectly.
+
+#### Example: Slideshow Gallery with Videos
+
+```json
+"gallery": {
+  "layout": "slideshow",
+  "images": [
+    {"src": "projects/story/intro.jpg", "caption": "Introduction"},
+    {"src": "projects/story/process.mp4", "caption": "Process video", "muted": false},
+    {"src": "projects/story/result.jpg", "caption": "Final result"}
+  ]
+}
+```
+
+Slideshow layout uses `object-fit: contain` to show entire video without cropping.
+
+### Video in Hero Section
+
+Use videos as hero images for dynamic project introductions.
+
+```json
+"content": {
+  "hero": {
+    "title": "Project Title",
+    "subtitle": "Dynamic project introduction",
+    "image": "projects/my-project/hero-video.mp4",
+    "loop": true,
+    "muted": true,
+    "poster": "projects/my-project/hero-poster.jpg"
+  }
+}
+```
+
+**Best practices for hero videos:**
+- Keep videos short (5-15 seconds for loops)
+- Use `loop: true` and `muted: true` for ambient background videos
+- Optimize file size (< 5MB recommended)
+- Provide a poster image for faster initial page load
+
+### Video Guidelines
+
+#### File Size Optimization
+- **Keep videos under 10MB** for gallery items
+- **Keep hero videos under 5MB** if using loop
+- Use video compression tools (HandBrake, FFmpeg)
+- Consider WebM format for better compression
+
+#### Encoding Recommendations
+```bash
+# Example FFmpeg command for web-optimized video
+ffmpeg -i input.mov -c:v libx264 -crf 23 -preset slow -c:a aac -b:a 128k output.mp4
+```
+
+Parameters explained:
+- `-crf 23`: Quality (lower = better, 23 is good balance)
+- `-preset slow`: Better compression (slower encode)
+- `-b:a 128k`: Audio bitrate
+
+#### Accessibility
+Always provide captions for videos:
+```json
+{
+  "src": "projects/demo/video.mp4",
+  "caption": "Interactive prototype showing gesture-based navigation",
+  "alt": "Video demonstration of gesture navigation interface"
+}
+```
+
+#### Performance Considerations
+- Videos use `preload="metadata"` to load only metadata initially
+- Full video data loads when user hovers/clicks
+- Multiple videos on one page is fine - they only load when needed
+- Use poster images to reduce initial bandwidth
+
+### Troubleshooting Videos
+
+#### Video not playing
+- **Check file format**: Must be .mp4, .mov, or .webm
+- **Check file path**: Use same path format as images (`projects/id/video.mp4`)
+- **Check file size**: Very large videos may timeout loading
+- **Check browser console**: Look for network errors or playback errors
+
+#### Video plays but no sound
+- **Check muted parameter**: Set to `false` if you want audio
+- **Browser autoplay policy**: Browsers may block unmuted autoplay on hover
+- **User interaction required**: Sound works reliably on tap/click
+
+#### Video doesn't loop
+- **Check loop parameter**: Set to `true` in your JSON
+- **Verify JSON syntax**: Ensure boolean value (not string "true")
+
+#### Video quality issues
+- **Re-encode video**: Use recommended FFmpeg settings above
+- **Check source quality**: Can't improve beyond source material
+- **Consider resolution**: 1920x1080 is usually sufficient
+
+#### Video too large/slow to load
+- **Compress video**: Use lower CRF value or WebM format
+- **Reduce resolution**: 1280x720 may be adequate for galleries
+- **Shorten duration**: Keep loops under 10 seconds
+- **Add poster image**: Provides instant visual feedback
 
 ---
 
@@ -687,6 +926,6 @@ For questions or issues, refer to:
 
 ---
 
-**Last Updated**: 2025-11-17
-**System Version**: 1.0
+**Last Updated**: 2026-01-19
+**System Version**: 1.1 (Added video support)
 **Inspired by**: jnackash.com, shuangli.info, shuangcai.cargo.site

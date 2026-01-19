@@ -175,6 +175,14 @@ button.nav-home:active {
   border-radius: 0.6rem;
 }
 
+.hero-image-container video {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 0.6rem;
+  cursor: pointer;
+}
+
 /* ===== Overview Section (3-column grid pattern from shuangcai.cargo.site) ===== */
 .project-overview {
   margin-bottom: var(--section-spacing);
@@ -317,6 +325,21 @@ button.nav-home:active {
   transform: scale(1.02);
 }
 
+/* Video styling - matches image styling exactly */
+.gallery-image-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  /* Same as images */
+  display: block;
+  transition: transform 0.3s ease;
+  cursor: pointer;  /* Indicate clickability */
+  border-radius: inherit;  /* Match wrapper radius */
+}
+
+.gallery-image-wrapper:hover video {
+  transform: scale(1.02);
+}
+
 .image-caption {
   margin-top: 0.8rem;
   font-size: var(--text-xs);
@@ -367,6 +390,20 @@ button.nav-home:active {
 .gallery-slideshow .gallery-image-wrapper img {
   width: 100%;
   height: auto;
+}
+
+/* Layout-specific video styling */
+.gallery-grid .gallery-image-wrapper video,
+.gallery-masonry .gallery-image-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-slideshow .gallery-image-wrapper video {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 /* ===== Custom Sections ===== */
@@ -494,6 +531,11 @@ button.nav-home:active {
 
   .project-header {
     padding: 1.5rem 2rem;
+  }
+
+  /* Mobile video optimizations */
+  .gallery-image-wrapper video {
+    touch-action: manipulation;
   }
 
   .project-nav {

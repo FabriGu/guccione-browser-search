@@ -98,6 +98,61 @@ function normalizeImagePath(path) {
   return `/assets/${normalized}`;
 }
 
+/**
+ * Detects if a file is a video based on extension
+ * @param {string} src - File path
+ * @returns {boolean} - True if video file
+ */
+function isVideoFile(src) {
+  if (!src) return false;
+  const videoExtensions = ['.mp4', '.mov', '.webm', '.MOV', '.MP4', '.WEBM'];
+  return videoExtensions.some(ext => src.toLowerCase().endsWith(ext.toLowerCase()));
+}
+
+/**
+ * Creates a video element with hover/tap play/pause interaction
+ * @param {Object} mediaData - Video data from JSON
+ * @param {string} mediaData.src - Video file path
+ * @param {boolean} mediaData.loop - Whether to loop video
+ * @param {boolean} mediaData.muted - Whether to mute audio
+ * @param {string} mediaData.poster - Optional poster image
+ * @returns {HTMLVideoElement} - Configured video element
+ */
+function createVideoElement(mediaData) {
+  const video = document.createElement('video');
+  video.src = normalizeImagePath(mediaData.src);
+  video.loop = mediaData.loop !== undefined ? mediaData.loop : false;
+  video.muted = mediaData.muted !== undefined ? mediaData.muted : false;
+  video.playsInline = true;  // Prevent fullscreen on iOS
+  video.preload = 'metadata';  // Load metadata only initially
+
+  if (mediaData.poster) {
+    video.poster = normalizeImagePath(mediaData.poster);
+  }
+
+  // Hover play/pause for desktop
+  video.addEventListener('mouseenter', () => {
+    video.play().catch(err => console.log('Video play failed:', err));
+  });
+
+  video.addEventListener('mouseleave', () => {
+    video.pause();
+    video.currentTime = 0;  // Reset to beginning
+  });
+
+  // Click/tap play/pause for mobile
+  video.addEventListener('click', () => {
+    if (video.paused) {
+      video.play().catch(err => console.log('Video play failed:', err));
+    } else {
+      video.pause();
+      video.currentTime = 0;
+    }
+  });
+
+  return video;
+}
+
 // Apply layout configuration
 function applyLayout(layout) {
   if (!layout) return;
@@ -132,16 +187,30 @@ function renderHero(project) {
     subtitle.style.display = 'none';
   }
 
-  // Set hero image if present
+  // Set hero image/video if present
   const heroImageContainer = document.getElementById('heroImageContainer');
   if (hero.image) {
-    // Clear any existing images first (defensive programming)
+    // Clear any existing media first (defensive programming)
     heroImageContainer.innerHTML = '';
 
-    const img = document.createElement('img');
-    img.src = normalizeImagePath(hero.image);
-    img.alt = hero.title || title;
-    heroImageContainer.appendChild(img);
+    let mediaElement;
+
+    if (isVideoFile(hero.image)) {
+      // Create video element for hero
+      mediaElement = createVideoElement({
+        src: hero.image,
+        loop: hero.loop,
+        muted: hero.muted,
+        poster: hero.poster
+      });
+    } else {
+      // Create image element
+      mediaElement = document.createElement('img');
+      mediaElement.src = normalizeImagePath(hero.image);
+      mediaElement.alt = hero.title || title;
+    }
+
+    heroImageContainer.appendChild(mediaElement);
   } else {
     heroImageContainer.style.display = 'none';
   }
@@ -344,12 +413,21 @@ function renderJustifiedRows(container, rows, containerWidth, targetHeight, gap)
       wrapper.style.width = `${actualWidth}px`;
       wrapper.style.height = `${actualHeight}px`;
 
-      const img = document.createElement('img');
-      img.src = normalizeImagePath(imgData.src);
-      img.alt = imgData.alt || imgData.caption || '';
-      img.loading = 'lazy';
+      let mediaElement;
 
-      wrapper.appendChild(img);
+      if (isVideoFile(imgData.src)) {
+        // Create video element
+        mediaElement = createVideoElement(imgData);
+        mediaElement.style.objectFit = 'cover';
+      } else {
+        // Create image element
+        mediaElement = document.createElement('img');
+        mediaElement.src = normalizeImagePath(imgData.src);
+        mediaElement.alt = imgData.alt || imgData.caption || '';
+        mediaElement.loading = 'lazy';
+      }
+
+      wrapper.appendChild(mediaElement);
 
       if (imgData.caption) {
         const caption = document.createElement('div');
@@ -374,12 +452,21 @@ function renderGridGallery(container, gallery) {
     const wrapper = document.createElement('div');
     wrapper.className = 'gallery-image-wrapper';
 
-    const img = document.createElement('img');
-    img.src = `/assets/${imgData.src}`;
-    img.alt = imgData.alt || imgData.caption || '';
-    img.loading = 'lazy';
+    let mediaElement;
 
-    wrapper.appendChild(img);
+    if (isVideoFile(imgData.src)) {
+      // Create video element
+      mediaElement = createVideoElement(imgData);
+      mediaElement.style.objectFit = 'cover';
+    } else {
+      // Create image element
+      mediaElement = document.createElement('img');
+      mediaElement.src = normalizeImagePath(imgData.src);
+      mediaElement.alt = imgData.alt || imgData.caption || '';
+      mediaElement.loading = 'lazy';
+    }
+
+    wrapper.appendChild(mediaElement);
 
     if (imgData.caption) {
       const caption = document.createElement('div');
@@ -401,12 +488,21 @@ function renderMasonryGallery(container, gallery) {
     const wrapper = document.createElement('div');
     wrapper.className = 'gallery-image-wrapper';
 
-    const img = document.createElement('img');
-    img.src = `/assets/${imgData.src}`;
-    img.alt = imgData.alt || imgData.caption || '';
-    img.loading = 'lazy';
+    let mediaElement;
 
-    wrapper.appendChild(img);
+    if (isVideoFile(imgData.src)) {
+      // Create video element
+      mediaElement = createVideoElement(imgData);
+      mediaElement.style.objectFit = 'cover';
+    } else {
+      // Create image element
+      mediaElement = document.createElement('img');
+      mediaElement.src = normalizeImagePath(imgData.src);
+      mediaElement.alt = imgData.alt || imgData.caption || '';
+      mediaElement.loading = 'lazy';
+    }
+
+    wrapper.appendChild(mediaElement);
 
     if (imgData.caption) {
       const caption = document.createElement('div');
@@ -425,12 +521,21 @@ function renderSlideshowGallery(container, gallery) {
     const wrapper = document.createElement('div');
     wrapper.className = 'gallery-image-wrapper';
 
-    const img = document.createElement('img');
-    img.src = `/assets/${imgData.src}`;
-    img.alt = imgData.alt || imgData.caption || '';
-    img.loading = 'lazy';
+    let mediaElement;
 
-    wrapper.appendChild(img);
+    if (isVideoFile(imgData.src)) {
+      // Create video element
+      mediaElement = createVideoElement(imgData);
+      mediaElement.style.objectFit = 'contain';
+    } else {
+      // Create image element
+      mediaElement = document.createElement('img');
+      mediaElement.src = normalizeImagePath(imgData.src);
+      mediaElement.alt = imgData.alt || imgData.caption || '';
+      mediaElement.loading = 'lazy';
+    }
+
+    wrapper.appendChild(mediaElement);
 
     if (imgData.caption) {
       const caption = document.createElement('div');
