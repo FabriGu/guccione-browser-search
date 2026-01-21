@@ -1,0 +1,94 @@
+{
+  "id": "SnoozeWars",
+  "title": "Snooze Wars",
+  "year": "2025-2026",
+  "thumbnail": "projects/SnoozeWars/icon.png",
+  "description": "Snooze Wars is an app that allows people feel more connected to their friends through more vulnerable sides of themselves in a silly, no pressure way.",
+  "tags": ["design", "interactive", "IOS app", "Swift", "SwiftUI", "Firebase"],
+
+  "theme": {
+    "backgroundColor": "#ffffff",
+    "accentColor": "#ff0000",
+    "textColor": "rgba(0, 0, 0, 0.85)",
+    "secondaryTextColor": "rgba(0, 0, 0, 0.6)",
+    "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+  },
+
+  "layout": {
+    "type": "default",
+    "columnGutter": "5rem",
+    "sectionSpacing": "6rem"
+  },
+
+  "content": {
+    "hero": {
+      "subtitle": "Snooze Wars is an app that allows people feel more connected to their friends through more vulnerable sides of themselves in a silly, no pressure way."
+    },
+
+    "overview": {
+      "longDescription": "Snooze wars is an app based social media that allows small pods/ groups of users to share their sleeping habits with each other. While most sleep tracking apps on the market currently are health apps this would take on more of a social media/ community game app. Users will be able to feel connected to their friends (people in their pod) by keeping each other accountable for waking up on time.",
+
+      "metadata": {
+        "role": "Developer & Designer",
+        "technologies": ["Swift", "SwiftUI", "Firebase"],
+        "client": "Personal Project in collaboration with Prisha Jain",
+        "duration": "3 month"
+      },
+
+      "links": [
+        
+      ]
+    },
+
+    "gallery": {
+      "layout": "justified",
+      "gutter": "1.1rem",
+      "images": [
+        {
+          "src": "projects/SnoozeWars/fullLogo.png",
+          "caption": "Full Logo",
+          "alt": "Full Logo"
+        },
+        {
+          "src": "projects/SnoozeWars/account.PNG",
+          "caption": "Account View",
+          "alt": "Account View"
+        },
+        {
+          "src": "projects/SnoozeWars/addFriend.PNG",
+          "caption": "Add friend view",
+          "alt": "Add friend view"
+        },
+        {
+          "src": "projects/SnoozeWars/alarms.PNG",
+          "caption": "Alarms View",
+          "alt": "Alarms View"
+        },
+        {
+          "src": "projects/SnoozeWars/friendRequests.PNG",
+          "caption": "Friend Requests View",
+          "alt": "Friend Requests View"
+        },
+        {
+          "src": "projects/SnoozeWars/friends.PNG",
+          "caption": "Friends View",
+          "alt": "Friends View"
+        },
+        {
+          "src": "projects/SnoozeWars/podDetails.PNG",
+          "caption": "Settings View",
+          "alt": "Settings View"
+        },
+        {
+          "src": "projects/SnoozeWars/pods.PNG",
+          "caption": "Settings View",
+          "alt": "Settings View"
+        }
+      ]
+    },
+
+    "customSections": [
+    
+    ]
+  }
+}

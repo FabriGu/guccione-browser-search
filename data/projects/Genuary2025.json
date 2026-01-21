@@ -1,0 +1,156 @@
+{
+  "id": "Genuary2025",
+  "title": "Genuary 2025",
+  "year": "2025",
+  "thumbnail": "projects/Genuary2025/genuary5.MOV",
+  "description": "Generative art created daily for the month of January 2025.",
+  "tags": ["design", "generative", "p5.js", "javascript", "processing", "genuary"],
+
+  "theme": {
+    "backgroundColor": "#ffffff",
+    "accentColor": "#ff0000",
+    "textColor": "rgba(0, 0, 0, 0.85)",
+    "secondaryTextColor": "rgba(0, 0, 0, 0.6)",
+    "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+  },
+
+  "layout": {
+    "type": "default",
+    "columnGutter": "5rem",
+    "sectionSpacing": "6rem"
+  },
+
+  "content": {
+    "hero": {
+      "subtitle": "Generative art created daily for the month of January 2025."
+    },
+
+    "overview": {
+      "longDescription": "Genuary 2025 is a series of 14 generative art pieces created in January 2025 as part of the annual community-driven creative coding challenge. Each work responds to a daily prompt, exploring themes of algorithmic aesthetics, mathematical beauty, and the intersection of physical and digital media. ",
+
+      "metadata": {
+        "role": "Artist & Creative Technologist",
+        "technologies": ["Arduino", "p5.js", "javascript"],
+        "client": "Personal Project",
+        "duration": "1 month"
+      },
+
+      "links": [
+        
+      ]
+    },
+
+    "gallery": {
+      "layout": "grid",
+      "columns": 4,
+      "gutter": "1.1rem",
+      "images": [
+        {
+          "src": "projects/Genuary2025/genuary1.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Spiral Mesmerizing Pattern"
+        },
+        {
+          "src": "projects/Genuary2025/genuary2.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Physical Computing Water LED Display Bag"
+        },
+        {
+          "src": "projects/Genuary2025/genuary3.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Pyramid Ball Drop"
+        },
+        {
+          "src": "projects/Genuary2025/genuary4.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Gradient Flow"
+        },
+        {
+          "src": "projects/Genuary2025/genuary5.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Rainbow Geometric Pattern Animation"
+        },
+        {
+          "src": "projects/Genuary2025/genuary6.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Recursive Tree of Life"
+        },
+        {
+          "src": "projects/Genuary2025/genuary7.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Square Grid Spiral Animation Pattern"
+        },
+        {
+          "src": "projects/Genuary2025/genuary8.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Spiral Tree Growth"
+        },
+        {
+          "src": "projects/Genuary2025/genuary9.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Square Grid Spiral Animation Pattern"
+        },
+        {
+          "src": "projects/Genuary2025/genuary10.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Map Line Flow"
+        },
+        {
+          "src": "projects/Genuary2025/genuary11.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Pixel Mouse Magnetism "
+        },
+        {
+          "src": "projects/Genuary2025/genuary12.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Line Animation"
+        },
+        {
+          "src": "projects/Genuary2025/genuary13.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Line Animation Expanded"
+        },
+        {
+          "src": "projects/Genuary2025/genuary14.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Lights and Shadows"
+        },
+        {
+          "src": "projects/Genuary2025/genuary15.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Glass Flowers"
+        },
+        {
+          "src": "projects/Genuary2025/genuary16.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Animated Lasagna"
+        },
+        {
+          "src": "projects/Genuary2025/genuary17.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Landscape Flow"
+        },
+        {
+          "src": "projects/Genuary2025/genuary18.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Console Animation Log"
+        },
+        {
+          "src": "projects/Genuary2025/genuary19.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Recursive Flower"
+        },
+        {
+          "src": "projects/Genuary2025/genuary20.MOV",
+          "loop": true, "muted": true, 
+          "alt": "Eye Delay"
+        }
+       
+      ]
+    },
+
+    "customSections": [
+    
+    ]
+  }
+}

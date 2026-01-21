@@ -22,6 +22,56 @@ function normalizeImagePath(path) {
   return `/assets/${normalized}`;
 }
 
+/**
+ * Detects if a file is a video based on extension
+ * @param {string} src - File path
+ * @returns {boolean} - True if video file
+ */
+function isVideoFile(src) {
+  if (!src) return false;
+  const videoExtensions = ['.mp4', '.mov', '.webm', '.MOV', '.MP4', '.WEBM'];
+  return videoExtensions.some(ext => src.toLowerCase().endsWith(ext.toLowerCase()));
+}
+
+/**
+ * Creates a video element for search results with hover/tap interaction
+ * @param {string} src - Video file path
+ * @param {string} alt - Alt text for accessibility
+ * @returns {HTMLVideoElement} - Configured video element
+ */
+function createSearchVideoElement(src, alt) {
+  const video = document.createElement('video');
+  video.src = normalizeImagePath(src);
+  video.muted = true;  // Always muted for search results
+  video.loop = true;   // Always loop for search results
+  video.playsInline = true;  // Prevent fullscreen on iOS
+  video.preload = 'metadata';  // Load metadata only
+  video.title = alt || '';
+
+  // Hover play/pause for desktop
+  video.addEventListener('mouseenter', () => {
+    video.play().catch(err => console.log('Video play failed:', err));
+  });
+
+  video.addEventListener('mouseleave', () => {
+    video.pause();
+    video.currentTime = 0;
+  });
+
+  // Click/tap play/pause for mobile
+  video.addEventListener('click', (e) => {
+    // Don't prevent default - allow navigation to project page
+    if (video.paused) {
+      video.play().catch(err => console.log('Video play failed:', err));
+    } else {
+      video.pause();
+      video.currentTime = 0;
+    }
+  });
+
+  return video;
+}
+
 // Client-side JavaScript for image search
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -752,19 +802,24 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
       imageContainer.className = "image-container";
       imageContainer.style.height = `${actualHeight}px`;
 
-      // Create image element
-      const img = document.createElement("img");
-      img.src = normalizeImagePath(imgData.result.url);
-      img.alt = imgData.result.caption || "";
+      // Create image or video element based on file type
+      let mediaElement;
+      if (isVideoFile(imgData.result.url)) {
+        mediaElement = createSearchVideoElement(imgData.result.url, imgData.result.caption || "");
+      } else {
+        mediaElement = document.createElement("img");
+        mediaElement.src = normalizeImagePath(imgData.result.url);
+        mediaElement.alt = imgData.result.caption || "";
+      }
 
-      // Make image clickable if workId available
+      // Make media clickable if workId available
       if (imgData.result.workId) {
         const link = document.createElement('a');
         link.href = `project.html?id=${encodeURIComponent(imgData.result.workId)}`;
-        link.appendChild(img);
+        link.appendChild(mediaElement);
         imageContainer.appendChild(link);
       } else {
-        imageContainer.appendChild(img);
+        imageContainer.appendChild(mediaElement);
       }
 
       // Create info section (below image)
@@ -872,12 +927,46 @@ document.getElementById("resultsNavAbout").addEventListener("click", function(e)
 
     workDiv.appendChild(contentDiv);
 
-    // Add thumbnail image if available
+    // Add thumbnail image or video if available
     if (work.thumbnailImage) {
-      const thumbnail = document.createElement("img");
-      thumbnail.src = normalizeImagePath(work.thumbnailImage);
-      thumbnail.className = "work-thumbnail";
-      thumbnail.alt = work.title || "Work thumbnail";
+      let thumbnail;
+      if (isVideoFile(work.thumbnailImage)) {
+        thumbnail = document.createElement("video");
+        thumbnail.src = normalizeImagePath(work.thumbnailImage);
+        thumbnail.width = 112;
+        thumbnail.height = 112;
+        thumbnail.muted = true;
+        thumbnail.loop = true;
+        thumbnail.playsInline = true;
+        thumbnail.preload = "metadata";
+        thumbnail.className = "work-thumbnail";
+        thumbnail.title = work.title || "Work thumbnail";
+
+        // Hover play/pause for desktop
+        thumbnail.addEventListener('mouseenter', () => {
+          thumbnail.play().catch(err => console.log('Video play failed:', err));
+        });
+
+        thumbnail.addEventListener('mouseleave', () => {
+          thumbnail.pause();
+          thumbnail.currentTime = 0;
+        });
+
+        // Click/tap play/pause for mobile
+        thumbnail.addEventListener('click', (e) => {
+          if (thumbnail.paused) {
+            thumbnail.play().catch(err => console.log('Video play failed:', err));
+          } else {
+            thumbnail.pause();
+            thumbnail.currentTime = 0;
+          }
+        });
+      } else {
+        thumbnail = document.createElement("img");
+        thumbnail.src = normalizeImagePath(work.thumbnailImage);
+        thumbnail.className = "work-thumbnail";
+        thumbnail.alt = work.title || "Work thumbnail";
+      }
       workDiv.appendChild(thumbnail);
     }
 

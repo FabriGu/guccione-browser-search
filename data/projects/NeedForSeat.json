@@ -1,0 +1,70 @@
+{
+  "id": "NeedForSeat",
+  "title": "Need For Seat",
+  "year": "2025",
+  "thumbnail": "projects/NeedForSeat/heroThumbnail.jpg",
+  "description": "A two-player competitive arcade game housed in a custom-built cabinet that transforms the mundane act of moving a chair into an absurdist racing experience.",
+  "tags": ["design", "interactive", "installation", "physical-computing"],
+
+  "theme": {
+    "backgroundColor": "#ffffff",
+    "accentColor": "#ff0000",
+    "textColor": "rgba(0, 0, 0, 0.85)",
+    "secondaryTextColor": "rgba(0, 0, 0, 0.6)",
+    "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+  },
+
+  "layout": {
+    "type": "default",
+    "columnGutter": "5rem",
+    "sectionSpacing": "6rem"
+  },
+
+  "content": {
+    
+    "hero": {
+      "subtitle": "A two-player competitive arcade game housed in a custom-built cabinet that transforms the mundane act of moving a chair into an absurdist racing experience."
+    },
+
+    "overview": {
+      "longDescription": "Need for Seat is a two-player competitive arcade game housed in a custom-built cabinet that transforms the mundane act of moving a chair into an absurdist racing experience. Players move four chair-leg-shaped inputs to \"walk\" their on-screen chair across a room to help a man in need of seat. The project merges digital game design with physical computing and furniture-scale fabrication, creating an installation that invites playful competition and incites a Need For Seat!",
+
+      "metadata": {
+        "role": "Artist & Creative Technologist",
+        "technologies": ["Arduino", "Electronics", "3D Printing", "Game Design", "Physical Computing"],
+        "client": "Personal Project in collaboration with Marven Ma and Sana Alimohamed",
+        "duration": "3 month"
+      },
+
+      "links": [
+        
+      ]
+    },
+
+    "gallery": {
+      "layout": "justified",
+      "gutter": "1.1rem",
+      "images": [
+        {
+          "src": "projects/NeedForSeat/showcase.jpg",
+          "caption": "New Arcade Cabinet Showcase at Wonderville New York",
+          "alt": "People playing Need for Seat at Wonderville New York"
+        },
+        {
+          "src": "projects/NeedForSeat/sideHalf.jpg",
+          "caption": "Up close view of the cabinet",
+          "alt": "Up close view of the cabinet"
+        },
+        {
+          "src": "projects/NeedForSeat/closeUpController1.jpg",
+          "caption": "Up close view of the cabinet controller",
+          "alt": "Up close view of the cabinet controller"
+        }
+      ]
+    },
+
+    "customSections": [
+    
+    ]
+  }
+}
