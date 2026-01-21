@@ -36,7 +36,7 @@ The Guccione Browser portfolio uses a **JSON-driven template system** that allow
 
 ## Quick Start
 
-### Adding a New Project (5 minutes)
+### Adding a New Project (5 minutes setup + rebuild time)
 
 1. **Create project JSON file** in `/data/projects/`:
    ```bash
@@ -55,11 +55,22 @@ The Guccione Browser portfolio uses a **JSON-driven template system** that allow
    }
    ```
 
-3. **Add project images** to `/public/assets/projects/my-new-project/`
+3. **Add project images/videos** to `/public/assets/projects/my-new-project/`
 
-4. **Update the gallery images array** in your JSON to reference these images
+4. **Update the gallery images array** in your JSON to reference these media files
 
-5. **View your project** at: `http://localhost:3000/project.html?id=my-new-project`
+5. **View your project directly** at: `http://localhost:3000/project.html?id=my-new-project`
+   - Project page works immediately
+   - Not searchable yet (next step)
+
+6. **Make it searchable** - Rebuild the search index:
+   ```bash
+   npm run rebuild
+   ```
+   Then restart your server:
+   ```bash
+   npm run dev
+   ```
 
 That's it! Your project is now live and searchable.
 
@@ -661,38 +672,167 @@ http://localhost:3000/project.html?id=my-new-project
 
 #### 4. Update Search Index
 
-Your project will automatically appear in search results once you add it to the backend data files.
+Run the rebuild command to make your project searchable:
 
-**For text search**, add to your works data file (implementation depends on your backend setup).
+```bash
+npm run rebuild
+```
 
-**For image search**, generate embeddings for your images (see [Updating Search Index](#updating-search-index)).
+This automatically:
+- Adds your project to the works index
+- Generates text embeddings for semantic search
+- Catalogs your project images
+- Generates image embeddings for visual search
+
+**First run**: Downloads ML models (~700MB, 30-60 min)
+**Subsequent runs**: Much faster (~5-10 min)
+
+After completion, restart your server and test search.
+
+See [Updating Search Index](#updating-search-index) for details and troubleshooting.
 
 ---
 
 ## Updating Search Index
 
-### Text Search (Works)
+After adding new projects, you need to rebuild the search index so they appear in search results. The system automatically generates embeddings for both text search (MiniLM) and image search (CLIP).
 
-Projects need to be indexed for semantic text search using MiniLM embeddings.
+### Quick Method: Rebuild Everything
 
-1. **Add project to works data** - Location depends on your backend implementation
-2. **Generate text embedding** - Backend will compute MiniLM embedding for description
-3. **Test search** - Search for keywords related to your project
+**Recommended for adding new projects:**
 
-### Image Search
+```bash
+npm run rebuild
+```
 
-Generate CLIP embeddings for project images:
+This single command runs all four steps automatically:
+1. Builds `data/works.json` from all project JSONs in `data/projects/`
+2. Generates text embeddings (MiniLM) for semantic text search
+3. Builds image catalog from all project images
+4. Generates image embeddings (CLIP) for visual search
 
-1. **Prepare image list** - All images in `public/assets/projects/`
-2. **Run embedding script**:
-   ```bash
-   # Example - adjust based on your backend implementation
-   node server/generate-embeddings.js
-   ```
-3. **Update image index** - Embeddings stored in backend database
-4. **Test search** - Search for visual concepts
+**First run will download ML models (~700MB) and can take 30-60 minutes.**
+Subsequent runs are much faster (only processing new content).
 
-**Note**: Embedding generation is computationally expensive. Only regenerate when adding new images.
+After completion:
+1. Restart your server: `npm run dev` or `npm start`
+2. Test search at: http://localhost:3000
+3. Your new projects should appear in search results
+
+### Individual Steps (Advanced)
+
+If you only need to update specific parts of the index:
+
+#### 1. Build Works Index Only
+```bash
+npm run build:works
+```
+- Scans all JSON files in `data/projects/`
+- Creates `data/works.json` with project metadata
+- No embeddings generated (search won't work yet)
+- Fast (< 1 second)
+
+#### 2. Generate Text Embeddings Only
+```bash
+npm run embed:text
+```
+- Reads `data/works.json`
+- Generates MiniLM embeddings for project descriptions
+- Creates `data/works-with-embeddings.json`
+- Required for text/semantic search to work
+- Medium speed (~1-5 minutes for dozens of projects)
+
+#### 3. Build Image Catalog Only
+```bash
+npm run build:images
+```
+- Scans `public/assets/projects/` for images
+- Creates `data/image-catalog.json` with image paths
+- No embeddings generated
+- Fast (< 1 second)
+
+#### 4. Generate Image Embeddings Only
+```bash
+npm run embed:images
+```
+- Reads `data/image-catalog.json`
+- Generates CLIP embeddings for each image
+- Creates `data/image-embeddings.json`
+- Required for visual search to work
+- Slow (~30-60 minutes for hundreds of images)
+
+### Complete Workflow Example
+
+**Scenario:** You just added 3 new projects
+
+```bash
+# 1. Verify your project files are in place
+ls data/projects/
+# Should show: project1.json, project2.json, project3.json, ...
+
+ls public/assets/projects/
+# Should show directories: project1/, project2/, project3/, ...
+
+# 2. Rebuild entire search index
+npm run rebuild
+
+# Wait for completion (first run downloads models, ~30-60 min)
+# Subsequent runs are faster (~5-10 min)
+
+# 3. Restart server
+npm run dev
+
+# 4. Test in browser
+# Navigate to http://localhost:3000
+# Search for your new projects by name, description, or visual content
+```
+
+### What Gets Generated
+
+After running `npm run rebuild`, these files are created/updated:
+
+- `data/works.json` - Raw project index (no embeddings)
+- `data/works-with-embeddings.json` - Projects with MiniLM text embeddings
+- `data/image-catalog.json` - Image paths catalog
+- `data/image-embeddings.json` - Images with CLIP visual embeddings
+
+**Important:** These files are auto-generated. Never edit them manually! Always edit the source project JSONs in `data/projects/` and rebuild.
+
+### Performance Notes
+
+- **Text embeddings**: ~0.1-0.5 seconds per project
+- **Image embeddings**: ~1-3 seconds per image
+- First run downloads models to `.cache/` (kept for future runs)
+- Only new/changed projects/images need reprocessing on subsequent runs
+
+### Troubleshooting Index Updates
+
+#### Projects don't appear in search after rebuild
+- Check that JSON file is in `data/projects/` (not a subdirectory)
+- Verify JSON syntax is valid (use a JSON validator)
+- Check console output during rebuild for errors
+- Ensure `id` field in JSON matches filename (without .json)
+- Restart server after rebuild completes
+
+#### Rebuild takes too long or fails
+- First run downloads models (~700MB) - this is normal
+- Close other intensive applications
+- Ensure stable internet connection for model download
+- Check disk space (models + embeddings can be large)
+- For large image sets (>500 images), consider running `npm run embed:images` separately overnight
+
+#### Images don't appear in image search
+- Verify images are in `public/assets/projects/[project-id]/`
+- Check file formats are supported (JPG, PNG)
+- Ensure image paths in JSON match actual file locations
+- Run `npm run build:images` to verify catalog is built
+- Check `data/image-catalog.json` contains your images
+
+#### Changes not reflected after rebuild
+- Make sure you restarted the server (`npm run dev`)
+- Clear browser cache (Cmd+Shift+R on Mac, Ctrl+Shift+R on Windows)
+- Check server console for errors loading embeddings
+- Verify `data/works-with-embeddings.json` has recent timestamp
 
 ---
 
