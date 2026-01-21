@@ -4,6 +4,11 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const ffmpeg = require('fluent-ffmpeg');
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+
+// Configure ffmpeg
+ffmpeg.setFfmpegPath(ffmpegPath);
 
 // Set environment
 process.env.TRANSFORMERS_CACHE = path.join(__dirname, '../models/huggingface');
@@ -53,6 +58,55 @@ async function loadExistingEmbeddings() {
 
   console.log(`Loaded ${map.size} existing embeddings`);
   return map;
+}
+
+/**
+ * Detects if a file is a video based on extension
+ * @param {string} url - File path
+ * @returns {boolean} - True if video file
+ */
+function isVideoFile(url) {
+  if (!url) return false;
+  const videoExtensions = ['.mp4', '.mov', '.webm', '.MOV', '.MP4', '.WEBM'];
+  return videoExtensions.some(ext => url.toLowerCase().endsWith(ext.toLowerCase()));
+}
+
+/**
+ * Extracts first frame from video file as RawImage
+ * @param {string} localPath - Absolute path to video file
+ * @returns {Promise<RawImage>} - RawImage from first frame
+ */
+async function extractFirstFrame(localPath) {
+  const { RawImage } = await import('@huggingface/transformers');
+  const tmpDir = path.join(__dirname, '../tmp');
+  const tmpPath = path.join(tmpDir, `frame-${Date.now()}.jpg`);
+
+  // Ensure tmp directory exists
+  if (!fs.existsSync(tmpDir)) {
+    fs.mkdirSync(tmpDir, { recursive: true });
+  }
+
+  return new Promise((resolve, reject) => {
+    ffmpeg(localPath)
+      .screenshots({
+        timestamps: [0.1],  // Extract at 0.1 seconds (avoid black first frame)
+        filename: path.basename(tmpPath),
+        folder: path.dirname(tmpPath),
+        size: '1280x?'  // Width 1280px, maintain aspect ratio
+      })
+      .on('end', async () => {
+        try {
+          const image = await RawImage.read(tmpPath);
+          fs.unlinkSync(tmpPath);  // Clean up temp file
+          resolve(image);
+        } catch (err) {
+          reject(new Error(`Failed to read extracted frame: ${err.message}`));
+        }
+      })
+      .on('error', (err) => {
+        reject(new Error(`FFmpeg extraction failed: ${err.message}`));
+      });
+  });
 }
 
 async function startServer() {
@@ -133,11 +187,18 @@ async function processImages() {
         continue;
       }
 
-      // Load image from local server
+      // Load image or extract video frame
       const imageUrl = `http://localhost:${PORT}/assets/${item.url}`;
-      console.log(`  → Loading from: /assets/${item.url}`);
+      const localPath = path.join(__dirname_root, 'public/assets', item.url);
 
-      const image = await RawImage.fromURL(imageUrl);
+      let image;
+      if (isVideoFile(item.url)) {
+        console.log(`  → Video detected, extracting first frame...`);
+        image = await extractFirstFrame(localPath);
+      } else {
+        console.log(`  → Loading image from: /assets/${item.url}`);
+        image = await RawImage.fromURL(imageUrl);
+      }
 
       // Process image with CLIP
       console.log(`  → Processing with CLIP...`);

@@ -802,8 +802,10 @@ After running `npm run rebuild`, these files are created/updated:
 
 - **Text embeddings**: ~0.1-0.5 seconds per project
 - **Image embeddings**: ~1-3 seconds per image
+- **Video embeddings**: ~3-4 seconds per video (extracts first frame at 0.1 seconds)
 - First run downloads models to `.cache/` (kept for future runs)
-- Only new/changed projects/images need reprocessing on subsequent runs
+- Only new/changed projects/images/videos need reprocessing on subsequent runs
+- Videos use 1280px frame width for high quality embeddings (no impact on search speed)
 
 ### Troubleshooting Index Updates
 
@@ -833,6 +835,20 @@ After running `npm run rebuild`, these files are created/updated:
 - Clear browser cache (Cmd+Shift+R on Mac, Ctrl+Shift+R on Windows)
 - Check server console for errors loading embeddings
 - Verify `data/works-with-embeddings.json` has recent timestamp
+
+#### Videos showing errors during embedding generation
+- Videos are automatically supported since v1.1
+- Dependencies (@ffmpeg-installer/ffmpeg, fluent-ffmpeg) installed automatically with `npm install`
+- Videos extract first frame at 0.1 seconds for visual search embeddings
+- Processing ~3-4 seconds per video (slower than images ~1-3 sec)
+- Check `/tmp` directory is writable for frame extraction
+- If ffmpeg fails, verify dependencies: `npm ls @ffmpeg-installer/ffmpeg fluent-ffmpeg`
+- Supported formats: .mp4, .mov, .webm (case-insensitive)
+
+#### Server won't start - port already in use
+- The `predev` script automatically kills processes on port 3000
+- If server still won't start, manually kill: `lsof -ti:3000 | xargs kill -9`
+- Check for zombie processes: `ps aux | grep node`
 
 ---
 

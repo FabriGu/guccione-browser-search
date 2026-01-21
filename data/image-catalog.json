@@ -50,18 +50,216 @@
     },
     {
       "id": "8",
+      "url": "projects/Genuary2025/genuary5.MOV",
+      "caption": "",
+      "alt": "Genuary 2025"
+    },
+    {
+      "id": "9",
+      "url": "projects/Genuary2025/genuary1.MOV",
+      "caption": "",
+      "alt": "Spiral Mesmerizing Pattern"
+    },
+    {
+      "id": "10",
+      "url": "projects/Genuary2025/genuary2.MOV",
+      "caption": "",
+      "alt": "Physical Computing Water LED Display Bag"
+    },
+    {
+      "id": "11",
+      "url": "projects/Genuary2025/genuary3.MOV",
+      "caption": "",
+      "alt": "Pyramid Ball Drop"
+    },
+    {
+      "id": "12",
+      "url": "projects/Genuary2025/genuary4.MOV",
+      "caption": "",
+      "alt": "Gradient Flow"
+    },
+    {
+      "id": "13",
+      "url": "projects/Genuary2025/genuary6.MOV",
+      "caption": "",
+      "alt": "Recursive Tree of Life"
+    },
+    {
+      "id": "14",
+      "url": "projects/Genuary2025/genuary7.MOV",
+      "caption": "",
+      "alt": "Square Grid Spiral Animation Pattern"
+    },
+    {
+      "id": "15",
+      "url": "projects/Genuary2025/genuary8.MOV",
+      "caption": "",
+      "alt": "Spiral Tree Growth"
+    },
+    {
+      "id": "16",
+      "url": "projects/Genuary2025/genuary9.MOV",
+      "caption": "",
+      "alt": "Square Grid Spiral Animation Pattern"
+    },
+    {
+      "id": "17",
+      "url": "projects/Genuary2025/genuary10.MOV",
+      "caption": "",
+      "alt": "Map Line Flow"
+    },
+    {
+      "id": "18",
+      "url": "projects/Genuary2025/genuary11.MOV",
+      "caption": "",
+      "alt": "Pixel Mouse Magnetism "
+    },
+    {
+      "id": "19",
+      "url": "projects/Genuary2025/genuary12.MOV",
+      "caption": "",
+      "alt": "Line Animation"
+    },
+    {
+      "id": "20",
+      "url": "projects/Genuary2025/genuary13.MOV",
+      "caption": "",
+      "alt": "Line Animation Expanded"
+    },
+    {
+      "id": "21",
+      "url": "projects/Genuary2025/genuary14.MOV",
+      "caption": "",
+      "alt": "Lights and Shadows"
+    },
+    {
+      "id": "22",
+      "url": "projects/Genuary2025/genuary15.MOV",
+      "caption": "",
+      "alt": "Glass Flowers"
+    },
+    {
+      "id": "23",
+      "url": "projects/Genuary2025/genuary16.MOV",
+      "caption": "",
+      "alt": "Animated Lasagna"
+    },
+    {
+      "id": "24",
+      "url": "projects/Genuary2025/genuary17.MOV",
+      "caption": "",
+      "alt": "Landscape Flow"
+    },
+    {
+      "id": "25",
+      "url": "projects/Genuary2025/genuary18.MOV",
+      "caption": "",
+      "alt": "Console Animation Log"
+    },
+    {
+      "id": "26",
+      "url": "projects/Genuary2025/genuary19.MOV",
+      "caption": "",
+      "alt": "Recursive Flower"
+    },
+    {
+      "id": "27",
+      "url": "projects/Genuary2025/genuary20.MOV",
+      "caption": "",
+      "alt": "Eye Delay"
+    },
+    {
+      "id": "28",
+      "url": "projects/NeedForSeat/heroThumbnail.jpg",
+      "caption": "",
+      "alt": "Need For Seat"
+    },
+    {
+      "id": "29",
+      "url": "projects/NeedForSeat/showcase.jpg",
+      "caption": "New Arcade Cabinet Showcase at Wonderville New York",
+      "alt": "People playing Need for Seat at Wonderville New York"
+    },
+    {
+      "id": "30",
+      "url": "projects/NeedForSeat/sideHalf.jpg",
+      "caption": "Up close view of the cabinet",
+      "alt": "Up close view of the cabinet"
+    },
+    {
+      "id": "31",
+      "url": "projects/NeedForSeat/closeUpController1.jpg",
+      "caption": "Up close view of the cabinet controller",
+      "alt": "Up close view of the cabinet controller"
+    },
+    {
+      "id": "32",
+      "url": "projects/SnoozeWars/icon.png",
+      "caption": "",
+      "alt": "Snooze Wars"
+    },
+    {
+      "id": "33",
+      "url": "projects/SnoozeWars/fullLogo.png",
+      "caption": "Full Logo",
+      "alt": "Full Logo"
+    },
+    {
+      "id": "34",
+      "url": "projects/SnoozeWars/account.PNG",
+      "caption": "Account View",
+      "alt": "Account View"
+    },
+    {
+      "id": "35",
+      "url": "projects/SnoozeWars/addFriend.PNG",
+      "caption": "Add friend view",
+      "alt": "Add friend view"
+    },
+    {
+      "id": "36",
+      "url": "projects/SnoozeWars/alarms.PNG",
+      "caption": "Alarms View",
+      "alt": "Alarms View"
+    },
+    {
+      "id": "37",
+      "url": "projects/SnoozeWars/friendRequests.PNG",
+      "caption": "Friend Requests View",
+      "alt": "Friend Requests View"
+    },
+    {
+      "id": "38",
+      "url": "projects/SnoozeWars/friends.PNG",
+      "caption": "Friends View",
+      "alt": "Friends View"
+    },
+    {
+      "id": "39",
+      "url": "projects/SnoozeWars/podDetails.PNG",
+      "caption": "Settings View",
+      "alt": "Settings View"
+    },
+    {
+      "id": "40",
+      "url": "projects/SnoozeWars/pods.PNG",
+      "caption": "Settings View",
+      "alt": "Settings View"
+    },
+    {
+      "id": "41",
       "url": "projects/SpokenWardrobe/SWOutfit1.jpg",
       "caption": "First example image",
       "alt": "Spoken Wardrobe"
     },
     {
-      "id": "9",
+      "id": "42",
       "url": "projects/SpokenWardrobe/SWOutfit2.jpg",
       "caption": "Second example image",
       "alt": "Sample project screenshot 2"
     },
     {
-      "id": "10",
+      "id": "43",
       "url": "projects/SpokenWardrobe/SWWords.jpg",
       "caption": "Third example image",
       "alt": "Sample project screenshot 3"
