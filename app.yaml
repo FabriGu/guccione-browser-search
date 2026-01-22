@@ -7,6 +7,7 @@ services:
       deploy_on_push: true
       repo: FabriGu/guccione-browser-search
     build_command: |
+      git lfs pull
       npm ci
       mkdir -p models/huggingface
       mkdir -p data
